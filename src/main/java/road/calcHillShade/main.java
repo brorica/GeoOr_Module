@@ -1,6 +1,6 @@
-package roadHillShade;
+package road.calcHillShade;
 
-import roadHillShade.service.RoadHillShadeService;
+import road.calcHillShade.service.RoadHillShadeService;
 
 public class main {
 

@@ -3,20 +3,20 @@ package storeDsm.service;
 import static config.ApplicationProperties.getProperty;
 
 import java.io.File;
-import storeDsm.repository.DsmRepository;
+import storeDsm.repository.StoreDsmRepository;
 import util.CreateSqlReader;
 
-public class DsmService {
+public class StoreDsmService {
 
-    private final DsmRepository dsmRepository;
+    private final StoreDsmRepository storeDsmRepository;
 
-    public DsmService() {
-        dsmRepository = new DsmRepository();
+    public StoreDsmService() {
+        storeDsmRepository = new StoreDsmRepository();
     }
 
     public void run() {
-        dsmRepository.createTable(getSqlReader());
-        dsmRepository.save(findDsms());
+        storeDsmRepository.createTable(getSqlReader());
+        storeDsmRepository.save(findDsms());
     }
 
     private CreateSqlReader getSqlReader() {

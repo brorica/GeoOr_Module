@@ -13,7 +13,7 @@ public class SaveDsm {
     private final int batchCountLimit = 4096;
 
     /**
-     * DsmService 에서 수집한 모든 DSM read stream 배열 전달받음
+     * StoreDsmService 에서 수집한 모든 DSM read stream 배열 전달받음
      */
     public void save(Connection conn, File[] dsms) throws SQLException {
         String sql = "INSERT INTO dsm VALUES(?, ?, ?)";

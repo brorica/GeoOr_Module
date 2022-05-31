@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import util.CreateSqlReader;
 
-public class DsmRepository {
+public class StoreDsmRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
 
     public void createTable(CreateSqlReader sqlReader) {

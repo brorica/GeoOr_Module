@@ -1,10 +1,10 @@
-package roadHillShade.service;
+package road.calcHillShade.service;
 
-import roadHillShade.domain.HillShadeGrid;
-import roadHillShade.domain.Road;
-import roadHillShade.repository.FindOverlaps;
-import roadHillShade.repository.GetRoads;
-import roadHillShade.repository.UpdateRoadHillShade;
+import road.calcHillShade.domain.HillShadeGrid;
+import road.calcHillShade.domain.Road;
+import road.calcHillShade.repository.FindOverlaps;
+import road.calcHillShade.repository.GetRoads;
+import road.calcHillShade.repository.UpdateRoadHillShade;
 import config.JdbcTemplate;
 import java.io.BufferedReader;
 import java.io.FileReader;
