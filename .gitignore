@@ -14,3 +14,6 @@ target/
 
 ### SHP ###
 data/
+
+### DSM ###
+*.xyz

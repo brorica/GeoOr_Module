@@ -47,7 +47,7 @@ public class RoadHillShadeService {
 
     private List<HillShadeGrid> createTestHillShadeGrids() {
         List<HillShadeGrid> hillShadeGrids = new ArrayList<>();
-        String path = "./src/main/resources/test/testGridPoints.txt";
+        String path = "./src/StoreDsmMain/resources/test/testGridPoints.txt";
         try(BufferedReader reader = new BufferedReader(new FileReader(path))) {
             String line;
             while ((line = reader.readLine()) != null) {
