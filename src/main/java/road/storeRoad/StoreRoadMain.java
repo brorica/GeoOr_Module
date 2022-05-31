@@ -11,5 +11,4 @@ public class StoreRoadMain {
         StoreRoadService storeRoadService = new StoreRoadService();
         storeRoadService.run();
     }
-
 }
