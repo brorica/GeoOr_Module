@@ -1,6 +1,6 @@
-package roadHillShade.repository;
+package road.calcHillShade.repository;
 
-import roadHillShade.domain.Road;
+import road.calcHillShade.domain.Road;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

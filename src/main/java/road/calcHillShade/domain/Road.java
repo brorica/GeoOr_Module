@@ -1,4 +1,4 @@
-package roadHillShade.domain;
+package road.calcHillShade.domain;
 
 public class Road {
 
