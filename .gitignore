@@ -13,7 +13,12 @@ target/
 .run/
 
 ### SHP ###
-src/main/java/road/storeRoad/files/shp/
+*.dbf
+*.prj
+*.shp
+*.shx
+*.cpg
+
 
 ### DSM ###
 *.xyz
