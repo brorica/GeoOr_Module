@@ -1,0 +1,24 @@
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+target/
+
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### env ###
+.run/
+
+### SHP ###
+*.dbf
+*.prj
+*.shp
+*.shx
+*.cpg
+
+
+### DSM ###
+*.xyz
