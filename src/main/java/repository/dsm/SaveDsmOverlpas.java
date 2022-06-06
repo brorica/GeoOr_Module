@@ -1,5 +1,7 @@
 package repository.dsm;
 
+import geoUtil.TransformCoordinate;
+import geoUtil.WKB;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -7,13 +9,20 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
-public class SaveDsm {
+/**
+ * 이 메소드는 dsm을 넣으면서 행정 구역도 찾아서 넣는 클래스다.
+ * 매우 오래 걸린다.
+ */
+public class SaveDsmOverlpas {
 
-    private final int batchCountLimit = 4096;
+    private final int batchCountLimit = 4;
+    private final WKB wKb = new WKB();
+    private final TransformCoordinate transformCoordinate = new TransformCoordinate();
 
     public void save(Connection conn, File[] dsms) throws SQLException {
-        String sql = "INSERT INTO dsm VALUES(?, ?, ?)";
+        String sql = "INSERT INTO dsm VALUES(?, ?, ?, (SELECT sig_cd FROM road WHERE ST_Overlaps(?, geom) LIMIT 1))";
         long totalBatchCount = 0;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             for (File dsm : dsms) {
@@ -35,9 +44,11 @@ public class SaveDsm {
         String line;
         while ((line = reader.readLine()) != null) {
             String[] s = line.split(" ");
+            transformCoordinate.setXY(Double.parseDouble(s[0]), Double.parseDouble(s[1]));
             ps.setString(1, s[0]);
             ps.setString(2, s[1]);
             ps.setString(3, s[2]);
+            ps.setBytes(4, wKb.convertPolygonWKB(transformCoordinate.createCoordinates()));
             ps.addBatch();
 
             if(--batchCount == 0) {

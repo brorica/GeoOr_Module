@@ -1,4 +1,4 @@
- CREATE TABLE road (
+CREATE TABLE IF NOT EXISTS road (
   id SERIAL PRIMARY KEY,
   geom geometry(MultiPolygon),
   opert_de character varying(14),

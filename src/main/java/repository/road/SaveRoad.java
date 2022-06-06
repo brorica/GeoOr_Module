@@ -71,7 +71,6 @@ public class SaveRoad {
             query.append("?, ");
         }
         query.append("?);");
-        System.out.println(query);
         return query.toString();
     }
 }
