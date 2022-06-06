@@ -3,7 +3,6 @@ package service;
 import static config.ApplicationProperties.getProperty;
 
 import java.io.File;
-import java.util.ArrayList;
 import repository.DsmRepository;
 import domain.SqlReader;
 
@@ -30,12 +29,6 @@ public class DsmService {
         String extension = "xyz";
         File directory = new File(path);
         return directory.listFiles((dir, name) -> name.endsWith(extension));
-    }
-
-    public void setDsmSigCode() {
-        HillShadeService hillShadeService = new HillShadeService();
-        ArrayList<Double> coordinates = hillShadeService.getCoordinates(354211, 574118);
-        dsmRepository.updateHillShade(coordinates);
     }
 
 }

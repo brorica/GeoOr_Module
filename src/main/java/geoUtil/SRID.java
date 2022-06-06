@@ -25,8 +25,6 @@ public class SRID {
         } catch (FactoryException e) {
             e.printStackTrace();
         }
-        // X 좌표가 먼저 오도록 설정. 즉, longitude 먼저 나온다.
-        System.setProperty("org.geotools.referencing.forceXY", "true");
     }
     // EPSG 4326 -> EPSG 5181 변환
     public Coordinate convertPoint(double longitude, double latitude) {

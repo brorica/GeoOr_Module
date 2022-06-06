@@ -2,14 +2,11 @@ package repository;
 
 import config.JdbcTemplate;
 
-import domain.HillShadeGrid;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import domain.SqlReader;
-import java.util.List;
 import repository.dsm.SaveDsm;
-import repository.dsm.UpdateDsmSigCode;
 
 public class DsmRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
@@ -31,9 +28,5 @@ public class DsmRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public void updateHillShade(List<Double> coordinates) {
-        UpdateDsmSigCode updateDsmSigCode = new UpdateDsmSigCode();
     }
 }

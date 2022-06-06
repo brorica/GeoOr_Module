@@ -1,7 +1,12 @@
-package service;
+package geoUtil;
 
 import static java.lang.Math.*;
 
+import java.util.ArrayList;
+
+/**
+ * DSM의 좌표를 EPSG 4326 형태로 바꿈
+ */
 public class TransformCoordinate {
 	
 	// 좌표변환 변수들
@@ -29,11 +34,24 @@ public class TransformCoordinate {
 	public double latitude; // 위도
 	public double longitude; // 경도
 
-	TransformCoordinate(double x, double y) {
+	public void setXY(double x, double y) {
 		X = x; Y = y;
 		transform();
 	}
-	
+
+	public ArrayList<Double> createCoordinates() {
+		ArrayList<Double> grid = new ArrayList<>();
+
+		//TransformCoordinate transformCoordinate = new TransformCoordinate(x + 1, y - 1);
+		setXY(this.X + 1, this.Y - 1);
+		grid.add(this.latitude); grid.add(this.longitude);
+
+		setXY(this.X - 1, this.Y + 1);
+		grid.add(this.latitude); grid.add(this.longitude);
+
+		return grid;
+	}
+
 	public void transform(){
 		b = a*(1-f);
 		double a2 = pow(a, 2);
