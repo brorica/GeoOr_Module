@@ -34,7 +34,7 @@ public class DsmService {
 
     public void setDsmSigCode() {
         HillShadeService hillShadeService = new HillShadeService();
-        ArrayList<Double> coordinates = hillShadeService.getCoordinates();
+        ArrayList<Double> coordinates = hillShadeService.getCoordinates(354211, 574118);
         dsmRepository.updateHillShade(coordinates);
     }
 
