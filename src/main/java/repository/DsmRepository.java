@@ -33,13 +33,7 @@ public class DsmRepository {
         }
     }
 
-    public void updateHillShade(List<HillShadeGrid> hillShadeGrids) {
+    public void updateHillShade(List<Double> coordinates) {
         UpdateDsmSigCode updateDsmSigCode = new UpdateDsmSigCode();
-        try (Connection conn = jdbcTemplate.getConnection()) {
-            updateDsmSigCode.update(conn, hillShadeGrids);
-            conn.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }
