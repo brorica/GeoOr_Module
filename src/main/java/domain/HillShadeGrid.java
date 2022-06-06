@@ -1,5 +1,8 @@
 package domain;
 
+/**
+ * 이 도메인은 제가 테스트용으로 만든 거라 신경 안 쓰셔도 됩니다
+ */
 public class HillShadeGrid {
 
     private final double x1;
