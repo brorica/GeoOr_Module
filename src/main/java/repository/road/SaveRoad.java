@@ -1,5 +1,6 @@
 package repository.road;
 
+import geoUtil.WKB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -14,11 +15,11 @@ import domain.Shp;
 public class SaveRoad {
 
     private final int batchLimitValue;
-    private final WKBWriter writer;
+    private final WKB wkb;
 
     public SaveRoad() {
         this.batchLimitValue = 1024;
-        this.writer = new WKBWriter();
+        this.wkb = new WKB();
     }
 
     public void save(Connection conn, List<Shp> shps) {
@@ -44,7 +45,7 @@ public class SaveRoad {
         int batchLimit = batchLimitValue, recordCount = 0;
         while (features.hasNext()) {
             SimpleFeature feature = features.next();
-            pStmt.setObject(1, writer.write((Geometry) feature.getDefaultGeometryProperty().getValue()));
+            pStmt.setObject(1, wkb.convertGeom((Geometry) feature.getDefaultGeometryProperty().getValue()));
             for (int i = 1; i < attributeNames.size(); i++) {
                 String name = attributeNames.get(i).getLocalName();
                 pStmt.setObject(i + 1, feature.getAttribute(name));
@@ -61,16 +62,11 @@ public class SaveRoad {
     }
 
     private String createQuery(Shp shp) {
-        int attributesCount = shp.getAttributeNames().size();
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");
         query.append("road");
         query.append("(geom, opert_de, rw_sn, sig_cd) ");
-        query.append(" VALUES (");
-        for (int i = 0; i < attributesCount - 1; i++) {
-            query.append("?, ");
-        }
-        query.append("?);");
+        query.append(" VALUES (?, ?, ?, ?);");
         return query.toString();
     }
 }
