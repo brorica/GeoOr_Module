@@ -27,7 +27,7 @@ public class SaveDsmOverlpas {
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             for (File dsm : dsms) {
                 System.out.printf("save %s ... ", dsm.getName());
-                totalBatchCount += readDsm(ps, dsm);
+                totalBatchCount += readDsmToPolygon(ps, dsm);
             }
         } catch (SQLException | IOException e) {
             // DSM 파일의 하나라도 오류가 나면 해당 파일 전체 작업 rollback.
@@ -38,7 +38,35 @@ public class SaveDsmOverlpas {
         System.out.printf("\ntotalBatchCount : %d\n", totalBatchCount);
     }
 
-    private int readDsm(PreparedStatement ps, File dsm) throws IOException, SQLException {
+    private int readDsmToPolygon(PreparedStatement ps, File dsm) throws IOException, SQLException {
+        BufferedReader reader = new BufferedReader(new FileReader(dsm));
+        int batchCount = batchCountLimit, batchResult = 0;
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] s = line.split(" ");
+            transformCoordinate.setXY(Double.parseDouble(s[0]), Double.parseDouble(s[1]));
+            ps.setString(1, s[0]);
+            ps.setString(2, s[1]);
+            ps.setString(3, s[2]);
+            ps.setBytes(4, wKb.convertPolygonWKB(transformCoordinate.createCoordinates()));
+            ps.addBatch();
+
+            if(--batchCount == 0) {
+                batchResult += ps.executeBatch().length;
+                batchCount = batchCountLimit;
+                System.out.println(batchResult);
+                ps.clearBatch();
+            }
+        }
+
+        batchResult += ps.executeBatch().length;
+        ps.clearBatch();
+        reader.close();
+        System.out.printf("%d records\n", batchResult);
+        return batchResult;
+    }
+
+    private int readDsmToPoint(PreparedStatement ps, File dsm) throws IOException, SQLException {
         BufferedReader reader = new BufferedReader(new FileReader(dsm));
         int batchCount = batchCountLimit, batchResult = 0;
         String line;
@@ -47,9 +75,7 @@ public class SaveDsmOverlpas {
             ps.setString(1, s[0]);
             ps.setString(2, s[1]);
             ps.setString(3, s[2]);
-            ps.setBytes(4, wKb.convertPointWKB(transformCoordinate.getCentralCoordinates(
-                Double.parseDouble(s[0]), Double.parseDouble(s[1])
-            )));
+            ps.setBytes(4, wKb.convertPointWKB(s[0], s[1]));
             ps.addBatch();
 
             if(--batchCount == 0) {

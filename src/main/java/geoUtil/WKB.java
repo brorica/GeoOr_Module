@@ -37,14 +37,21 @@ public class WKB {
         LinearRing ring = geometryFactory.createLinearRing(coords);
         LinearRing holes[] = null;
         Polygon polygon = geometryFactory.createPolygon(ring, holes);
-        return wkbWriter.write(srid.convertGeometry(polygon));
+        // 변환된 polygon의 좌표를 보고 싶다면 아래 주석 해제
+        //System.out.println(polygon.toString());
+        return wkbWriter.write(polygon);
     }
 
-    public byte[] convertPointWKB(List<Double> coordinates) {
-        double latitude = coordinates.get(0);
-        double longitude = coordinates.get(1);
+    public byte[] convertPointWKB(String lat, String lon) {
+        double latitude = Double.parseDouble(lat);
+        double longitude = Double.parseDouble(lon);
         Coordinate coord = new Coordinate(latitude, longitude);
         Point point = geometryFactory.createPoint(coord);
-        return wkbWriter.write(srid.convertGeometry(point));
+        return wkbWriter.write(point);
+    }
+    // 도로 polygon 변환용
+    public byte[] convertGeom(Geometry geom) {
+        Geometry geometry = srid.revertGeometry(geom);
+        return wkbWriter.write(geometry);
     }
 }
