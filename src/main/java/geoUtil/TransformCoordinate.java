@@ -39,6 +39,17 @@ public class TransformCoordinate {
 		transform();
 	}
 
+	public ArrayList<Double> getCentralCoordinates(double x, double y) {
+		this.X = x;
+		this.Y = y;
+		transform();
+
+		ArrayList<Double> grid = new ArrayList<>();
+		grid.add(this.latitude);
+		grid.add(this.longitude);
+		return grid;
+	}
+
 	public ArrayList<Double> createCoordinates() {
 		ArrayList<Double> grid = new ArrayList<>();
 

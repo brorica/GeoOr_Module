@@ -26,10 +26,10 @@ public class SRID {
         }
     }
     // EPSG 4326 -> EPSG 5181 변환
-    public Geometry convertPoint(Polygon polygon) {
+    public Geometry convertGeometry(Geometry geometry) {
         Geometry transform = null;
         try {
-            transform = JTS.transform(polygon, engine);
+            transform = JTS.transform(geometry, engine);
         } catch (TransformException e) {
             e.printStackTrace();
         }

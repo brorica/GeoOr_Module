@@ -16,7 +16,7 @@ public class DsmService {
 
     public void storeDsm() {
         dsmRepository.createTable(getSqlReader());
-        dsmRepository.save(findDsms());
+        dsmRepository.saveOverlaps(findDsms());
         // 아래 메소드는 saveDsmOverlaps 작업이 끝난 후, PgAdmin에서 행정구역이 제대로 들어간게 확인되면 주석 해제
         //dsmRepository.delete();
     }

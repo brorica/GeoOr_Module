@@ -44,11 +44,12 @@ public class SaveDsmOverlpas {
         String line;
         while ((line = reader.readLine()) != null) {
             String[] s = line.split(" ");
-            transformCoordinate.setXY(Double.parseDouble(s[0]), Double.parseDouble(s[1]));
             ps.setString(1, s[0]);
             ps.setString(2, s[1]);
             ps.setString(3, s[2]);
-            ps.setBytes(4, wKb.convertPolygonWKB(transformCoordinate.createCoordinates()));
+            ps.setBytes(4, wKb.convertPointWKB(transformCoordinate.getCentralCoordinates(
+                Double.parseDouble(s[0]), Double.parseDouble(s[1])
+            )));
             ps.addBatch();
 
             if(--batchCount == 0) {

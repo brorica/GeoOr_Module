@@ -6,6 +6,7 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LinearRing;
+import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.io.WKBWriter;
 
@@ -36,6 +37,14 @@ public class WKB {
         LinearRing ring = geometryFactory.createLinearRing(coords);
         LinearRing holes[] = null;
         Polygon polygon = geometryFactory.createPolygon(ring, holes);
-        return wkbWriter.write(srid.convertPoint(polygon));
+        return wkbWriter.write(srid.convertGeometry(polygon));
+    }
+
+    public byte[] convertPointWKB(List<Double> coordinates) {
+        double latitude = coordinates.get(0);
+        double longitude = coordinates.get(1);
+        Coordinate coord = new Coordinate(latitude, longitude);
+        Point point = geometryFactory.createPoint(coord);
+        return wkbWriter.write(srid.convertGeometry(point));
     }
 }
