@@ -54,11 +54,8 @@ public class TransformCoordinate {
 		ArrayList<Double> grid = new ArrayList<>();
 
 		//TransformCoordinate transformCoordinate = new TransformCoordinate(x + 1, y - 1);
-		setXY(this.X + 1, this.Y - 1);
-		grid.add(this.latitude); grid.add(this.longitude);
-
-		setXY(this.X - 1, this.Y + 1);
-		grid.add(this.latitude); grid.add(this.longitude);
+		grid.add(this.Y + 0.0000001); grid.add(this.X - 0.0000001);
+		grid.add(this.Y - 0.0000001); grid.add(this.X + 0.0000001);
 
 		return grid;
 	}
