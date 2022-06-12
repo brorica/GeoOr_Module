@@ -39,23 +39,12 @@ public class TransformCoordinate {
 		transform();
 	}
 
-	public ArrayList<Double> getCentralCoordinates(double x, double y) {
-		this.X = x;
-		this.Y = y;
-		transform();
-
-		ArrayList<Double> grid = new ArrayList<>();
-		grid.add(this.latitude);
-		grid.add(this.longitude);
-		return grid;
-	}
-
-	public ArrayList<Double> createCoordinates() {
+	public ArrayList<Double> createGridCoordinates() {
 		ArrayList<Double> grid = new ArrayList<>();
 
 		//TransformCoordinate transformCoordinate = new TransformCoordinate(x + 1, y - 1);
-		grid.add(this.Y + 0.0000001); grid.add(this.X - 0.0000001);
-		grid.add(this.Y - 0.0000001); grid.add(this.X + 0.0000001);
+		grid.add(this.Y + 0.0001); grid.add(this.X - 0.0001);
+		grid.add(this.Y - 0.0001); grid.add(this.X + 0.0001);
 
 		return grid;
 	}

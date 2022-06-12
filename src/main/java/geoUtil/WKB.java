@@ -37,8 +37,6 @@ public class WKB {
         LinearRing ring = geometryFactory.createLinearRing(coords);
         LinearRing holes[] = null;
         Polygon polygon = geometryFactory.createPolygon(ring, holes);
-        // 변환된 polygon의 좌표를 보고 싶다면 아래 주석 해제
-        //System.out.println(polygon.toString());
         return wkbWriter.write(polygon);
     }
 
@@ -49,6 +47,7 @@ public class WKB {
         Point point = geometryFactory.createPoint(coord);
         return wkbWriter.write(point);
     }
+
     // 도로 polygon 변환용
     public byte[] convertGeom(Geometry geom) {
         Geometry geometry = srid.revertGeometry(geom);
