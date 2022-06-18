@@ -33,19 +33,22 @@ public class TransformCoordinate {
 	private double lam0 = 2.21656815; // 투영 원점 경도 (10.405초 반영안함) 0.2890
 	public double latitude; // 위도
 	public double longitude; // 경도
+	private double gridInterval = 0.001;
 
 	public void setXY(double x, double y) {
 		X = x; Y = y;
 		transform();
 	}
 
+	/**
+	 * this.gridInterval의 소수 자릿수가 많을 수록 도로와 교차하는 부분은 적어지고
+	 * 적을 수록 교차하는 부분은 많아진다.
+	 * 너무 높다면 hillShade 신뢰도가 낮아지니 적절히 조절해야 함
+	 */
 	public ArrayList<Double> createGridCoordinates() {
 		ArrayList<Double> grid = new ArrayList<>();
-
-		//TransformCoordinate transformCoordinate = new TransformCoordinate(x + 1, y - 1);
-		grid.add(this.Y + 0.0001); grid.add(this.X - 0.0001);
-		grid.add(this.Y - 0.0001); grid.add(this.X + 0.0001);
-
+		grid.add(this.Y + this.gridInterval); grid.add(this.X - this.gridInterval);
+		grid.add(this.Y - this.gridInterval); grid.add(this.X + this.gridInterval);
 		return grid;
 	}
 
