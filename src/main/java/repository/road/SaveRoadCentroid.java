@@ -62,7 +62,7 @@ public class SaveRoadCentroid {
         query.append("INSERT INTO public.");
         query.append("road_centroid");
         query.append("(centroid, sig_cd) ");
-        query.append(" VALUES (?, ?);");
+        query.append(" VALUES (ST_FlipCoordinates(?), ?);");
         return query.toString();
     }
 }

@@ -40,11 +40,6 @@ public class TransformCoordinate {
 		transform();
 	}
 
-	/**
-	 * this.gridInterval의 소수 자릿수가 많을 수록 도로와 교차하는 부분은 적어지고
-	 * 적을 수록 교차하는 부분은 많아진다.
-	 * 너무 높다면 hillShade 신뢰도가 낮아지니 적절히 조절해야 함
-	 */
 	public ArrayList<Double> createGridCoordinates() {
 		ArrayList<Double> grid = new ArrayList<>();
 		grid.add(this.Y + this.gridInterval); grid.add(this.X - this.gridInterval);

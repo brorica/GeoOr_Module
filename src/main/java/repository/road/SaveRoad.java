@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.List;
 import org.geotools.feature.FeatureIterator;
 import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Point;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
 import domain.Shp;
@@ -66,7 +65,7 @@ public class SaveRoad {
         query.append("INSERT INTO public.");
         query.append("road");
         query.append("(polygon, opert_de, rw_sn, sig_cd) ");
-        query.append(" VALUES (?, ?, ?, ?);");
+        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?);");
         return query.toString();
     }
 }
