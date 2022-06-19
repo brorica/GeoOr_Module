@@ -7,7 +7,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import domain.SqlReader;
 import repository.dsm.DeleteUnUseDsm;
-import repository.dsm.SaveDsmOverlpas;
+import repository.dsm.SaveDsmTemp;
+import repository.dsm.SaveSortedDsm;
 
 public class DsmRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
@@ -21,21 +22,51 @@ public class DsmRepository {
         }
     }
 
-    public void saveOverlaps(File[] dsms) {
-        SaveDsmOverlpas saveDsmOverlpas = new SaveDsmOverlpas();
+    public void saveDsmTemp(File[] dsms) {
+        SaveDsmTemp saveDsmTemp = new SaveDsmTemp();
         try (Connection conn = jdbcTemplate.getConnection()) {
             System.out.println("# per 5 %");
-            saveDsmOverlpas.save(conn, dsms);
+            saveDsmTemp.save(conn, dsms);
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void delete() {
+    public void deleteNullSigCd() {
         DeleteUnUseDsm deleteUnUseDsm = new DeleteUnUseDsm();
         try (Connection conn = jdbcTemplate.getConnection()) {
             deleteUnUseDsm.delete(conn);
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveSortedDsm(SqlReader sqlReader) {
+        SaveSortedDsm saveSortedDsm = new SaveSortedDsm();
+        try (Connection conn = jdbcTemplate.getConnection()) {
+            saveSortedDsm.save(conn, sqlReader);
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createIndex(SqlReader sqlReader) {
+        CreateIndex createIndex = new CreateIndex();
+        try (Connection conn = jdbcTemplate.getConnection()) {
+            createIndex.create(conn, sqlReader);
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void dropDsmTempTable() {
+        DeleteUnUseDsm deleteUnUseDsm = new DeleteUnUseDsm();
+        try (Connection conn = jdbcTemplate.getConnection()) {
+            deleteUnUseDsm.drop(conn);
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();

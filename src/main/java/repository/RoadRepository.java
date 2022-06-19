@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.List;
 import domain.Shp;
 import domain.SqlReader;
-import repository.road.CreateIndex;
 import repository.road.SaveRoad;
 import repository.road.SaveRoadCentroid;
 
@@ -54,10 +53,10 @@ public class RoadRepository {
         }
     }
 
-    public void createIndex() {
+    public void createIndex(SqlReader sqlReader) {
         CreateIndex createIndex = new CreateIndex();
         try (Connection conn = jdbcTemplate.getConnection()) {
-            createIndex.create(conn);
+            createIndex.create(conn, sqlReader);
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();

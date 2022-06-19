@@ -10,18 +10,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-/**
- * 이 메소드는 dsm을 넣으면서 행정 구역도 찾아서 넣는 클래스다.
- * 매우 오래 걸린다.
- */
-public class SaveDsmOverlpas {
+public class SaveDsmTemp {
 
     private final int batchCountLimit = 648000;
     private final WKB wKb = new WKB();
     private final TransformCoordinate transformCoordinate = new TransformCoordinate();
 
     public void save(Connection conn, File[] dsms) throws SQLException {
-        String sql = "INSERT INTO dsm VALUES(?, ?, ?, (SELECT sig_cd FROM road_centroid WHERE ST_intersects(?, centroid) LIMIT 1))";
+        String sql = "INSERT INTO dsm_temp (x, y, z, sig_cd) VALUES(?, ?, ?, (SELECT sig_cd FROM road_centroid WHERE ST_intersects(?, centroid) LIMIT 1))";
         long totalBatchCount = 0;
         long startTime, endTime;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
