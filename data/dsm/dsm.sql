@@ -1,6 +1,1 @@
-CREATE TABLE IF NOT EXISTS dsm (
-   x varchar(32) not null,
-   y varchar(32) not null,
-   z varchar(32) not null,
-   sig_cd character varying(14)
-)
+CREATE TABLE dsm AS SELECT * FROM dsm_temp ORDER BY sig_cd;

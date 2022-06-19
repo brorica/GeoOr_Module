@@ -10,8 +10,8 @@ import org.opengis.referencing.operation.TransformException;
 
 public class SRID {
 
-    private CoordinateReferenceSystem sourceCrs;    // EPSG 4326
-    private CoordinateReferenceSystem targetCrs;    // EPSG 5181
+    private CoordinateReferenceSystem sourceCrs;    // EPSG 5174
+    private CoordinateReferenceSystem targetCrs;    // EPSG 4326
     private MathTransform engine;
     // prj 파일에 있는 내용임
     private final String wkt5174 = "PROJCS[\"Korean 1985 / Modified Central Belt\", "

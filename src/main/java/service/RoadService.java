@@ -19,12 +19,15 @@ public class RoadService {
     }
 
     public void storeRoad() {
-        roadRepository.createTable(getSqlReader());
-        roadRepository.save(getShps());
+        roadRepository.createRoadTable(getSqlReader(getProperty("road")));
+        roadRepository.createRoadCentroidTable(getSqlReader(getProperty("roadCentroid")));
+        roadRepository.saveRoad(getShps());
+        roadRepository.saveRoadCentroid(getShps());
+        roadRepository.createIndex(getSqlReader(getProperty("roadCentroidIndex")));
     }
 
-    private SqlReader getSqlReader() {
-        File file = new File(getProperty("road.createFilePath"));
+    private SqlReader getSqlReader(String path) {
+        File file = new File(path);
         return new SqlReader(file);
     }
 

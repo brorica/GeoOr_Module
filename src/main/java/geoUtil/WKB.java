@@ -6,7 +6,6 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LinearRing;
-import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.io.WKBWriter;
 
@@ -22,33 +21,20 @@ public class WKB {
         double latitude_2 = coordinates.get(2);
         double longitude_2 = coordinates.get(3);
 
-        /**
-         * Coordinate 매개변수는 x, y로 돼서 long, lat 으로 넣어야 할 거 같지만,
-         * lat, long 순으로 넣어야 한다.
-         * https://stackoverflow.com/questions/54362007/geotools-library-how-to-convert-korean-coordinates-epsg5179-to-decimal-degr
-         */
-        Coordinate coord1 = new Coordinate(latitude_1, longitude_1);
-        Coordinate coord2 = new Coordinate(latitude_2, longitude_1);
-        Coordinate coord3 = new Coordinate(latitude_2, longitude_2);
-        Coordinate coord4 = new Coordinate(latitude_1, longitude_2);
+        Coordinate coord1 = new Coordinate(longitude_1, latitude_1);
+        Coordinate coord2 = new Coordinate(longitude_1, latitude_2);
+        Coordinate coord3 = new Coordinate(longitude_2, latitude_2);
+        Coordinate coord4 = new Coordinate(longitude_2, latitude_1);
 
         Coordinate[] coords =
             new Coordinate[]{coord1, coord2, coord3, coord4, coord1};
         LinearRing ring = geometryFactory.createLinearRing(coords);
         LinearRing holes[] = null;
         Polygon polygon = geometryFactory.createPolygon(ring, holes);
-        // 변환된 polygon의 좌표를 보고 싶다면 아래 주석 해제
-        //System.out.println(polygon.toString());
         return wkbWriter.write(polygon);
     }
 
-    public byte[] convertPointWKB(String lat, String lon) {
-        double latitude = Double.parseDouble(lat);
-        double longitude = Double.parseDouble(lon);
-        Coordinate coord = new Coordinate(latitude, longitude);
-        Point point = geometryFactory.createPoint(coord);
-        return wkbWriter.write(point);
-    }
+
     // 도로 polygon 변환용
     public byte[] convertGeom(Geometry geom) {
         Geometry geometry = srid.revertGeometry(geom);

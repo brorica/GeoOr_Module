@@ -7,8 +7,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import domain.SqlReader;
 import repository.dsm.DeleteUnUseDsm;
-import repository.dsm.SaveDsm;
-import repository.dsm.SaveDsmOverlpas;
+import repository.dsm.SaveDsmTemp;
+import repository.dsm.SaveSortedDsm;
 
 public class DsmRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
@@ -21,35 +21,52 @@ public class DsmRepository {
             e.printStackTrace();
         }
     }
-    // 그냥 dsm 넣는 코드
-    public void save(File[] dsms) {
-        SaveDsm saveDsm = new SaveDsm();
+
+    public void saveDsmTemp(File[] dsms) {
+        SaveDsmTemp saveDsmTemp = new SaveDsmTemp();
         try (Connection conn = jdbcTemplate.getConnection()) {
-            saveDsm.save(conn, dsms);
+            System.out.println("# per 5 %");
+            saveDsmTemp.save(conn, dsms);
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    /**
-     * 이 메소드는 dsm을 넣으면서 행정 구역도 찾아서 넣는 메소드다.
-     * 매우 오래 걸린다.
-     */
-    public void saveOverlaps(File[] dsms) {
-        SaveDsmOverlpas saveDsmOverlpas = new SaveDsmOverlpas();
-        try (Connection conn = jdbcTemplate.getConnection()) {
-            saveDsmOverlpas.save(conn, dsms);
-            conn.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void delete() {
+    public void deleteNullSigCd() {
         DeleteUnUseDsm deleteUnUseDsm = new DeleteUnUseDsm();
         try (Connection conn = jdbcTemplate.getConnection()) {
             deleteUnUseDsm.delete(conn);
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveSortedDsm(SqlReader sqlReader) {
+        SaveSortedDsm saveSortedDsm = new SaveSortedDsm();
+        try (Connection conn = jdbcTemplate.getConnection()) {
+            saveSortedDsm.save(conn, sqlReader);
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createIndex(SqlReader sqlReader) {
+        CreateIndex createIndex = new CreateIndex();
+        try (Connection conn = jdbcTemplate.getConnection()) {
+            createIndex.create(conn, sqlReader);
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void dropDsmTempTable() {
+        DeleteUnUseDsm deleteUnUseDsm = new DeleteUnUseDsm();
+        try (Connection conn = jdbcTemplate.getConnection()) {
+            deleteUnUseDsm.drop(conn);
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
