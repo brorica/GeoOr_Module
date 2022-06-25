@@ -1,6 +1,5 @@
 package repository.dsm;
 
-import geoUtil.TransformCoordinate;
 import geoUtil.WKB;
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,17 +13,16 @@ public class SaveDsmTemp {
 
     private final int batchCountLimit = 648000;
     private final WKB wKb = new WKB();
-    private final TransformCoordinate transformCoordinate = new TransformCoordinate();
 
     public void save(Connection conn, File[] dsms) throws SQLException {
-        String sql = "INSERT INTO dsm_temp (x, y, z, sig_cd) VALUES(?, ?, ?, (SELECT sig_cd FROM road_centroid WHERE ST_intersects(?, centroid) LIMIT 1))";
+        String sql = "INSERT INTO dsm_temp (x, y, z, sig_cd) VALUES(?, ?, ?, (SELECT adm_sect_cd FROM admin_sector WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))";
         long totalBatchCount = 0;
         long startTime, endTime;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             for (File dsm : dsms) {
                 System.out.printf("save %s [", dsm.getName());
                 startTime = System.currentTimeMillis();
-                totalBatchCount += readDsmToGrid(ps, dsm);
+                totalBatchCount += readDsmToPoint(ps, dsm);
                 endTime = System.currentTimeMillis();
                 System.out.println("cost : " + (endTime - startTime) / 1000 + "s");
             }
@@ -35,7 +33,7 @@ public class SaveDsmTemp {
         System.out.printf("\ntotalBatchCount : %d\n", totalBatchCount);
     }
 
-    private int readDsmToGrid(PreparedStatement ps, File dsm) throws IOException, SQLException {
+    private int readDsmToPoint(PreparedStatement ps, File dsm) throws IOException, SQLException {
         BufferedReader reader = new BufferedReader(new FileReader(dsm));
         int batchCount = batchCountLimit, batchResult = 0;
         double s0, s1, s2;
@@ -46,11 +44,10 @@ public class SaveDsmTemp {
             s1 = Double.parseDouble(s[1]);
             s2 = Double.parseDouble(s[2]);
 
-            transformCoordinate.setXY(s0, s1);
             ps.setDouble(1, s0);
             ps.setDouble(2, s1);
             ps.setDouble(3, s2);
-            ps.setBytes(4, wKb.convertPolygonWKB(transformCoordinate.createGridCoordinates()));
+            ps.setBytes(4, wKb.convertPointWKB(s[0], s[1]));
             ps.addBatch();
 
             if(--batchCount == 0) {
@@ -68,3 +65,4 @@ public class SaveDsmTemp {
         return batchResult;
     }
 }
+
