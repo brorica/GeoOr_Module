@@ -33,30 +33,17 @@ public class TransformCoordinate {
 	private double lam0 = 2.21656815; // 투영 원점 경도 (10.405초 반영안함) 0.2890
 	public double latitude; // 위도
 	public double longitude; // 경도
+	private double gridInterval = 0.001;
 
 	public void setXY(double x, double y) {
 		X = x; Y = y;
 		transform();
 	}
 
-	public ArrayList<Double> getCentralCoordinates(double x, double y) {
-		this.X = x;
-		this.Y = y;
-		transform();
-
+	public ArrayList<Double> createGridCoordinates() {
 		ArrayList<Double> grid = new ArrayList<>();
-		grid.add(this.latitude);
-		grid.add(this.longitude);
-		return grid;
-	}
-
-	public ArrayList<Double> createCoordinates() {
-		ArrayList<Double> grid = new ArrayList<>();
-
-		//TransformCoordinate transformCoordinate = new TransformCoordinate(x + 1, y - 1);
-		grid.add(this.Y + 0.0000001); grid.add(this.X - 0.0000001);
-		grid.add(this.Y - 0.0000001); grid.add(this.X + 0.0000001);
-
+		grid.add(this.Y + this.gridInterval); grid.add(this.X - this.gridInterval);
+		grid.add(this.Y - this.gridInterval); grid.add(this.X + this.gridInterval);
 		return grid;
 	}
 

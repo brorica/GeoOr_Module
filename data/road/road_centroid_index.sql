@@ -1,0 +1,1 @@
+CREATE INDEX road_centroid_index ON road_centroid USING gist(centroid);
