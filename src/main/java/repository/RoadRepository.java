@@ -23,7 +23,7 @@ public class RoadRepository {
         }
     }
 
-    public void createRoadCentroidTable(SqlReader sqlReader) {
+    public void createRoadSplitTable(SqlReader sqlReader) {
         TableCreator tableCreator = new TableCreator();
         try (Connection conn = jdbcTemplate.getConnection()) {
             tableCreator.create(conn, sqlReader);
@@ -37,16 +37,6 @@ public class RoadRepository {
         SaveRoad saveRoad = new SaveRoad();
         try (Connection conn = jdbcTemplate.getConnection()) {
             saveRoad.save(conn, shps);
-            conn.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void saveRoadCentroid(List<Shp> shps) {
-        SaveRoadCentroid saveRoadCentroid = new SaveRoadCentroid();
-        try (Connection conn = jdbcTemplate.getConnection()) {
-            saveRoadCentroid.save(conn, shps);
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();

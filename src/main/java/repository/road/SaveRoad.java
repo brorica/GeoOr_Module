@@ -63,8 +63,8 @@ public class SaveRoad {
     private String createQuery() {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");
-        query.append("road_seoul");
-        query.append("(polygon, opert_de, rw_sn, sig_cd) ");
+        query.append("road");
+        query.append("(the_geom, opert_de, rw_sn, sig_cd) ");
         query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?);");
         return query.toString();
     }
