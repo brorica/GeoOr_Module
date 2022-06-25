@@ -1,15 +1,14 @@
 package repository;
 
 import config.JdbcTemplate;
+import domain.Shp;
+import domain.SqlReader;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import domain.Shp;
-import domain.SqlReader;
-import repository.road.SaveRoad;
-import repository.road.SaveRoadCentroid;
+import repository.adminSector.SaveAdminSector;
 
-public class RoadRepository {
+public class AdminSectorRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
 
@@ -23,20 +22,10 @@ public class RoadRepository {
         }
     }
 
-    public void createRoadSplitTable(SqlReader sqlReader) {
-        TableCreator tableCreator = new TableCreator();
+    public void saveAdminSector(List<Shp> shps) {
+        SaveAdminSector saveAdminSector = new SaveAdminSector();
         try (Connection conn = jdbcTemplate.getConnection()) {
-            tableCreator.create(conn, sqlReader);
-            conn.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void saveRoad(List<Shp> shps) {
-        SaveRoad saveRoad = new SaveRoad();
-        try (Connection conn = jdbcTemplate.getConnection()) {
-            saveRoad.save(conn, shps);
+            saveAdminSector.save(conn, shps);
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -52,4 +41,5 @@ public class RoadRepository {
             e.printStackTrace();
         }
     }
+
 }

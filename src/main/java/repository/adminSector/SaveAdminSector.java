@@ -1,5 +1,6 @@
-package repository.road;
+package repository.adminSector;
 
+import domain.Shp;
 import geoUtil.WKB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,14 +10,13 @@ import org.geotools.feature.FeatureIterator;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
-import domain.Shp;
 
-public class SaveRoad {
+public class SaveAdminSector {
 
     private final int batchLimitValue;
     private final WKB wkb;
 
-    public SaveRoad() {
+    public SaveAdminSector() {
         this.batchLimitValue = 1024;
         this.wkb = new WKB();
     }
@@ -34,7 +34,6 @@ public class SaveRoad {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     private int SetPreparedStatement(PreparedStatement pStmt, Shp shp) throws SQLException {
@@ -43,12 +42,11 @@ public class SaveRoad {
         int batchLimit = batchLimitValue, recordCount = 0;
         while (features.hasNext()) {
             SimpleFeature feature = features.next();
-            pStmt.setBytes(1, wkb.convert5181To4326((Geometry) feature.getDefaultGeometryProperty().getValue()));
+            pStmt.setBytes(1, wkb.convert5179To4326((Geometry) feature.getDefaultGeometryProperty().getValue()));
             for (int i = 1; i < attributeNames.size(); i++) {
                 String name = attributeNames.get(i).getLocalName();
                 pStmt.setObject(i + 1, feature.getAttribute(name));
             }
-
             pStmt.addBatch();
             if(--batchLimit == 0) {
                 recordCount += pStmt.executeBatch().length;
@@ -63,9 +61,8 @@ public class SaveRoad {
     private String createQuery() {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");
-        query.append("road");
-        query.append("(the_geom, opert_de, rw_sn, sig_cd) ");
-        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?);");
+        query.append("admin_sector");
+        query.append(" VALUES (?, ?, ?, ?, ?, ?);");
         return query.toString();
     }
 }
