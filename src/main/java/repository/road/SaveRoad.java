@@ -43,7 +43,7 @@ public class SaveRoad {
         int batchLimit = batchLimitValue, recordCount = 0;
         while (features.hasNext()) {
             SimpleFeature feature = features.next();
-            pStmt.setBytes(1, wkb.convertGeom((Geometry) feature.getDefaultGeometryProperty().getValue()));
+            pStmt.setBytes(1, wkb.convert5181To4326((Geometry) feature.getDefaultGeometryProperty().getValue()));
             for (int i = 1; i < attributeNames.size(); i++) {
                 String name = attributeNames.get(i).getLocalName();
                 pStmt.setObject(i + 1, feature.getAttribute(name));
@@ -64,7 +64,7 @@ public class SaveRoad {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");
         query.append("road");
-        query.append("(polygon, opert_de, rw_sn, sig_cd) ");
+        query.append("(the_geom, opert_de, rw_sn, sig_cd) ");
         query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?);");
         return query.toString();
     }
