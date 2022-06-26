@@ -2,27 +2,26 @@ package service;
 
 import static config.ApplicationProperties.getProperty;
 
-import domain.SqlReader;
 import domain.Shp;
+import domain.SqlReader;
 import java.io.File;
-import repository.RoadRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import repository.AdminSectorRepository;
 
-public class RoadService {
+public class AdminSectorService {
 
-    private final RoadRepository roadRepository;
+    private final AdminSectorRepository adminSectorRepository;
 
-    public RoadService() {
-        roadRepository = new RoadRepository();
+    public AdminSectorService() {
+        this.adminSectorRepository = new AdminSectorRepository();
     }
 
-    public void storeRoad() {
-        roadRepository.createRoadTable(getSqlReader(getProperty("road")));
-        roadRepository.saveRoad(getShps());
-        roadRepository.createRoadSplitTable(getSqlReader(getProperty("roadSplit")));
-        roadRepository.createIndex(getSqlReader(getProperty("roadSplitIndex")));
+    public void storeAdminSector() {
+        adminSectorRepository.createRoadTable(getSqlReader(getProperty("adminSector")));
+        adminSectorRepository.saveAdminSector(getShps());
+        adminSectorRepository.createIndex(getSqlReader(getProperty("adminSectorIndex")));
     }
 
     private SqlReader getSqlReader(String path) {
@@ -32,7 +31,7 @@ public class RoadService {
 
     private List<Shp> getShps() {
         List<Shp> shps = new ArrayList<>();
-        File[] shpFiles = findShpFiles(getProperty("road.shpPath"));
+        File[] shpFiles = findShpFiles(getProperty("adminSector.shpPath"));
         for (File file : shpFiles) {
             try {
                 shps.add(new Shp(file));

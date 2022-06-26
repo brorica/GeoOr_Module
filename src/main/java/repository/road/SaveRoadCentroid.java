@@ -43,7 +43,7 @@ public class SaveRoadCentroid {
         while (features.hasNext()) {
             SimpleFeature feature = features.next();
             Point centroid = ((Geometry) feature.getDefaultGeometry()).getCentroid();
-            pStmt.setBytes(1, wkb.convertGeom(centroid));
+            pStmt.setBytes(1, wkb.convert5181To4326(centroid));
             pStmt.setObject(2, feature.getAttribute("SIG_CD"));
             pStmt.addBatch();
             if(--batchLimit == 0) {
