@@ -15,6 +15,7 @@ public class WKB {
     private final WKBWriter wkbWriter = new WKBWriter();
     private final SRID srid = new SRID();
 
+<<<<<<< Updated upstream
     public byte[] convertPolygonWKB(List<Double> coordinates) {
         double latitude_1 = coordinates.get(0);
         double longitude_1 = coordinates.get(1);
@@ -32,6 +33,14 @@ public class WKB {
         LinearRing holes[] = null;
         Polygon polygon = geometryFactory.createPolygon(ring, holes);
         return wkbWriter.write(polygon);
+=======
+    public byte[] convertPointWKB(String lat, String lon) {
+        double latitude = Double.parseDouble(lat);
+        double longitude = Double.parseDouble(lon);
+        Coordinate coord = new Coordinate(latitude, longitude);
+        Point point = geometryFactory.createPoint(coord);
+        return wkbWriter.write(point);
+>>>>>>> Stashed changes
     }
 
 
