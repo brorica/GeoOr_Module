@@ -4,5 +4,5 @@ CREATE TABLE IF NOT EXISTS admin_sector (
   sgg_nm character varying(60),
   sgg_oid integer,
   col_adm_se character varying(5),
-  gid integer
+  gid integer primary key generated always as identity,
  )

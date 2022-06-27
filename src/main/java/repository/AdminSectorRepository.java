@@ -12,7 +12,7 @@ public class AdminSectorRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
 
-    public void createRoadTable(SqlReader sqlReader) {
+    public void runSQL(SqlReader sqlReader) {
         TableCreator tableCreator = new TableCreator();
         try (Connection conn = jdbcTemplate.getConnection()) {
             tableCreator.create(conn, sqlReader);
