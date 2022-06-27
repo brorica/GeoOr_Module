@@ -1,13 +1,10 @@
 package geoUtil;
-
-import java.util.List;
+;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.LinearRing;
 import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.io.WKBWriter;
 
 public class WKB {
@@ -20,7 +17,7 @@ public class WKB {
     public byte[] convertPointWKB(String lat, String lon) {
         double latitude = Double.parseDouble(lat);
         double longitude = Double.parseDouble(lon);
-        Coordinate coord = new Coordinate(longitude, latitude);
+        Coordinate coord = new Coordinate(latitude, longitude);
         Point point = geometryFactory.createPoint(coord);
         return wkbWriter.write(point);
     }

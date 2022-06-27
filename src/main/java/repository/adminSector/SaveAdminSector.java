@@ -28,6 +28,7 @@ public class SaveAdminSector {
             for (Shp shp : shps) {
                 System.out.printf("road table %s save start ... ", shp.getName());
                 totalRecordCount += SetPreparedStatement(pStmt, shp);
+                shp.close();
             }
             conn.commit();
             System.out.printf("total save : %s\n", totalRecordCount);
