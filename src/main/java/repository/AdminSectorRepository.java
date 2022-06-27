@@ -13,9 +13,9 @@ public class AdminSectorRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
 
     public void runSQL(SqlReader sqlReader) {
-        TableCreator tableCreator = new TableCreator();
+        RunScript runScript = new RunScript();
         try (Connection conn = jdbcTemplate.getConnection()) {
-            tableCreator.create(conn, sqlReader);
+            runScript.create(conn, sqlReader);
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();

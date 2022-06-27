@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import domain.SqlReader;
 
-public class TableCreator {
+public class RunScript {
 
     public void create(Connection conn, SqlReader sqlReader)  {
         try (Statement st = conn.createStatement()) {
