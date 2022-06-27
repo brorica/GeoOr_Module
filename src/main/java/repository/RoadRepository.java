@@ -7,7 +7,6 @@ import java.util.List;
 import domain.Shp;
 import domain.SqlReader;
 import repository.road.SaveRoad;
-import repository.road.SaveRoadCentroid;
 
 public class RoadRepository {
 

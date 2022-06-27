@@ -28,6 +28,7 @@ public class SaveAdminSector {
             for (Shp shp : shps) {
                 System.out.printf("road table %s save start ... ", shp.getName());
                 totalRecordCount += SetPreparedStatement(pStmt, shp);
+                shp.close();
             }
             conn.commit();
             System.out.printf("total save : %s\n", totalRecordCount);
@@ -62,7 +63,7 @@ public class SaveAdminSector {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");
         query.append("admin_sector");
-        query.append(" VALUES (?, ?, ?, ?, ?, ?);");
+        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?, ?, ?);");
         return query.toString();
     }
 }
