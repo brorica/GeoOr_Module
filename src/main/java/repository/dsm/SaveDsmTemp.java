@@ -15,7 +15,7 @@ public class SaveDsmTemp {
     private final WKB wKb = new WKB();
 
     public void save(Connection conn, File[] dsms) throws SQLException {
-        String sql = "INSERT INTO dsm_temp (x, y, z, sig_cd) VALUES(?, ?, ?, (SELECT adm_sect_cd FROM admin_sector WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))";
+        String sql = "INSERT INTO dsm_temp (x, y, z, sig_cd) VALUES(?, ?, ?, (SELECT adm_sect_cd FROM admin_sector_divide WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))";
         long totalBatchCount = 0;
         long startTime, endTime;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {

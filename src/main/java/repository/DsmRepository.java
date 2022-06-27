@@ -14,9 +14,9 @@ public class DsmRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
 
     public void createTable(SqlReader sqlReader) {
-        TableCreator tableCreator = new TableCreator();
+        RunScript runScript = new RunScript();
         try (Connection conn = jdbcTemplate.getConnection()) {
-            tableCreator.create(conn, sqlReader);
+            runScript.create(conn, sqlReader);
         } catch (SQLException e) {
             e.printStackTrace();
         }

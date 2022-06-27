@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import domain.SqlReader;
 
-public class TableCreator {
+public class RunScript {
 
     public void create(Connection conn, SqlReader sqlReader)  {
         try (Statement st = conn.createStatement()) {
@@ -15,10 +15,10 @@ public class TableCreator {
             st.execute(query);
             conn.commit();
         } catch (SQLException  e) {
-            System.err.println("테이블 생성 쿼리를 실행하는데 오류가 발생했습니다.");
+            System.err.println("쿼리를 실행하는데 오류가 발생했습니다.");
             e.printStackTrace();
         } catch (IOException e) {
-            System.err.println("테이블 생성 파일을 읽는데 오류가 발생했습니다.");
+            System.err.println("파일을 읽는데 오류가 발생했습니다.");
             e.printStackTrace();
         } finally {
             sqlReader.close();

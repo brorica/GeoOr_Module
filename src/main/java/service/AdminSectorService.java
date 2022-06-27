@@ -19,9 +19,11 @@ public class AdminSectorService {
     }
 
     public void storeAdminSector() {
-        adminSectorRepository.createRoadTable(getSqlReader(getProperty("adminSector")));
+        adminSectorRepository.runSQL(getSqlReader(getProperty("adminSector")));
+        adminSectorRepository.runSQL(getSqlReader(getProperty("adminSectorDivide")));
         adminSectorRepository.saveAdminSector(getShps());
-        adminSectorRepository.createIndex(getSqlReader(getProperty("adminSectorIndex")));
+        adminSectorRepository.runSQL(getSqlReader(getProperty("adminSectorPolygonDivide")));
+        adminSectorRepository.createIndex(getSqlReader(getProperty("adminSectorDivideIndex")));
     }
 
     private SqlReader getSqlReader(String path) {
