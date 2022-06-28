@@ -12,10 +12,10 @@ public class AdminSectorRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
 
-    public void createRoadTable(SqlReader sqlReader) {
-        TableCreator tableCreator = new TableCreator();
+    public void runSQL(SqlReader sqlReader) {
+        RunScript runScript = new RunScript();
         try (Connection conn = jdbcTemplate.getConnection()) {
-            tableCreator.create(conn, sqlReader);
+            runScript.create(conn, sqlReader);
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();

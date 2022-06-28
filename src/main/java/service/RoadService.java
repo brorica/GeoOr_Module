@@ -19,10 +19,13 @@ public class RoadService {
     }
 
     public void storeRoad() {
-        roadRepository.createRoadTable(getSqlReader(getProperty("road")));
+        roadRepository.runSQL(getSqlReader(getProperty("road")));
         roadRepository.saveRoad(getShps());
-        roadRepository.createRoadSplitTable(getSqlReader(getProperty("roadSplit")));
-        roadRepository.createIndex(getSqlReader(getProperty("roadSplitIndex")));
+        roadRepository.runSQL(getSqlReader(getProperty("roadDump")));
+        roadRepository.runSQL(getSqlReader(getProperty("roadDivide")));
+        roadRepository.runSQL(getSqlReader(getProperty("road.dividePolygon")));
+        roadRepository.dropDumpTable();
+        roadRepository.createIndex(getSqlReader(getProperty("roadIndex")));
     }
 
     private SqlReader getSqlReader(String path) {
