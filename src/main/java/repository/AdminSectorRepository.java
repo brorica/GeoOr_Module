@@ -6,40 +6,51 @@ import domain.SqlReader;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import repository.adminSector.DividePolygon;
 import repository.adminSector.SaveAdminSector;
 
 public class AdminSectorRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
 
-    public void runSQL(SqlReader sqlReader) {
+    public void saveOriginData(SqlReader createSql, List<Shp> shps) {
+        try (Connection conn = jdbcTemplate.getConnection()) {
+            createTable(conn, createSql);
+            saveAdminSector(conn, shps);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void createTable(Connection conn, SqlReader sqlReader) {
         RunScript runScript = new RunScript();
-        try (Connection conn = jdbcTemplate.getConnection()) {
-            runScript.create(conn, sqlReader);
-            conn.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        runScript.create(conn, sqlReader);
     }
 
-    public void saveAdminSector(List<Shp> shps) {
+    private void saveAdminSector(Connection conn, List<Shp> shps) {
         SaveAdminSector saveAdminSector = new SaveAdminSector();
+        saveAdminSector.save(conn, shps);
+    }
+
+    public void procOriginData(SqlReader createSql) {
         try (Connection conn = jdbcTemplate.getConnection()) {
-            saveAdminSector.save(conn, shps);
-            conn.commit();
+            createTable(conn, createSql);
+            divideAdminSector(conn);
+            createIndex(conn);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void createIndex(SqlReader sqlReader) {
+    private void divideAdminSector(Connection conn) throws SQLException {
+        DividePolygon dividePolygon = new DividePolygon();
+        dividePolygon.divide(conn);
+    }
+
+    private void createIndex(Connection conn) {
+        String sql = "CREATE INDEX admin_sector_index ON admin_sector_divide USING gist(the_geom);";
         CreateIndex createIndex = new CreateIndex();
-        try (Connection conn = jdbcTemplate.getConnection()) {
-            createIndex.create(conn, sqlReader);
-            conn.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        createIndex.create(conn, sql);
     }
 
 }

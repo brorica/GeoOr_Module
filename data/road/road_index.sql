@@ -1,1 +1,0 @@
-CREATE INDEX road_index ON road_divide USING gist(the_geom);

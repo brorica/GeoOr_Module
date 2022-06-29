@@ -1,20 +1,18 @@
-package repository;
+package repository.dsm;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class CreateIndex {
+public class CreatePrimaryKey {
 
-    public void create(Connection conn, String sql)  {
+    public void create(Connection conn) {
+        String sql = "ALTER TABLE dsm ADD COLUMN id SERIAL PRIMARY KEY;";
         try (Statement st = conn.createStatement()) {
             System.out.println(sql);
             st.execute(sql);
-            conn.commit();
         } catch (SQLException e) {
-            System.err.println("인덱스 쿼리를 실행하는데 오류가 발생했습니다.");
             e.printStackTrace();
         }
     }
-
 }
