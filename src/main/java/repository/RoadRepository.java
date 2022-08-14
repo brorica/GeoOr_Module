@@ -7,7 +7,6 @@ import java.util.List;
 import domain.Shp;
 import domain.SqlReader;
 import repository.road.DividePolygon;
-import repository.road.DropRoadDump;
 import repository.road.SaveRoad;
 
 public class RoadRepository {
@@ -33,15 +32,6 @@ public class RoadRepository {
         saveRoad.save(conn, shps);
     }
 
-    public void dumpOriginData(SqlReader createSql) {
-        try (Connection conn = jdbcTemplate.getConnection()) {
-            createTable(conn, createSql);
-            dropDumpTable(conn);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void procOriginData(SqlReader createSql) {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn, createSql);
@@ -63,8 +53,4 @@ public class RoadRepository {
         createIndex.create(conn, sql);
     }
 
-    private void dropDumpTable(Connection conn) {
-        DropRoadDump dropRoadDump = new DropRoadDump();
-        dropRoadDump.drop(conn);
-    }
 }

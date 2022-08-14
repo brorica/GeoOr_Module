@@ -20,7 +20,6 @@ public class RoadService {
 
     public void storeRoad() {
         roadRepository.saveOriginData(getSqlReader(getProperty("road")), getShps());
-        roadRepository.dumpOriginData(getSqlReader(getProperty("roadDump")));
         roadRepository.procOriginData(getSqlReader(getProperty("roadDivide")));
     }
 
