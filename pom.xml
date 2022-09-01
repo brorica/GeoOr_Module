@@ -33,6 +33,13 @@
       <artifactId>gt-swing</artifactId>
       <version>${geotools.version}</version>
     </dependency>
+    <dependency>
+      <groupId>postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>system</scope>
+      <version>42.3.1</version>
+      <systemPath>${basedir}\lib\postgresql-42.3.1.jar</systemPath>
+    </dependency>
   </dependencies>
 
   <repositories>

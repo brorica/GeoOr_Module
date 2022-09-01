@@ -6,50 +6,51 @@ import java.sql.SQLException;
 import java.util.List;
 import domain.Shp;
 import domain.SqlReader;
-import repository.road.DropRoadDump;
+import repository.road.DividePolygon;
 import repository.road.SaveRoad;
 
 public class RoadRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
 
-    public void runSQL(SqlReader sqlReader) {
+    public void saveOriginData(SqlReader createSql, List<Shp> shps) {
+        try (Connection conn = jdbcTemplate.getConnection()) {
+            createTable(conn, createSql);
+            saveRoad(conn, shps);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void createTable(Connection conn, SqlReader sqlReader) {
         RunScript runScript = new RunScript();
-        try (Connection conn = jdbcTemplate.getConnection()) {
-            runScript.create(conn, sqlReader);
-            conn.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        runScript.create(conn, sqlReader);
     }
 
-    public void saveRoad(List<Shp> shps) {
+    private void saveRoad(Connection conn, List<Shp> shps) {
         SaveRoad saveRoad = new SaveRoad();
+        saveRoad.save(conn, shps);
+    }
+
+    public void procOriginData(SqlReader createSql) {
         try (Connection conn = jdbcTemplate.getConnection()) {
-            saveRoad.save(conn, shps);
-            conn.commit();
+            createTable(conn, createSql);
+            divideDumpedRoad(conn);
+            createIndex(conn);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void createIndex(SqlReader sqlReader) {
+    private void divideDumpedRoad(Connection conn) throws SQLException {
+        DividePolygon dividePolygon = new DividePolygon();
+        dividePolygon.divide(conn);
+    }
+
+    private void createIndex(Connection conn) {
+        String sql = "CREATE INDEX road_index ON road_divide USING gist(the_geom);";
         CreateIndex createIndex = new CreateIndex();
-        try (Connection conn = jdbcTemplate.getConnection()) {
-            createIndex.create(conn, sqlReader);
-            conn.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        createIndex.create(conn, sql);
     }
 
-    public void dropDumpTable() {
-        DropRoadDump dropRoadDump = new DropRoadDump();
-        try (Connection conn = jdbcTemplate.getConnection()) {
-            dropRoadDump.drop(conn);
-            conn.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 }

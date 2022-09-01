@@ -1,1 +1,0 @@
-CREATE INDEX admin_sector_index ON admin_sector_divide USING gist(the_geom);
