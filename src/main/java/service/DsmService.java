@@ -15,12 +15,9 @@ public class DsmService {
     }
 
     public void storeDsm() {
-        dsmRepository.createTable(getSqlReader(getProperty("dsmTemp")));
-        dsmRepository.saveDsmTemp(findDsms(getProperty("dsm.path")));
-        dsmRepository.deleteNullSigCd();
-        dsmRepository.saveSortedDsm(getSqlReader(getProperty("dsm")));
-        dsmRepository.createIndex(getSqlReader(getProperty("dsmSigCdIndex")));
-        dsmRepository.dropDsmTempTable();
+        dsmRepository.saveOriginData(getSqlReader(getProperty("dsmTemp")), findDsms(getProperty("dsm.path")));
+        dsmRepository.procOriginData(getSqlReader(getProperty("dsm")));
+
     }
 
     private SqlReader getSqlReader(String path) {

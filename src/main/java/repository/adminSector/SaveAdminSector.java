@@ -26,7 +26,7 @@ public class SaveAdminSector {
         int totalRecordCount = 0;
         try (PreparedStatement pStmt = conn.prepareStatement(insertQuery)) {
             for (Shp shp : shps) {
-                System.out.printf("road table %s save start ... ", shp.getName());
+                System.out.printf("%s save start ... ", shp.getName());
                 totalRecordCount += SetPreparedStatement(pStmt, shp);
                 shp.close();
             }
