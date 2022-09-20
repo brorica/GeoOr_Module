@@ -31,6 +31,7 @@ public class AdminSectorService {
     private List<Shp> getShps() {
         List<Shp> shps = new ArrayList<>();
         File[] shpFiles = findShpFiles(getProperty("adminSector.shpPath"));
+        System.out.println(getProperty("adminSector.shpPath"));
         for (File file : shpFiles) {
             try {
                 shps.add(new Shp(file));

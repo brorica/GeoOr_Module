@@ -4,16 +4,16 @@ import service.DsmService;
 import service.RoadService;
 
 
-public class main {
+public class Main {
 
     private static final ApplicationProperties applicationProperties = new ApplicationProperties();
 
     public static void main(String[] args) {
         AdminSectorService adminSectorService = new AdminSectorService();
-        RoadService roadService = new RoadService();
-        DsmService dsmService = new DsmService();
+//        RoadService roadService = new RoadService();
+//        DsmService dsmService = new DsmService();
         adminSectorService.storeAdminSector();
-        roadService.storeRoad();
-        dsmService.storeDsm();
+//        roadService.storeRoad();
+//        dsmService.storeDsm();
     }
 }

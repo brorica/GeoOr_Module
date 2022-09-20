@@ -19,7 +19,7 @@ public class ApplicationProperties {
     }
 
     public static String getProperty(String name) {
-        return properties.getProperty(name);
+        return System.getProperty("user.dir") + properties.getProperty(name);
     }
 
 }
