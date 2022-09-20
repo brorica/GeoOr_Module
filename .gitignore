@@ -22,7 +22,7 @@ gradle-app.setting
 # Cache of project
 .gradletasknamecache
 
-!**/src/main/**/out/
+!**/src/Main/**/out/
 !**/src/test/**/out/
 
 ### env ###
