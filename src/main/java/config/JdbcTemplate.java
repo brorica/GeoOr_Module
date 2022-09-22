@@ -1,5 +1,6 @@
 package config;
 
+import static config.ApplicationProperties.getJdbcProperty;
 import static config.ApplicationProperties.getProperty;
 
 import java.sql.Connection;
@@ -12,14 +13,14 @@ public class JdbcTemplate {
     private final String password;
 
     public JdbcTemplate() {
-        connectUrl = getProperty("jdbc.connectUrl");
-        user = getProperty("jdbc.user");
-        password = getProperty("jdbc.password");
+        connectUrl = getJdbcProperty("jdbc.connectUrl");
+        user = getJdbcProperty("jdbc.user");
+        password = getJdbcProperty("jdbc.password");
     }
 
     public Connection getConnection() throws SQLException {
         try {
-            Class.forName(getProperty("jdbc.driver"));
+            Class.forName(getJdbcProperty("jdbc.driver"));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
