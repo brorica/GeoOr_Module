@@ -10,10 +10,10 @@ public class Main {
 
     public static void main(String[] args) {
         AdminSectorService adminSectorService = new AdminSectorService();
-//        RoadService roadService = new RoadService();
-//        DsmService dsmService = new DsmService();
+        RoadService roadService = new RoadService();
+        DsmService dsmService = new DsmService();
         adminSectorService.storeAdminSector();
-//        roadService.storeRoad();
-//        dsmService.storeDsm();
+        roadService.storeRoad();
+        dsmService.storeDsm();
     }
 }
