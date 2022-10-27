@@ -12,6 +12,7 @@ import repository.dsm.SaveDsmTemp;
 
 public class DsmRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
+    private ExecuteQuery executeQuery = new ExecuteQuery();
 
     public void saveOriginData(SqlReader createSql, File[] dsms) {
         try (Connection conn = jdbcTemplate.getConnection()) {
@@ -62,7 +63,6 @@ public class DsmRepository {
 
     private void createIndex(Connection conn) {
         String sql = "CREATE INDEX dsm_sig_cd_index ON dsm USING brin(sig_cd);";
-        CreateIndex createIndex = new CreateIndex();
-        createIndex.create(conn, sql);
+        executeQuery.createIndex(conn, sql);
     }
 }

@@ -12,6 +12,7 @@ import repository.road.SaveRoad;
 public class RoadRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
+    private ExecuteQuery executeQuery = new ExecuteQuery();
 
     public void saveOriginData(SqlReader createSql, List<Shp> shps) {
         try (Connection conn = jdbcTemplate.getConnection()) {
@@ -49,8 +50,7 @@ public class RoadRepository {
 
     private void createIndex(Connection conn) {
         String sql = "CREATE INDEX road_index ON road_divide USING gist(the_geom);";
-        CreateIndex createIndex = new CreateIndex();
-        createIndex.create(conn, sql);
+        executeQuery.createIndex(conn, sql);
     }
 
 }

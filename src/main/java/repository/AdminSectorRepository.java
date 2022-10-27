@@ -12,6 +12,7 @@ import repository.adminSector.SaveAdminSector;
 public class AdminSectorRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
+    private ExecuteQuery executeQuery = new ExecuteQuery();
 
     public void saveOriginData(SqlReader createSql, List<Shp> shps) {
         try (Connection conn = jdbcTemplate.getConnection()) {
@@ -49,8 +50,7 @@ public class AdminSectorRepository {
 
     private void createIndex(Connection conn) {
         String sql = "CREATE INDEX admin_sector_index ON admin_sector_divide USING gist(the_geom);";
-        CreateIndex createIndex = new CreateIndex();
-        createIndex.create(conn, sql);
+        executeQuery.createIndex(conn, sql);
     }
 
 }

@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * 영역 밖의 dsm 좌표 모두 삭제
+ * 행정 구역 밖의 dsm 좌표 모두 삭제
  */
 public class DeleteUnUseDsm {
 
