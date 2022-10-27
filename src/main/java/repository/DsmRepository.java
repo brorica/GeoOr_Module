@@ -6,8 +6,6 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import domain.SqlReader;
-import repository.dsm.CreatePrimaryKey;
-import repository.dsm.DeleteUnUseDsm;
 import repository.dsm.SaveDsmTemp;
 
 public class DsmRepository {
@@ -35,8 +33,8 @@ public class DsmRepository {
     }
 
     private void deleteNullSigCd(Connection conn) throws SQLException {
-        DeleteUnUseDsm deleteUnUseDsm = new DeleteUnUseDsm();
-        deleteUnUseDsm.delete(conn);
+        String sql = "DELETE FROM dsm_temp WHERE sig_cd is NULL";
+        executeQuery.delete(conn, sql);
     }
 
     public void procOriginData(SqlReader createSql) {
@@ -51,13 +49,13 @@ public class DsmRepository {
     }
 
     private void dropDsmTempTable(Connection conn) {
-        DeleteUnUseDsm deleteUnUseDsm = new DeleteUnUseDsm();
-        deleteUnUseDsm.drop(conn);
+        String sql = "DROP table dsm_temp";
+        executeQuery.drop(conn, sql);
     }
 
     private void setPrimaryKey(Connection conn) {
-        CreatePrimaryKey createPrimaryKey = new CreatePrimaryKey();
-        createPrimaryKey.create(conn);
+        String sql = "ALTER TABLE dsm ADD COLUMN id SERIAL PRIMARY KEY;";
+        executeQuery.alter(conn, sql);
     }
 
     private void createIndex(Connection conn) {

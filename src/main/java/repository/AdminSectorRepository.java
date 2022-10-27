@@ -6,7 +6,6 @@ import domain.SqlReader;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import repository.adminSector.DividePolygon;
 import repository.adminSector.SaveAdminSector;
 
 public class AdminSectorRepository {
@@ -43,8 +42,9 @@ public class AdminSectorRepository {
     }
 
     private void divideAdminSector(Connection conn) throws SQLException {
-        DividePolygon dividePolygon = new DividePolygon();
-        dividePolygon.divide(conn);
+        String sql = "insert into admin_sector_divide(the_geom, adm_sect_cd) "
+            + "select ST_Subdivide(ST_CollectionExtract(ST_MakeValid(the_geom), 3)), adm_sect_cd from admin_sector";
+        executeQuery.save(conn, sql);
     }
 
     private void createIndex(Connection conn) {

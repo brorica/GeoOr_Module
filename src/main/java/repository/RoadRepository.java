@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.List;
 import domain.Shp;
 import domain.SqlReader;
-import repository.road.DividePolygon;
 import repository.road.SaveRoad;
 
 public class RoadRepository {
@@ -43,8 +42,9 @@ public class RoadRepository {
     }
 
     private void divideDumpedRoad(Connection conn) throws SQLException {
-        DividePolygon dividePolygon = new DividePolygon();
-        dividePolygon.divide(conn);
+        String sql = "insert into road_divide(origin_id, the_geom)"
+            + " select id, ST_Subdivide(ST_CollectionExtract(ST_MakeValid(the_geom), 3)) from road";
+        executeQuery.save(conn, sql);
     }
 
     private void createIndex(Connection conn) {
