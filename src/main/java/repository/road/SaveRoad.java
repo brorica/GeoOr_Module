@@ -13,13 +13,8 @@ import domain.Shp;
 
 public class SaveRoad {
 
-    private final int batchLimitValue;
-    private final WKB wkb;
-
-    public SaveRoad() {
-        this.batchLimitValue = 1024;
-        this.wkb = new WKB();
-    }
+    private final int batchLimitValue = 1024;
+    private final WKB wkb = new WKB();
 
     public void save(Connection conn, List<Shp> shps) {
         String insertQuery = createQuery();
