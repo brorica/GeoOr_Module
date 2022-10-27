@@ -8,19 +8,22 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import repository.AdminSectorRepository;
+import repository.adminSector.DivideAdminSectorRepository;
+import repository.adminSector.OriginAdminSectorRepository;
 
 public class AdminSectorService {
 
-    private final AdminSectorRepository adminSectorRepository;
+    private final OriginAdminSectorRepository origin;
+    private final DivideAdminSectorRepository divide;
 
     public AdminSectorService() {
-        this.adminSectorRepository = new AdminSectorRepository();
+        this.origin = new OriginAdminSectorRepository();
+        this.divide = new DivideAdminSectorRepository();
     }
 
     public void storeAdminSector() {
-        adminSectorRepository.saveOriginData(getSqlReader(getProperty("adminSector")), getShps());
-        adminSectorRepository.procOriginData(getSqlReader(getProperty("adminSectorDivide")));
+        origin.run(getSqlReader(getProperty("adminSector")), getShps());
+        divide.run(getSqlReader(getProperty("adminSectorDivide")));
     }
 
     private SqlReader getSqlReader(String path) {

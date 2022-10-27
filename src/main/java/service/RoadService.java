@@ -5,7 +5,7 @@ import static config.ApplicationProperties.getProperty;
 import domain.SqlReader;
 import domain.Shp;
 import java.io.File;
-import repository.RoadRepository;
+import repository.road.RoadRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

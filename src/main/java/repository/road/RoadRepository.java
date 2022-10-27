@@ -1,4 +1,4 @@
-package repository;
+package repository.road;
 
 import config.JdbcTemplate;
 import java.sql.Connection;
@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.List;
 import domain.Shp;
 import domain.SqlReader;
+import repository.ExecuteQuery;
 import repository.road.SaveRoad;
 
 public class RoadRepository {

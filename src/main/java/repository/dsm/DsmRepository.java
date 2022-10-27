@@ -1,4 +1,4 @@
-package repository;
+package repository.dsm;
 
 import config.JdbcTemplate;
 
@@ -6,6 +6,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import domain.SqlReader;
+import repository.ExecuteQuery;
 import repository.dsm.SaveDsmTemp;
 
 public class DsmRepository {

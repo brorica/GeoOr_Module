@@ -3,7 +3,7 @@ package service;
 import static config.ApplicationProperties.getProperty;
 
 import java.io.File;
-import repository.DsmRepository;
+import repository.dsm.DsmRepository;
 import domain.SqlReader;
 
 public class DsmService {

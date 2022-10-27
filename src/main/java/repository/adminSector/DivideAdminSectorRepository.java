@@ -1,37 +1,21 @@
-package repository;
+package repository.adminSector;
 
 import config.JdbcTemplate;
-import domain.Shp;
 import domain.SqlReader;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
-import repository.adminSector.SaveAdminSector;
+import repository.ExecuteQuery;
 
-public class AdminSectorRepository {
+/**
+ * OriginAdminSectorRepository 에서 저장한 행정구역을 분할해 인덱싱
+ */
+
+public class DivideAdminSectorRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
-    public void saveOriginData(SqlReader createSql, List<Shp> shps) {
-        try (Connection conn = jdbcTemplate.getConnection()) {
-            createTable(conn, createSql);
-            saveAdminSector(conn, shps);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void createTable(Connection conn, SqlReader sqlReader) {
-        executeQuery.create(conn, sqlReader);
-    }
-
-    private void saveAdminSector(Connection conn, List<Shp> shps) {
-        SaveAdminSector saveAdminSector = new SaveAdminSector();
-        saveAdminSector.save(conn, shps);
-    }
-
-    public void procOriginData(SqlReader createSql) {
+    public void run(SqlReader createSql) {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn, createSql);
             divideAdminSector(conn);
@@ -39,6 +23,10 @@ public class AdminSectorRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void createTable(Connection conn, SqlReader sqlReader) {
+        executeQuery.create(conn, sqlReader);
     }
 
     private void divideAdminSector(Connection conn) throws SQLException {
