@@ -5,22 +5,20 @@ import static config.ApplicationProperties.getProperty;
 import domain.SqlReader;
 import domain.Shp;
 import java.io.File;
-import repository.road.RoadRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import repository.road.DivideRoadRepository;
+import repository.road.OriginRoadRepository;
 
 public class RoadService {
 
-    private final RoadRepository roadRepository;
-
-    public RoadService() {
-        roadRepository = new RoadRepository();
-    }
+    private final OriginRoadRepository origin = new OriginRoadRepository();
+    private final DivideRoadRepository divide = new DivideRoadRepository();
 
     public void storeRoad() {
-        roadRepository.saveOriginData(getSqlReader(getProperty("road")), getShps());
-        roadRepository.procOriginData(getSqlReader(getProperty("roadDivide")));
+        origin.run(getSqlReader(getProperty("road")), getShps());
+        divide.run(getSqlReader(getProperty("roadDivide")));
     }
 
     private SqlReader getSqlReader(String path) {
