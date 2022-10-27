@@ -24,8 +24,7 @@ public class RoadRepository {
     }
 
     private void createTable(Connection conn, SqlReader sqlReader) {
-        RunScript runScript = new RunScript();
-        runScript.create(conn, sqlReader);
+        executeQuery.create(conn, sqlReader);
     }
 
     private void saveRoad(Connection conn, List<Shp> shps) {

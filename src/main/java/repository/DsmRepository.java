@@ -25,8 +25,7 @@ public class DsmRepository {
     }
 
     private void createTable(Connection conn, SqlReader sqlReader) {
-        RunScript runScript = new RunScript();
-        runScript.create(conn, sqlReader);
+        executeQuery.create(conn, sqlReader);
     }
 
     private void saveDsmTemp(Connection conn, File[] dsms) throws SQLException {
