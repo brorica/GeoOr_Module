@@ -8,6 +8,10 @@ import java.sql.Statement;
 
 public class ExecuteQuery {
 
+    /**
+     * 테이블을 생성하는 메소드
+     * application.properties에 명시된 경로에 있는 sql 파일을 읽어 실행한다.
+     */
     public void create(Connection conn, SqlReader sqlReader) {
         try (Statement st = conn.createStatement()) {
             String query = sqlReader.getContents();
