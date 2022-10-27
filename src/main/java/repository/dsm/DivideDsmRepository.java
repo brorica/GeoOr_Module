@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import repository.ExecuteQuery;
 
 public class DivideDsmRepository {
+
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 

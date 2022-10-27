@@ -38,13 +38,14 @@ public class SaveAdminSector {
         int batchLimit = batchLimitValue, recordCount = 0;
         while (features.hasNext()) {
             SimpleFeature feature = features.next();
-            pStmt.setBytes(1, wkb.convert5179To4326((Geometry) feature.getDefaultGeometryProperty().getValue()));
+            pStmt.setBytes(1,
+                wkb.convert5179To4326((Geometry) feature.getDefaultGeometryProperty().getValue()));
             for (int i = 1; i < attributeNames.size(); i++) {
                 String name = attributeNames.get(i).getLocalName();
                 pStmt.setObject(i + 1, feature.getAttribute(name));
             }
             pStmt.addBatch();
-            if(--batchLimit == 0) {
+            if (--batchLimit == 0) {
                 recordCount += pStmt.executeBatch().length;
                 batchLimit = batchLimitValue;
             }

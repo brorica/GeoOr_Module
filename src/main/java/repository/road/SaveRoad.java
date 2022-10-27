@@ -1,5 +1,6 @@
 package repository.road;
 
+import domain.Shp;
 import geoUtil.WKB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +10,6 @@ import org.geotools.feature.FeatureIterator;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
-import domain.Shp;
 
 public class SaveRoad {
 
@@ -39,14 +39,15 @@ public class SaveRoad {
         int batchLimit = batchLimitValue, recordCount = 0;
         while (features.hasNext()) {
             SimpleFeature feature = features.next();
-            pStmt.setBytes(1, wkb.convert5181To4326((Geometry) feature.getDefaultGeometryProperty().getValue()));
+            pStmt.setBytes(1,
+                wkb.convert5181To4326((Geometry) feature.getDefaultGeometryProperty().getValue()));
             for (int i = 1; i < attributeNames.size(); i++) {
                 String name = attributeNames.get(i).getLocalName();
                 pStmt.setObject(i + 1, feature.getAttribute(name));
             }
 
             pStmt.addBatch();
-            if(--batchLimit == 0) {
+            if (--batchLimit == 0) {
                 recordCount += pStmt.executeBatch().length;
                 batchLimit = batchLimitValue;
             }

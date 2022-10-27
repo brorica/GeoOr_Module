@@ -9,8 +9,7 @@ import java.sql.Statement;
 public class ExecuteQuery {
 
     /**
-     * 테이블을 생성하는 메소드
-     * application.properties에 명시된 경로에 있는 sql 파일을 읽어 실행한다.
+     * 테이블을 생성하는 메소드 application.properties에 명시된 경로에 있는 sql 파일을 읽어 실행한다.
      */
     public void create(Connection conn, SqlReader sqlReader) {
         try (Statement st = conn.createStatement()) {
@@ -18,7 +17,7 @@ public class ExecuteQuery {
             System.out.println(query);
             st.execute(query);
             conn.commit();
-        } catch (SQLException  e) {
+        } catch (SQLException e) {
             System.err.println("쿼리를 실행하는데 오류가 발생했습니다.");
             e.printStackTrace();
         } catch (IOException e) {
@@ -29,7 +28,7 @@ public class ExecuteQuery {
         }
     }
 
-    public void createIndex(Connection conn, String sql)  {
+    public void createIndex(Connection conn, String sql) {
         System.out.println(sql);
         try (Statement st = conn.createStatement()) {
             st.execute(sql);

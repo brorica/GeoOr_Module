@@ -2,8 +2,8 @@ package service;
 
 import static config.ApplicationProperties.getProperty;
 
-import java.io.File;
 import domain.SqlReader;
+import java.io.File;
 import repository.dsm.DivideDsmRepository;
 import repository.dsm.OriginDsmRepository;
 

@@ -2,8 +2,8 @@ package service;
 
 import static config.ApplicationProperties.getProperty;
 
-import domain.SqlReader;
 import domain.Shp;
+import domain.SqlReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

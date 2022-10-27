@@ -24,7 +24,7 @@ public class SaveDsmTemp {
                 startTime = System.currentTimeMillis();
                 totalBatchCount += readDsmToPoint(ps, dsm);
                 endTime = System.currentTimeMillis();
-                System.out.println("cost : " + (endTime - startTime) / 1000 + "s");
+                System.out.printf("cost : \n", (endTime - startTime) / 1000 + "s");
             }
         } catch (SQLException | IOException e) {
             conn.rollback();
@@ -50,7 +50,7 @@ public class SaveDsmTemp {
             ps.setBytes(4, wkb.convertPointWKB(s[0], s[1]));
             ps.addBatch();
 
-            if(--batchCount == 0) {
+            if (--batchCount == 0) {
                 batchResult += ps.executeBatch().length;
                 batchCount = batchLimitValue;
                 System.out.print('#');

@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import repository.ExecuteQuery;
 
 public class OriginDsmRepository {
+
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
@@ -28,7 +29,8 @@ public class OriginDsmRepository {
     private void saveDsmTemp(Connection conn, File[] dsms) throws SQLException {
         System.out.println("# per 5 %");
         SaveDsmTemp saveDsmTemp = new SaveDsmTemp();
-        saveDsmTemp.save(conn, dsms);;
+        saveDsmTemp.save(conn, dsms);
+        ;
     }
 
     private void deleteNullSigCd(Connection conn) throws SQLException {
