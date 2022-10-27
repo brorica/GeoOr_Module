@@ -3,20 +3,18 @@ package service;
 import static config.ApplicationProperties.getProperty;
 
 import java.io.File;
-import repository.dsm.DsmRepository;
 import domain.SqlReader;
+import repository.dsm.DivideDsmRepository;
+import repository.dsm.OriginDsmRepository;
 
 public class DsmService {
 
-    private final DsmRepository dsmRepository;
-
-    public DsmService() {
-        dsmRepository = new DsmRepository();
-    }
+    private final OriginDsmRepository origin = new OriginDsmRepository();
+    private final DivideDsmRepository divide = new DivideDsmRepository();
 
     public void storeDsm() {
-        dsmRepository.saveOriginData(getSqlReader(getProperty("dsmTemp")), findDsms(getProperty("dsm.path")));
-        dsmRepository.procOriginData(getSqlReader(getProperty("dsm")));
+        origin.run(getSqlReader(getProperty("dsmTemp")), findDsms(getProperty("dsm.path")));
+        divide.run(getSqlReader(getProperty("dsm")));
 
     }
 
