@@ -4,18 +4,14 @@ import static config.ApplicationProperties.getProperty;
 
 import domain.SqlReader;
 import java.io.File;
-import repository.dsm.DivideDsmRepository;
-import repository.dsm.OriginDsmRepository;
+import repository.dsm.DsmRepository;
 
 public class DsmService {
 
-    private final OriginDsmRepository origin = new OriginDsmRepository();
-    private final DivideDsmRepository divide = new DivideDsmRepository();
+    private final DsmRepository origin = new DsmRepository();
 
     public void storeDsm() {
         origin.run(getSqlReader(getProperty("dsmTemp")), findDsms(getProperty("dsm.path")));
-        divide.run(getSqlReader(getProperty("dsm")));
-
     }
 
     private SqlReader getSqlReader(String path) {
