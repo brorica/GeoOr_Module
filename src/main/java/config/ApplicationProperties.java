@@ -14,13 +14,15 @@ public class ApplicationProperties {
         try {
             properties.load(getClass().getClassLoader().getResourceAsStream("application.properties"));
         } catch (IOException e) {
-            Logger.getLogger(getClass().getName()).log(Level.ALL, "IOException Occurred while loading properties file " + e.getMessage());
+            Logger.getLogger(getClass().getName()).log(Level.ALL,
+                "IOException Occurred while loading properties file " + e.getMessage());
         }
     }
 
     public static String getProperty(String name) {
         return System.getProperty("user.dir") + properties.getProperty(name);
     }
+
     public static String getJdbcProperty(String name) {
         return properties.getProperty(name);
     }

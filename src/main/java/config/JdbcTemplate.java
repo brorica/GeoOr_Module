@@ -1,13 +1,13 @@
 package config;
 
 import static config.ApplicationProperties.getJdbcProperty;
-import static config.ApplicationProperties.getProperty;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class JdbcTemplate {
+
     private final String connectUrl;
     private final String user;
     private final String password;
