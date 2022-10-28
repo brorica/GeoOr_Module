@@ -11,7 +11,7 @@ import repository.ExecuteQuery;
 /**
  * 원본 행정 구역 shp 저장 DivideAdminSectorRepository 를 통해 R-Tree 인덱싱에 적합하게 분할한다.
  */
-public class OriginAdminSectorRepository {
+public class AdminSectorRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();

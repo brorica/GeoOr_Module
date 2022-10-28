@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import repository.ExecuteQuery;
 
 /**
- * OriginAdminSectorRepository 에서 저장한 행정구역을 분할해 인덱싱
+ * AdminSectorRepository 에서 저장한 행정구역을 분할해 인덱싱
  */
 
 public class DivideAdminSectorRepository {

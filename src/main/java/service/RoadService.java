@@ -9,11 +9,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import repository.road.DivideRoadRepository;
-import repository.road.OriginRoadRepository;
+import repository.road.RoadRepository;
 
 public class RoadService {
 
-    private final OriginRoadRepository origin = new OriginRoadRepository();
+    private final RoadRepository origin = new RoadRepository();
     private final DivideRoadRepository divide = new DivideRoadRepository();
 
     public void storeRoad() {

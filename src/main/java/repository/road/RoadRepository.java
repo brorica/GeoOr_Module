@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 import repository.ExecuteQuery;
 
-public class OriginRoadRepository {
+public class RoadRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();

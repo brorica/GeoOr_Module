@@ -16,9 +16,9 @@ public class DsmRepository {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn, createSql);
             saveDsmTemp(conn, dsms);
-            deleteNullSigCd(conn);
+            deleteNullSigCode(conn);
             createIndex(conn);
-            applyClusterIndex(conn);
+            createClusterIndex(conn);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -35,7 +35,7 @@ public class DsmRepository {
         ;
     }
 
-    private void deleteNullSigCd(Connection conn) throws SQLException {
+    private void deleteNullSigCode(Connection conn) throws SQLException {
         String sql = "DELETE FROM dsm WHERE sig_cd is NULL";
         executeQuery.delete(conn, sql);
     }
@@ -45,7 +45,7 @@ public class DsmRepository {
         executeQuery.createIndex(conn, sql);
     }
 
-    private void applyClusterIndex(Connection conn) {
+    private void createClusterIndex(Connection conn) {
         String sql = "CLUSTER dsm USING dsm_sig_cd_index";
         executeQuery.createIndex(conn, sql);
     }

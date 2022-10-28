@@ -8,16 +8,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import repository.adminSector.AdminSectorRepository;
 import repository.adminSector.DivideAdminSectorRepository;
-import repository.adminSector.OriginAdminSectorRepository;
 
 public class AdminSectorService {
 
-    private final OriginAdminSectorRepository origin;
+    private final AdminSectorRepository origin;
     private final DivideAdminSectorRepository divide;
 
     public AdminSectorService() {
-        this.origin = new OriginAdminSectorRepository();
+        this.origin = new AdminSectorRepository();
         this.divide = new DivideAdminSectorRepository();
     }
 
