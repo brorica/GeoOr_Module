@@ -24,7 +24,7 @@ public class SaveDsmTemp {
                 startTime = System.currentTimeMillis();
                 totalBatchCount += readDsmToPoint(ps, dsm);
                 endTime = System.currentTimeMillis();
-                System.out.printf("cost : \n", (endTime - startTime) / 1000 + "s");
+                System.out.println("cost : " + (endTime - startTime) / 1000 + "s");
             }
         } catch (SQLException | IOException e) {
             conn.rollback();

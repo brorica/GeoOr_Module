@@ -15,7 +15,9 @@ public class DivideRoadRepository {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn, createSql);
             divideDumpedRoad(conn);
-            createIndex(conn);
+            createGeomIndex(conn);
+            createSigCodeIndex(conn);
+            applyClusterIndex(conn);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -26,13 +28,23 @@ public class DivideRoadRepository {
     }
 
     private void divideDumpedRoad(Connection conn) throws SQLException {
-        String sql = "insert into road_divide(origin_id, the_geom)"
-            + " select id, ST_Subdivide(ST_CollectionExtract(ST_MakeValid(the_geom), 3)) from road";
+        String sql = "insert into road_divide(origin_id, sig_cd, the_geom)"
+            + " select id, sig_cd, ST_Subdivide(ST_CollectionExtract(ST_MakeValid(the_geom), 3)) from road";
         executeQuery.save(conn, sql);
     }
 
-    private void createIndex(Connection conn) {
-        String sql = "CREATE INDEX road_index ON road_divide USING gist(the_geom);";
+    private void createGeomIndex(Connection conn) {
+        String sql = "CREATE INDEX road_geom_index ON road_divide USING gist(the_geom);";
+        executeQuery.createIndex(conn, sql);
+    }
+
+    private void createSigCodeIndex(Connection conn) {
+        String sql = "CREATE INDEX road_sig_cd_index ON road_divide USING btree(sig_cd);";
+        executeQuery.createIndex(conn, sql);
+    }
+
+    private void applyClusterIndex(Connection conn) {
+        String sql = "CLUSTER road_divide USING road_sig_cd_index";
         executeQuery.createIndex(conn, sql);
     }
 
