@@ -2,22 +2,16 @@ package service;
 
 import static config.ApplicationProperties.getProperty;
 
-import java.io.File;
-import repository.DsmRepository;
 import domain.SqlReader;
+import java.io.File;
+import repository.dsm.DsmRepository;
 
 public class DsmService {
 
-    private final DsmRepository dsmRepository;
-
-    public DsmService() {
-        dsmRepository = new DsmRepository();
-    }
+    private final DsmRepository origin = new DsmRepository();
 
     public void storeDsm() {
-        dsmRepository.saveOriginData(getSqlReader(getProperty("dsmTemp")), findDsms(getProperty("dsm.path")));
-        dsmRepository.procOriginData(getSqlReader(getProperty("dsm")));
-
+        origin.run(getSqlReader(getProperty("dsm")), findDsm(getProperty("dsm.path")));
     }
 
     private SqlReader getSqlReader(String path) {
@@ -25,7 +19,7 @@ public class DsmService {
         return new SqlReader(file);
     }
 
-    private File[] findDsms(String path) {
+    private File[] findDsm(String path) {
         String extension = "xyz";
         File directory = new File(path);
         return directory.listFiles((dir, name) -> name.endsWith(extension));

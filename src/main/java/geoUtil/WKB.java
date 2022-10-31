@@ -1,11 +1,13 @@
 package geoUtil;
-;
+
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.WKBWriter;
+
+;
 
 public class WKB {
 
@@ -27,6 +29,7 @@ public class WKB {
         Geometry geometry = srid5181.convertGeometry(geom);
         return wkbWriter.write(geometry);
     }
+
     // 지역 경계면 polygon 변환용
     public byte[] convert5179To4326(Geometry geom) {
         Geometry geometry = srid5179.convertGeometry(geom);

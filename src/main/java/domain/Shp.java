@@ -17,8 +17,7 @@ import org.opengis.filter.Filter;
 
 /**
  * 2022-03 데이터 기준 좌표계는 5181이다.
- * 만약, 새로운 데이터를 받았는데 좌표계가 다르다면
- * src/geoUtil/SRID 파일의 좌표체계도 수정해야 한다.
+ * 만약, 새로운 데이터를 받았는데 좌표계가 다르다면 src/geoUtil/SRID 파일의 좌표체계도 수정해야 한다.
  */
 public class Shp {
 

@@ -10,9 +10,6 @@ import org.opengis.referencing.operation.TransformException;
 
 public class SRID5181 {
 
-    private CoordinateReferenceSystem sourceCrs;
-    private CoordinateReferenceSystem targetCrs;
-    private MathTransform engine;
     // prj 파일에 있는 내용임
     private final String wkt5174 = "PROJCS[\"Korea 2000 / Central Belt\", \n"
         + "  GEOGCS[\"Korea 2000\", \n"
@@ -35,6 +32,9 @@ public class SRID5181 {
         + "  AXIS[\"Easting\", EAST], \n"
         + "  AXIS[\"Northing\", NORTH], \n"
         + "  AUTHORITY[\"EPSG\",\"5181\"]]";
+    private CoordinateReferenceSystem sourceCrs;
+    private CoordinateReferenceSystem targetCrs;
+    private MathTransform engine;
 
 
     public SRID5181() {

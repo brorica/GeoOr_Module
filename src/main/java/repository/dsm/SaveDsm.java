@@ -9,13 +9,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class SaveDsmTemp {
+public class SaveDsm {
 
-    private final int batchCountLimit = 648000;
-    private final WKB wKb = new WKB();
+    private final int batchLimitValue = 648000;
+    private final WKB wkb = new WKB();
 
     public void save(Connection conn, File[] dsms) throws SQLException {
-        String sql = "INSERT INTO dsm_temp (x, y, z, sig_cd) VALUES(?, ?, ?, (SELECT adm_sect_cd FROM admin_sector_divide WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))";
+        String sql = "INSERT INTO dsm (x, y, z, sig_cd) VALUES(?, ?, ?, (SELECT adm_sect_cd FROM admin_sector_divide WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))";
         long totalBatchCount = 0;
         long startTime, endTime;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -35,7 +35,7 @@ public class SaveDsmTemp {
 
     private int readDsmToPoint(PreparedStatement ps, File dsm) throws IOException, SQLException {
         BufferedReader reader = new BufferedReader(new FileReader(dsm));
-        int batchCount = batchCountLimit, batchResult = 0;
+        int batchCount = batchLimitValue, batchResult = 0;
         double s0, s1, s2;
         String line;
         while ((line = reader.readLine()) != null) {
@@ -47,12 +47,12 @@ public class SaveDsmTemp {
             ps.setDouble(1, s0);
             ps.setDouble(2, s1);
             ps.setDouble(3, s2);
-            ps.setBytes(4, wKb.convertPointWKB(s[0], s[1]));
+            ps.setBytes(4, wkb.convertPointWKB(s[0], s[1]));
             ps.addBatch();
 
-            if(--batchCount == 0) {
+            if (--batchCount == 0) {
                 batchResult += ps.executeBatch().length;
-                batchCount = batchCountLimit;
+                batchCount = batchLimitValue;
                 System.out.print('#');
                 ps.clearBatch();
             }
