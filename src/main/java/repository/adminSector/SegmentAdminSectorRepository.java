@@ -31,7 +31,7 @@ public class SegmentAdminSectorRepository {
 
     private void divideAdminSector(Connection conn) throws SQLException {
         String sql = "insert into admin_sector_segment "
-            + "select ST_Subdivide(the_geom, 10), adm_sect_cd from admin_sector";
+            + "select ST_Subdivide(the_geom, 16), adm_sect_cd from admin_sector";
         executeQuery.save(conn, sql);
     }
 

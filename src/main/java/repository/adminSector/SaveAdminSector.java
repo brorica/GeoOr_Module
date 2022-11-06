@@ -40,10 +40,11 @@ public class SaveAdminSector {
             SimpleFeature feature = features.next();
             pStmt.setBytes(1,
                 wkb.convert5179To4326((Geometry) feature.getDefaultGeometryProperty().getValue()));
-            for (int i = 1; i < attributeNames.size(); i++) {
-                String name = attributeNames.get(i).getLocalName();
-                pStmt.setObject(i + 1, feature.getAttribute(name));
-            }
+            pStmt.setInt(2, Integer.parseInt((String) feature.getAttribute("ADM_SECT_C")));
+            pStmt.setObject(3, feature.getAttribute("SGG_NM"));
+            pStmt.setObject(4, feature.getAttribute("SGG_OID"));
+            pStmt.setObject(5, feature.getAttribute("COL_ADM_SE"));
+            pStmt.setObject(6, feature.getAttribute("GID"));
             pStmt.addBatch();
             if (--batchLimit == 0) {
                 recordCount += pStmt.executeBatch().length;
