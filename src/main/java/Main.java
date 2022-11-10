@@ -1,6 +1,7 @@
 import config.ApplicationProperties;
 import service.AdminSectorService;
 import service.DsmService;
+import service.FrozenService;
 import service.RoadService;
 
 
@@ -12,8 +13,11 @@ public class Main {
         AdminSectorService adminSectorService = new AdminSectorService();
         RoadService roadService = new RoadService();
         DsmService dsmService = new DsmService();
+        FrozenService frozenService = new FrozenService();
+
         adminSectorService.storeAdminSector();
         roadService.storeRoad();
         dsmService.storeDsm();
+        frozenService.storeFrozen();
     }
 }
