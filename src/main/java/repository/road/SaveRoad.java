@@ -41,10 +41,9 @@ public class SaveRoad {
             SimpleFeature feature = features.next();
             pStmt.setBytes(1,
                 wkb.convert5181To4326((Geometry) feature.getDefaultGeometryProperty().getValue()));
-            for (int i = 1; i < attributeNames.size(); i++) {
-                String name = attributeNames.get(i).getLocalName();
-                pStmt.setObject(i + 1, feature.getAttribute(name));
-            }
+            pStmt.setObject(2, feature.getAttribute("OPERT_DE"));
+            pStmt.setObject(3, feature.getAttribute("RW_SN"));
+            pStmt.setInt(4, Integer.parseInt((String) feature.getAttribute("SIG_CD")));
 
             pStmt.addBatch();
             if (--batchLimit == 0) {

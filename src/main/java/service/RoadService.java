@@ -8,17 +8,17 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import repository.road.DivideRoadRepository;
+import repository.road.SegmentRoadRepository;
 import repository.road.RoadRepository;
 
 public class RoadService {
 
     private final RoadRepository origin = new RoadRepository();
-    private final DivideRoadRepository divide = new DivideRoadRepository();
+    private final SegmentRoadRepository divide = new SegmentRoadRepository();
 
     public void storeRoad() {
         origin.run(getSqlReader(getProperty("road")), getShps());
-        divide.run(getSqlReader(getProperty("roadDivide")));
+        divide.run(getSqlReader(getProperty("roadSegment")));
     }
 
     private SqlReader getSqlReader(String path) {

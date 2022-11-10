@@ -9,21 +9,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import repository.adminSector.AdminSectorRepository;
-import repository.adminSector.DivideAdminSectorRepository;
+import repository.adminSector.SegmentAdminSectorRepository;
 
 public class AdminSectorService {
 
     private final AdminSectorRepository origin;
-    private final DivideAdminSectorRepository divide;
+    private final SegmentAdminSectorRepository divide;
 
     public AdminSectorService() {
         this.origin = new AdminSectorRepository();
-        this.divide = new DivideAdminSectorRepository();
+        this.divide = new SegmentAdminSectorRepository();
     }
 
     public void storeAdminSector() {
         origin.run(getSqlReader(getProperty("adminSector")), getShps());
-        divide.run(getSqlReader(getProperty("adminSectorDivide")));
+        divide.run(getSqlReader(getProperty("adminSectorSegment")));
     }
 
     private SqlReader getSqlReader(String path) {
