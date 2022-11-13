@@ -11,12 +11,7 @@ public class DsmService {
     private final DsmRepository origin = new DsmRepository();
 
     public void storeDsm() {
-        origin.run(getSqlReader(getProperty("dsm")), findDsm(getProperty("dsm.path")));
-    }
-
-    private SqlReader getSqlReader(String path) {
-        File file = new File(path);
-        return new SqlReader(file);
+        origin.run(findDsm(getProperty("dsm")));
     }
 
     private File[] findDsm(String path) {

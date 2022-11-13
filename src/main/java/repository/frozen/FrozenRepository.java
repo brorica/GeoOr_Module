@@ -12,9 +12,9 @@ public class FrozenRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
-    public void run(SqlReader createSql, File[] files) {
+    public void run(File[] files) {
         try (Connection conn = jdbcTemplate.getConnection()) {
-            createTable(conn, createSql);
+            createTable(conn);
             saveFrozen(conn, files);
             createIndex(conn);
             createClusterIndex(conn);
@@ -23,8 +23,11 @@ public class FrozenRepository {
         }
     }
 
-    private void createTable(Connection conn, SqlReader createSql) {
-        executeQuery.create(conn, createSql);
+    private void createTable(Connection conn) {
+        String ddl = "CREATE TABLE IF NOT EXISTS frozen (\n"
+            + "  the_geom geometry(Point, 4326),\n"
+            + "  sig_cd integer)";
+        executeQuery.create(conn, ddl);
     }
 
     private void saveFrozen(Connection conn, File[] files) throws SQLException {

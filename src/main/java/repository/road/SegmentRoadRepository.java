@@ -11,9 +11,9 @@ public class SegmentRoadRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
-    public void run(SqlReader createSql) {
+    public void run() {
         try (Connection conn = jdbcTemplate.getConnection()) {
-            createTable(conn, createSql);
+            createTable(conn);
             divideRoad(conn);
             createGeomIndex(conn);
             createSigCodeIndex(conn);
@@ -23,8 +23,12 @@ public class SegmentRoadRepository {
         }
     }
 
-    private void createTable(Connection conn, SqlReader sqlReader) {
-        executeQuery.create(conn, sqlReader);
+    private void createTable(Connection conn) {
+        String ddl = "CREATE TABLE IF NOT EXISTS road_segment (\n"
+            + "  origin_id integer,\n"
+            + "  sig_cd integer,\n"
+            + "  the_geom geometry(Polygon, 4326))";
+        executeQuery.create(conn, ddl);
     }
 
     /**

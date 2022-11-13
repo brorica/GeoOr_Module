@@ -11,14 +11,8 @@ public class FrozenService {
     FrozenRepository repository = new FrozenRepository();
 
     public void storeFrozen() {
-        SqlReader createSql = getSqlReader(getProperty("frozen"));
-        File[] files = findData(getProperty("frozen.dataPath"));
-        repository.run(createSql, files);
-    }
-
-    private SqlReader getSqlReader(String path) {
-        File file = new File(path);
-        return new SqlReader(file);
+        File[] files = findData(getProperty("frozen"));
+        repository.run(files);
     }
 
     private File[] findData(String path) {

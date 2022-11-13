@@ -15,9 +15,9 @@ public class SegmentAdminSectorRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
-    public void run(SqlReader createSql) {
+    public void run() {
         try (Connection conn = jdbcTemplate.getConnection()) {
-            createTable(conn, createSql);
+            createTable(conn);
             divideAdminSector(conn);
             createIndex(conn);
         } catch (SQLException e) {
@@ -25,8 +25,11 @@ public class SegmentAdminSectorRepository {
         }
     }
 
-    private void createTable(Connection conn, SqlReader sqlReader) {
-        executeQuery.create(conn, sqlReader);
+    private void createTable(Connection conn) {
+        String ddl = "CREATE TABLE IF NOT EXISTS admin_sector_segment (\n"
+            + "  the_geom geometry(Polygon, 4326),\n"
+            + "  adm_sect_cd integer)";
+        executeQuery.create(conn, ddl);
     }
 
     private void divideAdminSector(Connection conn) throws SQLException {

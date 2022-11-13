@@ -22,18 +22,13 @@ public class AdminSectorService {
     }
 
     public void storeAdminSector() {
-        origin.run(getSqlReader(getProperty("adminSector")), getShps());
-        divide.run(getSqlReader(getProperty("adminSectorSegment")));
-    }
-
-    private SqlReader getSqlReader(String path) {
-        File file = new File(path);
-        return new SqlReader(file);
+        origin.run(getShps());
+        divide.run();
     }
 
     private List<Shp> getShps() {
         List<Shp> shps = new ArrayList<>();
-        File[] shpFiles = findShpFiles(getProperty("adminSector.shpPath"));
+        File[] shpFiles = findShpFiles(getProperty("adminSector"));
         for (File file : shpFiles) {
             try {
                 shps.add(new Shp(file));

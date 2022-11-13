@@ -13,17 +13,24 @@ public class RoadRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
-    public void run(SqlReader createSql, List<Shp> shps) {
+    public void run(List<Shp> shps) {
         try (Connection conn = jdbcTemplate.getConnection()) {
-            createTable(conn, createSql);
+            createTable(conn);
             saveRoad(conn, shps);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private void createTable(Connection conn, SqlReader sqlReader) {
-        executeQuery.create(conn, sqlReader);
+    private void createTable(Connection conn) {
+        String ddl = "CREATE TABLE IF NOT EXISTS road (\n"
+            + "  id integer primary key generated always as identity,\n"
+            + "  the_geom geometry(MultiPolygon, 4326),\n"
+            + "  opert_de character varying(14),\n"
+            + "  rw_sn double precision,\n"
+            + "  sig_cd integer,\n"
+            + "  hillshade integer default 0)";
+        executeQuery.create(conn, ddl);
     }
 
     private void saveRoad(Connection conn, List<Shp> shps) {

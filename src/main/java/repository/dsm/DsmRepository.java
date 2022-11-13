@@ -12,9 +12,9 @@ public class DsmRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
-    public void run(SqlReader createSql, File[] dsms) {
+    public void run(File[] dsms) {
         try (Connection conn = jdbcTemplate.getConnection()) {
-            createTable(conn, createSql);
+            createTable(conn);
             saveDsmTemp(conn, dsms);
             deleteNullSigCode(conn);
             createIndex(conn);
@@ -24,8 +24,13 @@ public class DsmRepository {
         }
     }
 
-    private void createTable(Connection conn, SqlReader sqlReader) {
-        executeQuery.create(conn, sqlReader);
+    private void createTable(Connection conn) {
+        String ddl = "CREATE TABLE IF NOT EXISTS dsm (\n"
+            + "   x numeric not null,\n"
+            + "   y numeric not null,\n"
+            + "   z numeric not null,\n"
+            + "   sig_cd integer)";
+        executeQuery.create(conn, ddl);
     }
 
     private void saveDsmTemp(Connection conn, File[] dsms) throws SQLException {

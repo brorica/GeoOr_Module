@@ -17,18 +17,13 @@ public class RoadService {
     private final SegmentRoadRepository divide = new SegmentRoadRepository();
 
     public void storeRoad() {
-        origin.run(getSqlReader(getProperty("road")), getShps());
-        divide.run(getSqlReader(getProperty("roadSegment")));
-    }
-
-    private SqlReader getSqlReader(String path) {
-        File file = new File(path);
-        return new SqlReader(file);
+        origin.run(getShps());
+        divide.run();
     }
 
     private List<Shp> getShps() {
         List<Shp> shps = new ArrayList<>();
-        File[] shpFiles = findShpFiles(getProperty("road.shpPath"));
+        File[] shpFiles = findShpFiles(getProperty("road"));
         for (File file : shpFiles) {
             try {
                 shps.add(new Shp(file));
