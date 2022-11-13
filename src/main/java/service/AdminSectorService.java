@@ -10,7 +10,7 @@ import java.util.List;
 import repository.adminSector.AdminSectorRepository;
 import repository.adminSector.SegmentAdminSectorRepository;
 
-public class AdminSectorService {
+public class AdminSectorService implements Service {
 
     private final AdminSectorRepository origin;
     private final SegmentAdminSectorRepository segment;
@@ -20,14 +20,15 @@ public class AdminSectorService {
         this.segment = new SegmentAdminSectorRepository();
     }
 
-    public void storeAdminSector() {
+    @Override
+    public void save() {
         origin.run(getShps());
         segment.run();
     }
 
     private List<Shp> getShps() {
         List<Shp> shps = new ArrayList<>();
-        File[] shpFiles = findShpFiles(getProperty("adminSector"));
+        File[] shpFiles = getFiles(getProperty("adminSector"), "shp");
         for (File file : shpFiles) {
             try {
                 shps.add(new Shp(file));
@@ -39,9 +40,9 @@ public class AdminSectorService {
         return shps;
     }
 
-    private File[] findShpFiles(String shpPath) {
-        File directory = new File(shpPath);
-        String extension = "shp";
+    @Override
+    public File[] getFiles(String path, String extension) {
+        File directory = new File(path);
         return directory.listFiles((dir, name) -> name.endsWith(extension));
     }
 }

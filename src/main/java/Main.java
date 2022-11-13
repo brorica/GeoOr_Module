@@ -15,7 +15,7 @@ public class Main {
         DsmService dsmService = new DsmService();
         FrozenService frozenService = new FrozenService();
 
-        adminSectorService.storeAdminSector();
+        adminSectorService.save();
         roadService.storeRoad();
         dsmService.storeDsm();
         frozenService.storeFrozen();
