@@ -1,8 +1,6 @@
 package service;
 
 import static config.ApplicationProperties.getProperty;
-
-import domain.SqlReader;
 import java.io.File;
 import repository.frozen.FrozenRepository;
 

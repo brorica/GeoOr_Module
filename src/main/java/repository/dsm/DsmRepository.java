@@ -1,7 +1,6 @@
 package repository.dsm;
 
 import config.JdbcTemplate;
-import domain.SqlReader;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;

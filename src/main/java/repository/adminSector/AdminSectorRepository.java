@@ -2,7 +2,6 @@ package repository.adminSector;
 
 import config.JdbcTemplate;
 import domain.Shp;
-import domain.SqlReader;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;

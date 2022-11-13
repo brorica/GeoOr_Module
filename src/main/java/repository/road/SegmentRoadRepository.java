@@ -1,7 +1,6 @@
 package repository.road;
 
 import config.JdbcTemplate;
-import domain.SqlReader;
 import java.sql.Connection;
 import java.sql.SQLException;
 import repository.ExecuteQuery;

@@ -3,7 +3,6 @@ package service;
 import static config.ApplicationProperties.getProperty;
 
 import domain.Shp;
-import domain.SqlReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,16 +13,16 @@ import repository.adminSector.SegmentAdminSectorRepository;
 public class AdminSectorService {
 
     private final AdminSectorRepository origin;
-    private final SegmentAdminSectorRepository divide;
+    private final SegmentAdminSectorRepository segment;
 
     public AdminSectorService() {
         this.origin = new AdminSectorRepository();
-        this.divide = new SegmentAdminSectorRepository();
+        this.segment = new SegmentAdminSectorRepository();
     }
 
     public void storeAdminSector() {
         origin.run(getShps());
-        divide.run();
+        segment.run();
     }
 
     private List<Shp> getShps() {

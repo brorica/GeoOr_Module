@@ -3,7 +3,6 @@ package service;
 import static config.ApplicationProperties.getProperty;
 
 import domain.Shp;
-import domain.SqlReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,11 +13,11 @@ import repository.road.RoadRepository;
 public class RoadService {
 
     private final RoadRepository origin = new RoadRepository();
-    private final SegmentRoadRepository divide = new SegmentRoadRepository();
+    private final SegmentRoadRepository segment = new SegmentRoadRepository();
 
     public void storeRoad() {
         origin.run(getShps());
-        divide.run();
+        segment.run();
     }
 
     private List<Shp> getShps() {
