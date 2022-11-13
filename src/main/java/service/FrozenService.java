@@ -4,17 +4,17 @@ import static config.ApplicationProperties.getProperty;
 import java.io.File;
 import repository.frozen.FrozenRepository;
 
-public class FrozenService {
+public class FrozenService implements Service {
 
     FrozenRepository repository = new FrozenRepository();
 
-    public void storeFrozen() {
-        File[] files = findData(getProperty("frozen"));
-        repository.run(files);
+    public void save() {
+        String path = getProperty("frozen");
+        String extension = "txt";
+        repository.run(getFiles(path, extension));
     }
 
-    private File[] findData(String path) {
-        String extension = "txt";
+    public File[] getFiles(String path, String extension) {
         File directory = new File(path);
         return directory.listFiles((dir, name) -> name.endsWith(extension));
     }

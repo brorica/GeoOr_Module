@@ -10,19 +10,22 @@ import java.util.List;
 import repository.road.SegmentRoadRepository;
 import repository.road.RoadRepository;
 
-public class RoadService {
+public class RoadService implements Service {
 
     private final RoadRepository origin = new RoadRepository();
     private final SegmentRoadRepository segment = new SegmentRoadRepository();
 
-    public void storeRoad() {
+    public void save() {
         origin.run(getShps());
         segment.run();
     }
 
     private List<Shp> getShps() {
+        String path = getProperty("road");
+        String extension = "shp";
+        File[] shpFiles = getFiles(path, extension);
+
         List<Shp> shps = new ArrayList<>();
-        File[] shpFiles = findShpFiles(getProperty("road"));
         for (File file : shpFiles) {
             try {
                 shps.add(new Shp(file));
@@ -34,9 +37,9 @@ public class RoadService {
         return shps;
     }
 
-    private File[] findShpFiles(String shpPath) {
-        File directory = new File(shpPath);
-        String extension = "shp";
+    @Override
+    public File[] getFiles(String path, String extension) {
+        File directory = new File(path);
         return directory.listFiles((dir, name) -> name.endsWith(extension));
     }
 }

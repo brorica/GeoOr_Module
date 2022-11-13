@@ -9,7 +9,7 @@ public class FrozenInitializer {
 
     public static void main(String[] args) {
         FrozenService frozenService = new FrozenService();
-        frozenService.storeFrozen();
+        frozenService.save();
     }
 
 }

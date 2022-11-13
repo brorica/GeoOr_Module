@@ -5,18 +5,20 @@ import static config.ApplicationProperties.getProperty;
 import java.io.File;
 import repository.dsm.DsmRepository;
 
-public class DsmService {
+public class DsmService implements Service {
 
     private final DsmRepository origin = new DsmRepository();
 
-    public void storeDsm() {
-        origin.run(findDsm(getProperty("dsm")));
+    @Override
+    public void save() {
+        String path = getProperty("dsm");
+        String extension = "xyz";
+        origin.run(getFiles(path, extension));
     }
 
-    private File[] findDsm(String path) {
-        String extension = "xyz";
-        File directory = new File(path);
-        return directory.listFiles((dir, name) -> name.endsWith(extension));
+    @Override
+    public File[] getFiles(String path, String extension) {
+        return new File[0];
     }
 
 }

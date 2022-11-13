@@ -27,8 +27,11 @@ public class AdminSectorService implements Service {
     }
 
     private List<Shp> getShps() {
+        String path = getProperty("adminSector");
+        String extension = "shp";
+        File[] shpFiles = getFiles(path, extension);
+
         List<Shp> shps = new ArrayList<>();
-        File[] shpFiles = getFiles(getProperty("adminSector"), "shp");
         for (File file : shpFiles) {
             try {
                 shps.add(new Shp(file));
