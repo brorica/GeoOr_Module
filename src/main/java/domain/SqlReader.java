@@ -1,12 +1,13 @@
 package domain;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class SqlReader {
+public class SqlReader implements Closeable {
 
     private final BufferedReader reader;
 
@@ -29,6 +30,7 @@ public class SqlReader {
         return query.toString();
     }
 
+    @Override
     public void close() {
         try {
             reader.close();
