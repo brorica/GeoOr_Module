@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * 이 인터페이스를 구현한단 것은
- * 데이터베이스에 직접 삽입을 한단 클래스란 뜻이다.
+ * 데이터베이스에 직접 삽입을 하는 클래스란 뜻이다.
  */
 
 public interface Save <T> {
