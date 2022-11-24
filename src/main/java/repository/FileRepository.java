@@ -1,6 +1,7 @@
 package repository;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * 이 인터페이스를 구현하는 것은
@@ -8,5 +9,5 @@ import java.io.File;
  */
 public interface FileRepository {
 
-    void run(File[] files);
+    void run(List<File> files);
 }

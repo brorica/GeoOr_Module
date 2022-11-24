@@ -46,7 +46,7 @@ public class SegmentRoadRepository {
 
     private void divideRoad(Connection conn) throws SQLException {
         String sql = "insert into " + segmentTableName +
-            "select id, sig_cd, ST_Subdivide(ST_MakeValid(the_geom), " + maximumPoints + ") from " + originTableName;
+            " select id, sig_cd, ST_Subdivide(ST_MakeValid(the_geom), " + maximumPoints + ") from " + originTableName;
         executeQuery.save(conn, sql);
     }
 

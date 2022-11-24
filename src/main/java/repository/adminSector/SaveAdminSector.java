@@ -10,8 +10,9 @@ import org.geotools.feature.FeatureIterator;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
+import repository.Save;
 
-public class SaveAdminSector {
+public class SaveAdminSector implements Save<Shp> {
 
     private final int batchLimitValue = 1024;
     private final WKB wkb = new WKB();
@@ -21,6 +22,7 @@ public class SaveAdminSector {
         this.tableName = tableName;
     }
 
+    @Override
     public void save(Connection conn, List<Shp> shps) {
         String insertQuery = createQuery();
         int totalRecordCount = 0;
@@ -61,7 +63,8 @@ public class SaveAdminSector {
         return recordCount;
     }
 
-    private String createQuery() {
+    @Override
+    public String createQuery() {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");
         query.append(tableName);

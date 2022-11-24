@@ -6,6 +6,7 @@ import domain.Shp;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import repository.road.SegmentRoadRepository;
 import repository.road.RoadRepository;
@@ -31,7 +32,7 @@ public class RoadService implements Service {
     private List<Shp> getShps() {
         String path = getProperty("road");
         String extension = "shp";
-        File[] shpFiles = getFiles(path, extension);
+        List<File> shpFiles = getFiles(path, extension);
 
         List<Shp> shps = new ArrayList<>();
         for (File file : shpFiles) {
@@ -46,8 +47,9 @@ public class RoadService implements Service {
     }
 
     @Override
-    public File[] getFiles(String path, String extension) {
+    public List<File> getFiles(String path, String extension) {
         File directory = new File(path);
-        return directory.listFiles((dir, name) -> name.endsWith(extension));
+        File[] files = directory.listFiles((dir, name) -> name.endsWith(extension));
+        return Arrays.asList(files);
     }
 }

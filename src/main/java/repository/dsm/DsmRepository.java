@@ -4,6 +4,7 @@ import config.JdbcTemplate;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import repository.ExecuteQuery;
 import repository.FileRepository;
 
@@ -20,7 +21,7 @@ public class DsmRepository implements FileRepository {
         this.indexName = "dsm_sig_cd_index";
     }
 
-    public void run(File[] dsms) {
+    public void run(List<File> dsms) {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);
             saveDsmTemp(conn, dsms);
@@ -42,7 +43,7 @@ public class DsmRepository implements FileRepository {
         executeQuery.create(conn, ddl);
     }
 
-    private void saveDsmTemp(Connection conn, File[] dsms) throws SQLException {
+    private void saveDsmTemp(Connection conn, List<File> dsms) throws SQLException {
         System.out.println("# per 5 %");
         SaveDsm saveDsm = new SaveDsm(tableName);
         saveDsm.save(conn, dsms);

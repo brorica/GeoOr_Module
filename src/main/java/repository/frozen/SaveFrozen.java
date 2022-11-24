@@ -8,9 +8,11 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 import repository.RelateAdminSector;
+import repository.Save;
 
-public class SaveFrozen extends RelateAdminSector {
+public class SaveFrozen extends RelateAdminSector implements Save<File> {
 
     private final int batchLimitValue = 648000;
     private final WKB wkb = new WKB();
@@ -20,8 +22,9 @@ public class SaveFrozen extends RelateAdminSector {
         this.tableName = tableName;
     }
 
-    public void save(Connection conn, File[] files) throws SQLException {
-        String sql = getSQL();
+    @Override
+    public void save(Connection conn, List<File> files) throws SQLException {
+        String sql = createQuery();
         long totalBatchCount = 0;
         System.out.print("save frozen data... ");
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -64,7 +67,8 @@ public class SaveFrozen extends RelateAdminSector {
         return batchResult;
     }
 
-    private String getSQL() {
+    @Override
+    public String createQuery() {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO ");
         query.append(tableName);

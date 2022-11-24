@@ -1,6 +1,7 @@
 package service;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Service interface를 구현하는 개체들은 다음 2가지를 수행해야 한다.
@@ -11,6 +12,6 @@ public interface Service {
 
     void save();
 
-    File[] getFiles(String path, String extension);
+    List<File> getFiles(String path, String extension);
 
 }

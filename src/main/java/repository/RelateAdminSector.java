@@ -9,7 +9,7 @@ package repository;
  */
 public class RelateAdminSector {
 
-    private final String adminSectorSegmentTableName = "admin_sector_segment ";
+    private final String adminSectorSegmentTableName = "admin_sector_segment";
 
     protected String getAdminSectorSegmentTableName() {
         return adminSectorSegmentTableName;

@@ -4,6 +4,7 @@ import config.JdbcTemplate;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import repository.ExecuteQuery;
 import repository.FileRepository;
 
@@ -20,7 +21,7 @@ public class FrozenRepository implements FileRepository {
         this.sigIndexName = "frozen_sig_cd_index";
     }
 
-    public void run(File[] files) {
+    public void run(List<File> files) {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);
             saveFrozen(conn, files);
@@ -38,7 +39,7 @@ public class FrozenRepository implements FileRepository {
         executeQuery.create(conn, ddl);
     }
 
-    private void saveFrozen(Connection conn, File[] files) throws SQLException {
+    private void saveFrozen(Connection conn, List<File> files) throws SQLException {
         SaveFrozen saveFrozen = new SaveFrozen(tableName);
         saveFrozen.save(conn, files);
     }

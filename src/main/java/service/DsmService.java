@@ -3,6 +3,8 @@ package service;
 import static config.ApplicationProperties.getProperty;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import repository.dsm.DsmRepository;
 
 public class DsmService implements Service {
@@ -22,9 +24,10 @@ public class DsmService implements Service {
     }
 
     @Override
-    public File[] getFiles(String path, String extension) {
+    public List<File> getFiles(String path, String extension) {
         File directory = new File(path);
-        return directory.listFiles((dir, name) -> name.endsWith(extension));
+        File[] files = directory.listFiles((dir, name) -> name.endsWith(extension));
+        return Arrays.asList(files);
     }
 
 }
