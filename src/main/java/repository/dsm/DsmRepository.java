@@ -5,8 +5,9 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import repository.ExecuteQuery;
+import repository.FileRepository;
 
-public class DsmRepository {
+public class DsmRepository implements FileRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();

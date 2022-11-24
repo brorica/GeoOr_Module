@@ -6,8 +6,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import repository.ExecuteQuery;
+import repository.ShpRepository;
 
-public class RoadRepository {
+public class RoadRepository implements ShpRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
@@ -42,5 +43,4 @@ public class RoadRepository {
         SaveRoad saveRoad = new SaveRoad(tableName);
         saveRoad.save(conn, shps);
     }
-
 }
