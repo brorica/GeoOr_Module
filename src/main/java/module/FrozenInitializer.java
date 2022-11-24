@@ -11,5 +11,4 @@ public class FrozenInitializer {
         FrozenService frozenService = new FrozenService();
         frozenService.save();
     }
-
 }

@@ -20,7 +20,6 @@ public class SaveDsm extends RelateAdminSector implements Save<File> {
 
     private final int batchLimitValue = 648000;
     private final WKB wkb = new WKB();
-
     private final String tableName;
 
     public SaveDsm(String tableName) {
@@ -45,6 +44,17 @@ public class SaveDsm extends RelateAdminSector implements Save<File> {
             e.printStackTrace();
         }
         System.out.printf("\ntotalBatchCount : %d\n", totalBatchCount);
+    }
+
+    @Override
+    public String createQuery() {
+        StringBuilder query = new StringBuilder();
+        query.append("INSERT INTO ");
+        query.append(tableName);
+        query.append(" (x, y, z, sig_cd) VALUES(?, ?, ?, (SELECT adm_sect_cd FROM ");
+        query.append(getAdminSectorSegmentTableName());
+        query.append(" WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))");
+        return query.toString();
     }
 
     private int readDsmToPoint(PreparedStatement ps, File dsm) throws IOException, SQLException {
@@ -77,17 +87,6 @@ public class SaveDsm extends RelateAdminSector implements Save<File> {
         reader.close();
         System.out.printf("] %d records\n", batchResult);
         return batchResult;
-    }
-
-    @Override
-    public String createQuery() {
-        StringBuilder query = new StringBuilder();
-        query.append("INSERT INTO ");
-        query.append(tableName);
-        query.append(" (x, y, z, sig_cd) VALUES(?, ?, ?, (SELECT adm_sect_cd FROM ");
-        query.append(getAdminSectorSegmentTableName());
-        query.append(" WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))");
-        return query.toString();
     }
 }
 

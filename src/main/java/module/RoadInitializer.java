@@ -11,5 +11,4 @@ public class RoadInitializer {
         RoadService roadService = new RoadService();
         roadService.save();
     }
-
 }

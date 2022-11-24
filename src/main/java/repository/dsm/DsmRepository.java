@@ -24,7 +24,7 @@ public class DsmRepository implements FileRepository {
     public void run(List<File> dsms) {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);
-            saveDsmTemp(conn, dsms);
+            save(conn, dsms);
             deleteNullSigCode(conn);
             createIndex(conn);
             createClusterIndex(conn);
@@ -43,7 +43,13 @@ public class DsmRepository implements FileRepository {
         executeQuery.create(conn, ddl);
     }
 
-    private void saveDsmTemp(Connection conn, List<File> dsms) throws SQLException {
+    /**
+     * 주의 : 한 dsm 파일 처리 시간은 대략 6~13분 정도로 잡고 있으며,
+     * 15분 이상 넘어가는 경우 자원 할당을 조정해야 함.
+     * 단, 노트북의 경우 충전 유무에 따라 사용하는 cpu 양이 다르기 때문에
+     * 충전기를 꼽으면 해결할 수 있다.
+     */
+    private void save(Connection conn, List<File> dsms) throws SQLException {
         System.out.println("# per 5 %");
         SaveDsm saveDsm = new SaveDsm(tableName);
         saveDsm.save(conn, dsms);
@@ -67,5 +73,4 @@ public class DsmRepository implements FileRepository {
         String sql = "CLUSTER " + tableName + " USING "+ indexName;
         executeQuery.createIndex(conn, sql);
     }
-
 }

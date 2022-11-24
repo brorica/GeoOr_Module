@@ -13,5 +13,4 @@ public interface Service {
     void save();
 
     List<File> getFiles(String path, String extension);
-
 }

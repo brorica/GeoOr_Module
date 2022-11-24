@@ -53,5 +53,4 @@ public class FrozenRepository implements FileRepository {
         String sql = "CLUSTER " + tableName + " USING " + sigIndexName;
         executeQuery.createIndex(conn, sql);
     }
-
 }

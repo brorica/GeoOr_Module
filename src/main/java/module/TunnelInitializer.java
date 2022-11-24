@@ -11,5 +11,4 @@ public class TunnelInitializer {
         TunnelService tunnelService = new TunnelService();
         tunnelService.save();
     }
-
 }

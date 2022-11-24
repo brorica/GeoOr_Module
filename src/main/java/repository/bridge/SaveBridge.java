@@ -45,11 +45,11 @@ public class SaveBridge extends RelateAdminSector implements Save<Shp> {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");
         query.append(tableName);
-        query.append(" (the_geom, ufid, kind, name, leng, widt, eymd, qual, rvnm, rest, scls, fmta, sig_cd) ");
-        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ");
+        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ");
         query.append("(SELECT adm_sect_cd FROM ");
         query.append(getAdminSectorSegmentTableName());
-        query.append(" WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))");
+        query.append(
+            " WHERE ST_intersects(st_setSRID(ST_FlipCoordinates(?) ::geometry, 4326), the_geom) LIMIT 1))");
         return query.toString();
     }
 
@@ -60,19 +60,10 @@ public class SaveBridge extends RelateAdminSector implements Save<Shp> {
             SimpleFeature feature = features.next();
 
             byte[] centerPoint = getCentroid((Geometry) feature.getAttribute(0));
-            pStmt.setBytes(1,centerPoint);
+            pStmt.setBytes(1, centerPoint);
             pStmt.setObject(2, feature.getAttribute("UFID"));
-            pStmt.setObject(3, feature.getAttribute("KIND"));
-            pStmt.setObject(4, feature.getAttribute("NAME"));
-            pStmt.setObject(5, feature.getAttribute("LENG"));
-            pStmt.setObject(6, feature.getAttribute("WIDT"));
-            pStmt.setObject(7, feature.getAttribute("EYMD"));
-            pStmt.setObject(8, feature.getAttribute("QUAL"));
-            pStmt.setObject(9, feature.getAttribute("RVNM"));
-            pStmt.setObject(10, feature.getAttribute("REST"));
-            pStmt.setObject(11, feature.getAttribute("SCLS"));
-            pStmt.setObject(12, feature.getAttribute("FMTA"));
-            pStmt.setBytes(13, centerPoint);
+            pStmt.setObject(3, feature.getAttribute("NAME"));
+            pStmt.setBytes(4, centerPoint);
 
             pStmt.addBatch();
             if (--batchLimit == 0) {

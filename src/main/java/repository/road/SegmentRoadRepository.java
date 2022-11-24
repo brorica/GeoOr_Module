@@ -44,6 +44,9 @@ public class SegmentRoadRepository {
         executeQuery.create(conn, ddl);
     }
 
+    /**
+     * 주의 : 이 작업은 전국 도로 데이터를 전부 넣는다 할 때, 매우 오래 걸림
+     */
     private void divideRoad(Connection conn) throws SQLException {
         String sql = "insert into " + segmentTableName +
             " select id, sig_cd, ST_Subdivide(ST_MakeValid(the_geom), " + maximumPoints + ") from " + originTableName;
@@ -64,5 +67,4 @@ public class SegmentRoadRepository {
         String sql = "CLUSTER " + segmentTableName + " USING " + sigIndexName;
         executeQuery.createIndex(conn, sql);
     }
-
 }

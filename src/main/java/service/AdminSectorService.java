@@ -15,7 +15,6 @@ public class AdminSectorService implements Service {
 
     private final AdminSectorRepository origin;
     private final SegmentRelateAdminSectorRepository segment;
-
     private final String originTableName = "admin_sector";
 
     public AdminSectorService() {

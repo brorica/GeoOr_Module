@@ -39,6 +39,16 @@ public class SaveRoad implements Save<Shp> {
 
     }
 
+    @Override
+    public String createQuery() {
+        StringBuilder query = new StringBuilder();
+        query.append("INSERT INTO public.");
+        query.append(tableName);
+        query.append("(the_geom, opert_de, rw_sn, sig_cd) ");
+        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?)");
+        return query.toString();
+    }
+
     private int SetPreparedStatement(PreparedStatement pStmt, Shp shp) throws SQLException {
         FeatureIterator<SimpleFeature> features = shp.getFeature();
         int batchLimit = batchLimitValue, recordCount = 0;
@@ -59,15 +69,5 @@ public class SaveRoad implements Save<Shp> {
         recordCount += pStmt.executeBatch().length;
         System.out.printf("%d save\n", recordCount);
         return recordCount;
-    }
-
-    @Override
-    public String createQuery() {
-        StringBuilder query = new StringBuilder();
-        query.append("INSERT INTO public.");
-        query.append(tableName);
-        query.append("(the_geom, opert_de, rw_sn, sig_cd) ");
-        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?)");
-        return query.toString();
     }
 }

@@ -11,5 +11,4 @@ public class BridgeInitializer {
         BridgeService BridgeService = new BridgeService();
         BridgeService.save();
     }
-
 }

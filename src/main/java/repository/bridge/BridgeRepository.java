@@ -37,16 +37,7 @@ public class BridgeRepository implements ShpRepository {
         String ddl = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
             + " the_geom geometry(Point, 4326),\n"
             + " ufid varchar(34),\n"
-            + " kind varchar(6),\n"
             + " name varchar(100),\n"
-            + " leng numeric(7, 2),\n"
-            + " widt numeric(5, 2),\n"
-            + " eymd varchar(30),\n"
-            + " qual varchar(6),\n"
-            + " rvnm varchar(30),\n"
-            + " rest varchar(50),\n"
-            + " scls varchar(8),\n"
-            + " fmta varchar(9),\n"
             + " sig_cd integer)";
         executeQuery.create(conn, ddl);
     }

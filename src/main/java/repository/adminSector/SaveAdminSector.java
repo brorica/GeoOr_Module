@@ -39,6 +39,15 @@ public class SaveAdminSector implements Save<Shp> {
         }
     }
 
+    @Override
+    public String createQuery() {
+        StringBuilder query = new StringBuilder();
+        query.append("INSERT INTO public.");
+        query.append(tableName);
+        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?, ?, ?)");
+        return query.toString();
+    }
+
     private int SetPreparedStatement(PreparedStatement pStmt, Shp shp) throws SQLException {
         FeatureIterator<SimpleFeature> features = shp.getFeature();
         List<AttributeDescriptor> attributeNames = shp.getAttributeNames();
@@ -61,14 +70,5 @@ public class SaveAdminSector implements Save<Shp> {
         recordCount += pStmt.executeBatch().length;
         System.out.printf("%d save\n", recordCount);
         return recordCount;
-    }
-
-    @Override
-    public String createQuery() {
-        StringBuilder query = new StringBuilder();
-        query.append("INSERT INTO public.");
-        query.append(tableName);
-        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?, ?, ?)");
-        return query.toString();
     }
 }

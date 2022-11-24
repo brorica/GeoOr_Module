@@ -11,5 +11,4 @@ public class DsmInitializer {
         DsmService dsmService = new DsmService();
         dsmService.save();
     }
-
 }

@@ -39,6 +39,17 @@ public class SaveFrozen extends RelateAdminSector implements Save<File> {
         }
     }
 
+    @Override
+    public String createQuery() {
+        StringBuilder query = new StringBuilder();
+        query.append("INSERT INTO ");
+        query.append(tableName);
+        query.append(" VALUES(?, (SELECT adm_sect_cd FROM ");
+        query.append(getAdminSectorSegmentTableName());
+        query.append(" WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))");
+        return query.toString();
+    }
+
     private int readData(PreparedStatement ps, File file) throws IOException, SQLException {
         BufferedReader reader = new BufferedReader(new FileReader(file));
         int batchCount = batchLimitValue, batchResult = 0;
@@ -65,16 +76,5 @@ public class SaveFrozen extends RelateAdminSector implements Save<File> {
         ps.clearBatch();
         reader.close();
         return batchResult;
-    }
-
-    @Override
-    public String createQuery() {
-        StringBuilder query = new StringBuilder();
-        query.append("INSERT INTO ");
-        query.append(tableName);
-        query.append(" VALUES(?, (SELECT adm_sect_cd FROM ");
-        query.append(getAdminSectorSegmentTableName());
-        query.append(" WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))");
-        return query.toString();
     }
 }

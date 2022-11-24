@@ -38,11 +38,6 @@ public class TunnelRepository implements ShpRepository {
             + " the_geom geometry(Point, 4326),\n"
             + " ufid varchar(32) not null PRIMARY KEY,\n"
             + " name varchar(100),\n"
-            + " leng numeric(7, 2),\n"
-            + " widt numeric(5, 2),\n"
-            + " heig numeric(5, 2),\n"
-            + " scls varchar(8),\n"
-            + " fmta varchar(9),\n"
             + " sig_cd integer)";
         executeQuery.create(conn, ddl);
     }

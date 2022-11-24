@@ -44,11 +44,11 @@ public class SaveTunnel extends RelateAdminSector implements Save<Shp> {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");
         query.append(tableName);
-        query.append(" (the_geom, ufid, name, leng, widt, heig, scls, fmta, sig_cd) ");
-        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?, ?, ?, ?, ?, ");
+        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ");
         query.append("(SELECT adm_sect_cd FROM ");
         query.append(getAdminSectorSegmentTableName());
-        query.append(" WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))");
+        query.append(
+            " WHERE ST_intersects(st_setSRID(ST_FlipCoordinates(?) ::geometry, 4326), the_geom) LIMIT 1))");
         return query.toString();
     }
 
@@ -62,12 +62,7 @@ public class SaveTunnel extends RelateAdminSector implements Save<Shp> {
             pStmt.setBytes(1,centerPoint);
             pStmt.setObject(2, feature.getAttribute("UFID"));
             pStmt.setObject(3, feature.getAttribute("NAME"));
-            pStmt.setObject(4, feature.getAttribute("LENG"));
-            pStmt.setObject(5, feature.getAttribute("WIDT"));
-            pStmt.setObject(6, feature.getAttribute("HEIG"));
-            pStmt.setObject(7, feature.getAttribute("SCLS"));
-            pStmt.setObject(8, feature.getAttribute("FMTA"));
-            pStmt.setBytes(9, centerPoint);
+            pStmt.setBytes(4, centerPoint);
 
             pStmt.addBatch();
             if (--batchLimit == 0) {

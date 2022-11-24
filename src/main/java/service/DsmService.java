@@ -29,5 +29,4 @@ public class DsmService implements Service {
         File[] files = directory.listFiles((dir, name) -> name.endsWith(extension));
         return Arrays.asList(files);
     }
-
 }

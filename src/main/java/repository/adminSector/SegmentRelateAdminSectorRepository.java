@@ -3,8 +3,8 @@ package repository.adminSector;
 import config.JdbcTemplate;
 import java.sql.Connection;
 import java.sql.SQLException;
-import repository.RelateAdminSector;
 import repository.ExecuteQuery;
+import repository.RelateAdminSector;
 
 public class SegmentRelateAdminSectorRepository extends RelateAdminSector {
 
@@ -40,7 +40,8 @@ public class SegmentRelateAdminSectorRepository extends RelateAdminSector {
 
     private void divideAdminSector(Connection conn) throws SQLException {
         String sql = "insert into " + getAdminSectorSegmentTableName()
-            + " select ST_Subdivide(the_geom, " + maximumPoints +"), adm_sect_cd from " + originTableName;
+            + " select ST_Subdivide(ST_MakeValid(the_geom), " + maximumPoints
+            + "), adm_sect_cd from " + originTableName;
         executeQuery.save(conn, sql);
     }
 
