@@ -14,12 +14,14 @@ public class SegmentRoadRepository {
     private final String segmentTableName;
     private final String geomIndexName;
     private final String sigIndexName;
+    private final int maximumPoints;
 
     public SegmentRoadRepository(String originTableName, String segmentTableName) {
         this.originTableName = originTableName;
         this.segmentTableName = segmentTableName;
         this.geomIndexName = "road_geom_index";
         this.sigIndexName = "road_sig_cd_index";
+        this.maximumPoints = 64;
     }
 
     public void run() {
@@ -44,7 +46,7 @@ public class SegmentRoadRepository {
 
     private void divideRoad(Connection conn) throws SQLException {
         String sql = "insert into " + segmentTableName +
-            "select id, sig_cd, ST_Subdivide(ST_MakeValid(the_geom), 64) from " + originTableName;
+            "select id, sig_cd, ST_Subdivide(ST_MakeValid(the_geom), " + maximumPoints + ") from " + originTableName;
         executeQuery.save(conn, sql);
     }
 

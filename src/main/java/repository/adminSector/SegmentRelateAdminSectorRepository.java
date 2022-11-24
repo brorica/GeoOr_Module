@@ -13,10 +13,12 @@ public class SegmentRelateAdminSectorRepository extends RelateAdminSector {
 
     private final String originTableName;
     private final String geomIndexName;
+    private final int maximumPoints;
 
     public SegmentRelateAdminSectorRepository(String originTableName) {
         this.originTableName = originTableName;
         this.geomIndexName = "admin_sector_index";
+        this.maximumPoints = 64;
     }
 
     public void run() {
@@ -38,7 +40,7 @@ public class SegmentRelateAdminSectorRepository extends RelateAdminSector {
 
     private void divideAdminSector(Connection conn) throws SQLException {
         String sql = "insert into " + getAdminSectorSegmentTableName()
-            + "select ST_Subdivide(the_geom, 64), adm_sect_cd from " + originTableName;
+            + "select ST_Subdivide(the_geom, " + maximumPoints +"), adm_sect_cd from " + originTableName;
         executeQuery.save(conn, sql);
     }
 
