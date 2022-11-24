@@ -15,12 +15,14 @@ public class FrozenService implements Service {
         this.repository = new FrozenRepository(originTableName);
     }
 
+    @Override
     public void save() {
         String path = getProperty("frozen");
         String extension = "txt";
         repository.run(getFiles(path, extension));
     }
 
+    @Override
     public List<File> getFiles(String path, String extension) {
         File directory = new File(path);
         File[] files = directory.listFiles((dir, name) -> name.endsWith(extension));
