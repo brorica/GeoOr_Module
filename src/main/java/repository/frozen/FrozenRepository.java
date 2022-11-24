@@ -38,7 +38,7 @@ public class FrozenRepository {
     }
 
     private void saveFrozen(Connection conn, File[] files) throws SQLException {
-        SaveFrozen saveFrozen = new SaveFrozen();
+        SaveFrozen saveFrozen = new SaveFrozen(tableName);
         saveFrozen.save(conn, files);
     }
 

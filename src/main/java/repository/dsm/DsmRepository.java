@@ -43,7 +43,7 @@ public class DsmRepository {
 
     private void saveDsmTemp(Connection conn, File[] dsms) throws SQLException {
         System.out.println("# per 5 %");
-        SaveDsm saveDsm = new SaveDsm();
+        SaveDsm saveDsm = new SaveDsm(tableName);
         saveDsm.save(conn, dsms);
     }
 

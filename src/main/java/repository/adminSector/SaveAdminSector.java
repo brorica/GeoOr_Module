@@ -15,6 +15,11 @@ public class SaveAdminSector {
 
     private final int batchLimitValue = 1024;
     private final WKB wkb = new WKB();
+    private final String tableName;
+
+    public SaveAdminSector(String tableName) {
+        this.tableName = tableName;
+    }
 
     public void save(Connection conn, List<Shp> shps) {
         String insertQuery = createQuery();
@@ -59,7 +64,7 @@ public class SaveAdminSector {
     private String createQuery() {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");
-        query.append("admin_sector");
+        query.append(tableName);
         query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?, ?, ?)");
         return query.toString();
     }

@@ -39,7 +39,7 @@ public class AdminSectorRepository {
     }
 
     private void saveAdminSector(Connection conn, List<Shp> shps) {
-        SaveAdminSector saveAdminSector = new SaveAdminSector();
+        SaveAdminSector saveAdminSector = new SaveAdminSector(tableName);
         saveAdminSector.save(conn, shps);
     }
 

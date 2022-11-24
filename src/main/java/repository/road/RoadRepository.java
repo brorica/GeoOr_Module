@@ -39,7 +39,7 @@ public class RoadRepository {
     }
 
     private void saveRoad(Connection conn, List<Shp> shps) {
-        SaveRoad saveRoad = new SaveRoad();
+        SaveRoad saveRoad = new SaveRoad(tableName);
         saveRoad.save(conn, shps);
     }
 

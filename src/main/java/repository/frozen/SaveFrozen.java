@@ -13,9 +13,16 @@ public class SaveFrozen {
 
     private final int batchLimitValue = 648000;
     private final WKB wkb = new WKB();
+    private final String tableName;
+    private final String adminSectorTableName;
+
+    public SaveFrozen(String tableName) {
+        this.tableName = tableName;
+        this.adminSectorTableName = "admin_sector_segment";
+    }
 
     public void save(Connection conn, File[] files) throws SQLException {
-        String sql = "INSERT INTO frozen VALUES(?, (SELECT adm_sect_cd FROM admin_sector_segment WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))";
+        String sql = getSQL();
         long totalBatchCount = 0;
         System.out.print("save frozen data... ");
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -58,4 +65,13 @@ public class SaveFrozen {
         return batchResult;
     }
 
+    private String getSQL() {
+        StringBuilder query = new StringBuilder();
+        query.append("INSERT INTO ");
+        query.append(tableName);
+        query.append(" VALUES(?, (SELECT adm_sect_cd FROM ");
+        query.append(adminSectorTableName);
+        query.append(" WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))");
+        return query.toString();
+    }
 }

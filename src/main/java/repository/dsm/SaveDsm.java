@@ -18,8 +18,16 @@ public class SaveDsm {
     private final int batchLimitValue = 648000;
     private final WKB wkb = new WKB();
 
+    private final String tableName;
+    private final String adminSectorTableName;
+
+    public SaveDsm(String tableName) {
+        this.tableName = tableName;
+        this.adminSectorTableName = "admin_sector_segment";
+    }
+
     public void save(Connection conn, File[] dsms) throws SQLException {
-        String sql = "INSERT INTO dsm (x, y, z, sig_cd) VALUES(?, ?, ?, (SELECT adm_sect_cd FROM admin_sector_segment WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))";
+        String sql = getSQL();
         long totalBatchCount = 0;
         long startTime, endTime;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -67,6 +75,16 @@ public class SaveDsm {
         reader.close();
         System.out.printf("] %d records\n", batchResult);
         return batchResult;
+    }
+
+    private String getSQL() {
+        StringBuilder query = new StringBuilder();
+        query.append("INSERT INTO ");
+        query.append(tableName);
+        query.append(" (x, y, z, sig_cd) VALUES(?, ?, ?, (SELECT adm_sect_cd FROM ");
+        query.append(adminSectorTableName);
+        query.append(" WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))");
+        return query.toString();
     }
 }
 
