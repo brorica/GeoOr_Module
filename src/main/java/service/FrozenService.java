@@ -6,7 +6,12 @@ import repository.frozen.FrozenRepository;
 
 public class FrozenService implements Service {
 
-    FrozenRepository repository = new FrozenRepository();
+    private final FrozenRepository repository;
+    private final String originTableName = "frozen";
+
+    public FrozenService() {
+        this.repository = new FrozenRepository(originTableName);
+    }
 
     public void save() {
         String path = getProperty("frozen");

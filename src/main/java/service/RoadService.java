@@ -12,8 +12,16 @@ import repository.road.RoadRepository;
 
 public class RoadService implements Service {
 
-    private final RoadRepository origin = new RoadRepository();
-    private final SegmentRoadRepository segment = new SegmentRoadRepository();
+    private final RoadRepository origin;
+    private final SegmentRoadRepository segment;
+
+    private final String originTableName = "road";
+    private final String segmentTableName = "road_segment";
+
+    public RoadService() {
+        this.origin = new RoadRepository(originTableName);
+        this.segment = new SegmentRoadRepository(originTableName, segmentTableName);
+    }
 
     public void save() {
         origin.run(getShps());

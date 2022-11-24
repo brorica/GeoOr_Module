@@ -9,6 +9,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * 대량의 dsm 파일을 넣는 과정에서 콘솔창에 에러 글이 뜨는 경우가 있는데
+ * 저장되는데는 문제가 없으니 그냥 넘어가도 된다.
+ */
 public class SaveDsm {
 
     private final int batchLimitValue = 648000;

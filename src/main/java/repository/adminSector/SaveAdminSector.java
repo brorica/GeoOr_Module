@@ -60,7 +60,7 @@ public class SaveAdminSector {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");
         query.append("admin_sector");
-        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?, ?, ?);");
+        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?, ?, ?)");
         return query.toString();
     }
 }

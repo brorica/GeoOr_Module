@@ -7,7 +7,12 @@ import repository.dsm.DsmRepository;
 
 public class DsmService implements Service {
 
-    private final DsmRepository origin = new DsmRepository();
+    private final DsmRepository origin;
+    private final String originTableName = "road";
+
+    public DsmService() {
+        this.origin = new DsmRepository(originTableName);
+    }
 
     @Override
     public void save() {
@@ -18,7 +23,8 @@ public class DsmService implements Service {
 
     @Override
     public File[] getFiles(String path, String extension) {
-        return new File[0];
+        File directory = new File(path);
+        return directory.listFiles((dir, name) -> name.endsWith(extension));
     }
 
 }

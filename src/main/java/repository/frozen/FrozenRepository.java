@@ -11,6 +11,14 @@ public class FrozenRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
+    private final String tableName;
+    private final String sigIndexName;
+
+    public FrozenRepository(String tableName) {
+        this.tableName = tableName;
+        this.sigIndexName = "frozen_sig_cd_index";
+    }
+
     public void run(File[] files) {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);
@@ -23,7 +31,7 @@ public class FrozenRepository {
     }
 
     private void createTable(Connection conn) {
-        String ddl = "CREATE TABLE IF NOT EXISTS frozen (\n"
+        String ddl = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
             + "  the_geom geometry(Point, 4326),\n"
             + "  sig_cd integer)";
         executeQuery.create(conn, ddl);
@@ -35,12 +43,12 @@ public class FrozenRepository {
     }
 
     private void createIndex(Connection conn) {
-        String sql = "CREATE INDEX frozen_sig_cd_index ON frozen USING btree(sig_cd);";
+        String sql = "CREATE INDEX " + sigIndexName + " ON " + tableName + " USING btree(sig_cd)";
         executeQuery.createIndex(conn, sql);
     }
 
     private void createClusterIndex(Connection conn) {
-        String sql = "CLUSTER frozen USING frozen_sig_cd_index";
+        String sql = "CLUSTER " + tableName + " USING " + sigIndexName;
         executeQuery.createIndex(conn, sql);
     }
 

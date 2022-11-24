@@ -61,7 +61,7 @@ public class SaveRoad {
         query.append("INSERT INTO public.");
         query.append("road");
         query.append("(the_geom, opert_de, rw_sn, sig_cd) ");
-        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?);");
+        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?)");
         return query.toString();
     }
 }

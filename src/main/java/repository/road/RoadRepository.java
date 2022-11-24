@@ -12,6 +12,12 @@ public class RoadRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
+    private final String tableName;
+
+    public RoadRepository(String tableName) {
+        this.tableName = tableName;
+    }
+
     public void run(List<Shp> shps) {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);
@@ -22,7 +28,7 @@ public class RoadRepository {
     }
 
     private void createTable(Connection conn) {
-        String ddl = "CREATE TABLE IF NOT EXISTS road (\n"
+        String ddl = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
             + "  id integer primary key generated always as identity,\n"
             + "  the_geom geometry(MultiPolygon, 4326),\n"
             + "  opert_de character varying(14),\n"
