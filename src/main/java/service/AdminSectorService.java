@@ -8,20 +8,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import repository.adminSector.AdminSectorRepository;
-import repository.adminSector.SegmentAdminSectorRepository;
+import repository.adminSector.SegmentRelateAdminSectorRepository;
 
 public class AdminSectorService implements Service {
 
     private final AdminSectorRepository origin;
-    private final SegmentAdminSectorRepository segment;
+    private final SegmentRelateAdminSectorRepository segment;
 
-    private final String originTableName = "road";
-    private final String segmentTableName = "road_segment";
-
+    private final String originTableName = "admin_sector";
 
     public AdminSectorService() {
         this.origin = new AdminSectorRepository(originTableName);
-        this.segment = new SegmentAdminSectorRepository(originTableName, segmentTableName);
+        this.segment = new SegmentRelateAdminSectorRepository(originTableName);
     }
 
     @Override

@@ -8,7 +8,7 @@ import repository.dsm.DsmRepository;
 public class DsmService implements Service {
 
     private final DsmRepository origin;
-    private final String originTableName = "road";
+    private final String originTableName = "dsm";
 
     public DsmService() {
         this.origin = new DsmRepository(originTableName);

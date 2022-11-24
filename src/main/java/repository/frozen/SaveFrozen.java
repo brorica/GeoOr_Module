@@ -8,17 +8,16 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import repository.RelateAdminSector;
 
-public class SaveFrozen {
+public class SaveFrozen extends RelateAdminSector {
 
     private final int batchLimitValue = 648000;
     private final WKB wkb = new WKB();
     private final String tableName;
-    private final String adminSectorTableName;
 
     public SaveFrozen(String tableName) {
         this.tableName = tableName;
-        this.adminSectorTableName = "admin_sector_segment";
     }
 
     public void save(Connection conn, File[] files) throws SQLException {
@@ -70,7 +69,7 @@ public class SaveFrozen {
         query.append("INSERT INTO ");
         query.append(tableName);
         query.append(" VALUES(?, (SELECT adm_sect_cd FROM ");
-        query.append(adminSectorTableName);
+        query.append(getAdminSectorSegmentTableName());
         query.append(" WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))");
         return query.toString();
     }
