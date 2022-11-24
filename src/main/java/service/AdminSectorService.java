@@ -3,37 +3,38 @@ package service;
 import static config.ApplicationProperties.getProperty;
 
 import domain.Shp;
-import domain.SqlReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import repository.adminSector.AdminSectorRepository;
-import repository.adminSector.SegmentAdminSectorRepository;
+import repository.adminSector.SegmentRelateAdminSectorRepository;
 
-public class AdminSectorService {
+public class AdminSectorService implements Service {
 
     private final AdminSectorRepository origin;
-    private final SegmentAdminSectorRepository divide;
+    private final SegmentRelateAdminSectorRepository segment;
+
+    private final String originTableName = "admin_sector";
 
     public AdminSectorService() {
-        this.origin = new AdminSectorRepository();
-        this.divide = new SegmentAdminSectorRepository();
+        this.origin = new AdminSectorRepository(originTableName);
+        this.segment = new SegmentRelateAdminSectorRepository(originTableName);
     }
 
-    public void storeAdminSector() {
-        origin.run(getSqlReader(getProperty("adminSector")), getShps());
-        divide.run(getSqlReader(getProperty("adminSectorSegment")));
-    }
-
-    private SqlReader getSqlReader(String path) {
-        File file = new File(path);
-        return new SqlReader(file);
+    @Override
+    public void save() {
+        origin.run(getShps());
+        segment.run();
     }
 
     private List<Shp> getShps() {
+        String path = getProperty("adminSector");
+        String extension = "shp";
+        List<File> shpFiles = getFiles(path, extension);
+
         List<Shp> shps = new ArrayList<>();
-        File[] shpFiles = findShpFiles(getProperty("adminSector.shpPath"));
         for (File file : shpFiles) {
             try {
                 shps.add(new Shp(file));
@@ -45,9 +46,10 @@ public class AdminSectorService {
         return shps;
     }
 
-    private File[] findShpFiles(String shpPath) {
-        File directory = new File(shpPath);
-        String extension = "shp";
-        return directory.listFiles((dir, name) -> name.endsWith(extension));
+    @Override
+    public List<File> getFiles(String path, String extension) {
+        File directory = new File(path);
+        File[] files = directory.listFiles((dir, name) -> name.endsWith(extension));
+        return Arrays.asList(files);
     }
 }

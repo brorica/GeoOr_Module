@@ -9,13 +9,19 @@ import java.util.List;
 import org.geotools.feature.FeatureIterator;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.type.AttributeDescriptor;
+import repository.Save;
 
-public class SaveRoad {
+public class SaveRoad implements Save<Shp> {
 
     private final int batchLimitValue = 1024;
     private final WKB wkb = new WKB();
+    private final String tableName;
 
+    public SaveRoad(String tableName) {
+        this.tableName = tableName;
+    }
+
+    @Override
     public void save(Connection conn, List<Shp> shps) {
         String insertQuery = createQuery();
         int totalRecordCount = 0;
@@ -35,7 +41,6 @@ public class SaveRoad {
 
     private int SetPreparedStatement(PreparedStatement pStmt, Shp shp) throws SQLException {
         FeatureIterator<SimpleFeature> features = shp.getFeature();
-        List<AttributeDescriptor> attributeNames = shp.getAttributeNames();
         int batchLimit = batchLimitValue, recordCount = 0;
         while (features.hasNext()) {
             SimpleFeature feature = features.next();
@@ -56,12 +61,13 @@ public class SaveRoad {
         return recordCount;
     }
 
-    private String createQuery() {
+    @Override
+    public String createQuery() {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");
-        query.append("road");
+        query.append(tableName);
         query.append("(the_geom, opert_de, rw_sn, sig_cd) ");
-        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?);");
+        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?)");
         return query.toString();
     }
 }

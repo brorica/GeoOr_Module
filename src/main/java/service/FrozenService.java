@@ -1,30 +1,30 @@
 package service;
 
 import static config.ApplicationProperties.getProperty;
-
-import domain.SqlReader;
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import repository.frozen.FrozenRepository;
 
-public class FrozenService {
+public class FrozenService implements Service {
 
-    FrozenRepository repository = new FrozenRepository();
+    private final FrozenRepository repository;
+    private final String originTableName = "frozen";
 
-    public void storeFrozen() {
-        SqlReader createSql = getSqlReader(getProperty("frozen"));
-        File[] files = findData(getProperty("frozen.dataPath"));
-        repository.run(createSql, files);
+    public FrozenService() {
+        this.repository = new FrozenRepository(originTableName);
     }
 
-    private SqlReader getSqlReader(String path) {
-        File file = new File(path);
-        return new SqlReader(file);
-    }
-
-    private File[] findData(String path) {
+    public void save() {
+        String path = getProperty("frozen");
         String extension = "txt";
+        repository.run(getFiles(path, extension));
+    }
+
+    public List<File> getFiles(String path, String extension) {
         File directory = new File(path);
-        return directory.listFiles((dir, name) -> name.endsWith(extension));
+        File[] files = directory.listFiles((dir, name) -> name.endsWith(extension));
+        return Arrays.asList(files);
     }
 
 }

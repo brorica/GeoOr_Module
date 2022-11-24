@@ -8,14 +8,28 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
+import repository.RelateAdminSector;
+import repository.Save;
 
-public class SaveDsm {
+/**
+ * 대량의 dsm 파일을 넣는 과정에서 콘솔창에 에러 글이 뜨는 경우가 있는데
+ * 저장되는데는 문제가 없으니 그냥 넘어가도 된다.
+ */
+public class SaveDsm extends RelateAdminSector implements Save<File> {
 
     private final int batchLimitValue = 648000;
     private final WKB wkb = new WKB();
 
-    public void save(Connection conn, File[] dsms) throws SQLException {
-        String sql = "INSERT INTO dsm (x, y, z, sig_cd) VALUES(?, ?, ?, (SELECT adm_sect_cd FROM admin_sector_segment WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))";
+    private final String tableName;
+
+    public SaveDsm(String tableName) {
+        this.tableName = tableName;
+    }
+
+    @Override
+    public void save(Connection conn, List<File> dsms) throws SQLException {
+        String sql = createQuery();
         long totalBatchCount = 0;
         long startTime, endTime;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -63,6 +77,17 @@ public class SaveDsm {
         reader.close();
         System.out.printf("] %d records\n", batchResult);
         return batchResult;
+    }
+
+    @Override
+    public String createQuery() {
+        StringBuilder query = new StringBuilder();
+        query.append("INSERT INTO ");
+        query.append(tableName);
+        query.append(" (x, y, z, sig_cd) VALUES(?, ?, ?, (SELECT adm_sect_cd FROM ");
+        query.append(getAdminSectorSegmentTableName());
+        query.append(" WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))");
+        return query.toString();
     }
 }
 

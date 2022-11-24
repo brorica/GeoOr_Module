@@ -8,14 +8,23 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
+import repository.RelateAdminSector;
+import repository.Save;
 
-public class SaveFrozen {
+public class SaveFrozen extends RelateAdminSector implements Save<File> {
 
     private final int batchLimitValue = 648000;
     private final WKB wkb = new WKB();
+    private final String tableName;
 
-    public void save(Connection conn, File[] files) throws SQLException {
-        String sql = "INSERT INTO frozen VALUES(?, (SELECT adm_sect_cd FROM admin_sector_segment WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))";
+    public SaveFrozen(String tableName) {
+        this.tableName = tableName;
+    }
+
+    @Override
+    public void save(Connection conn, List<File> files) throws SQLException {
+        String sql = createQuery();
         long totalBatchCount = 0;
         System.out.print("save frozen data... ");
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -58,4 +67,14 @@ public class SaveFrozen {
         return batchResult;
     }
 
+    @Override
+    public String createQuery() {
+        StringBuilder query = new StringBuilder();
+        query.append("INSERT INTO ");
+        query.append(tableName);
+        query.append(" VALUES(?, (SELECT adm_sect_cd FROM ");
+        query.append(getAdminSectorSegmentTableName());
+        query.append(" WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))");
+        return query.toString();
+    }
 }

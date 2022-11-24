@@ -1,20 +1,29 @@
 package repository.frozen;
 
 import config.JdbcTemplate;
-import domain.SqlReader;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import repository.ExecuteQuery;
+import repository.FileRepository;
 
-public class FrozenRepository {
+public class FrozenRepository implements FileRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
-    public void run(SqlReader createSql, File[] files) {
+    private final String tableName;
+    private final String sigIndexName;
+
+    public FrozenRepository(String tableName) {
+        this.tableName = tableName;
+        this.sigIndexName = "frozen_sig_cd_index";
+    }
+
+    public void run(List<File> files) {
         try (Connection conn = jdbcTemplate.getConnection()) {
-            createTable(conn, createSql);
+            createTable(conn);
             saveFrozen(conn, files);
             createIndex(conn);
             createClusterIndex(conn);
@@ -23,22 +32,25 @@ public class FrozenRepository {
         }
     }
 
-    private void createTable(Connection conn, SqlReader createSql) {
-        executeQuery.create(conn, createSql);
+    private void createTable(Connection conn) {
+        String ddl = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
+            + "  the_geom geometry(Point, 4326),\n"
+            + "  sig_cd integer)";
+        executeQuery.create(conn, ddl);
     }
 
-    private void saveFrozen(Connection conn, File[] files) throws SQLException {
-        SaveFrozen saveFrozen = new SaveFrozen();
+    private void saveFrozen(Connection conn, List<File> files) throws SQLException {
+        SaveFrozen saveFrozen = new SaveFrozen(tableName);
         saveFrozen.save(conn, files);
     }
 
     private void createIndex(Connection conn) {
-        String sql = "CREATE INDEX frozen_sig_cd_index ON frozen USING btree(sig_cd);";
+        String sql = "CREATE INDEX " + sigIndexName + " ON " + tableName + " USING btree(sig_cd)";
         executeQuery.createIndex(conn, sql);
     }
 
     private void createClusterIndex(Connection conn) {
-        String sql = "CLUSTER frozen USING frozen_sig_cd_index";
+        String sql = "CLUSTER " + tableName + " USING " + sigIndexName;
         executeQuery.createIndex(conn, sql);
     }
 

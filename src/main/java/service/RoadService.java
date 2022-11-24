@@ -3,32 +3,38 @@ package service;
 import static config.ApplicationProperties.getProperty;
 
 import domain.Shp;
-import domain.SqlReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import repository.road.SegmentRoadRepository;
 import repository.road.RoadRepository;
 
-public class RoadService {
+public class RoadService implements Service {
 
-    private final RoadRepository origin = new RoadRepository();
-    private final SegmentRoadRepository divide = new SegmentRoadRepository();
+    private final RoadRepository origin;
+    private final SegmentRoadRepository segment;
 
-    public void storeRoad() {
-        origin.run(getSqlReader(getProperty("road")), getShps());
-        divide.run(getSqlReader(getProperty("roadSegment")));
+    private final String originTableName = "road";
+    private final String segmentTableName = "road_segment";
+
+    public RoadService() {
+        this.origin = new RoadRepository(originTableName);
+        this.segment = new SegmentRoadRepository(originTableName, segmentTableName);
     }
 
-    private SqlReader getSqlReader(String path) {
-        File file = new File(path);
-        return new SqlReader(file);
+    public void save() {
+        origin.run(getShps());
+        segment.run();
     }
 
     private List<Shp> getShps() {
+        String path = getProperty("road");
+        String extension = "shp";
+        List<File> shpFiles = getFiles(path, extension);
+
         List<Shp> shps = new ArrayList<>();
-        File[] shpFiles = findShpFiles(getProperty("road.shpPath"));
         for (File file : shpFiles) {
             try {
                 shps.add(new Shp(file));
@@ -40,9 +46,10 @@ public class RoadService {
         return shps;
     }
 
-    private File[] findShpFiles(String shpPath) {
-        File directory = new File(shpPath);
-        String extension = "shp";
-        return directory.listFiles((dir, name) -> name.endsWith(extension));
+    @Override
+    public List<File> getFiles(String path, String extension) {
+        File directory = new File(path);
+        File[] files = directory.listFiles((dir, name) -> name.endsWith(extension));
+        return Arrays.asList(files);
     }
 }
