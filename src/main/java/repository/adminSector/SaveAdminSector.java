@@ -10,12 +10,19 @@ import org.geotools.feature.FeatureIterator;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
+import repository.Save;
 
-public class SaveAdminSector {
+public class SaveAdminSector implements Save<Shp> {
 
     private final int batchLimitValue = 1024;
     private final WKB wkb = new WKB();
+    private final String tableName;
 
+    public SaveAdminSector(String tableName) {
+        this.tableName = tableName;
+    }
+
+    @Override
     public void save(Connection conn, List<Shp> shps) {
         String insertQuery = createQuery();
         int totalRecordCount = 0;
@@ -30,6 +37,15 @@ public class SaveAdminSector {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String createQuery() {
+        StringBuilder query = new StringBuilder();
+        query.append("INSERT INTO public.");
+        query.append(tableName);
+        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?, ?, ?)");
+        return query.toString();
     }
 
     private int SetPreparedStatement(PreparedStatement pStmt, Shp shp) throws SQLException {
@@ -54,13 +70,5 @@ public class SaveAdminSector {
         recordCount += pStmt.executeBatch().length;
         System.out.printf("%d save\n", recordCount);
         return recordCount;
-    }
-
-    private String createQuery() {
-        StringBuilder query = new StringBuilder();
-        query.append("INSERT INTO public.");
-        query.append("admin_sector");
-        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?, ?, ?);");
-        return query.toString();
     }
 }

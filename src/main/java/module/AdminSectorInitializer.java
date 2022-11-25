@@ -9,6 +9,6 @@ public class AdminSectorInitializer {
 
     public static void main(String[] args) {
         AdminSectorService adminSectorService = new AdminSectorService();
-        adminSectorService.storeAdminSector();
+        adminSectorService.save();
     }
 }

@@ -1,8 +1,10 @@
 import config.ApplicationProperties;
 import service.AdminSectorService;
+import service.BridgeService;
 import service.DsmService;
 import service.FrozenService;
 import service.RoadService;
+import service.TunnelService;
 
 
 public class Main {
@@ -14,10 +16,14 @@ public class Main {
         RoadService roadService = new RoadService();
         DsmService dsmService = new DsmService();
         FrozenService frozenService = new FrozenService();
+        TunnelService tunnelService = new TunnelService();
+        BridgeService bridgeService = new BridgeService();
 
-        adminSectorService.storeAdminSector();
-        roadService.storeRoad();
-        dsmService.storeDsm();
-        frozenService.storeFrozen();
+        adminSectorService.save();
+        roadService.save();
+        dsmService.save();
+        frozenService.save();
+        tunnelService.save();
+        bridgeService.save();
     }
 }

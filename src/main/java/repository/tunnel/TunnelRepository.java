@@ -1,14 +1,14 @@
-package repository.frozen;
+package repository.tunnel;
 
 import config.JdbcTemplate;
-import java.io.File;
+import domain.Shp;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import repository.ExecuteQuery;
-import repository.FileRepository;
+import repository.ShpRepository;
 
-public class FrozenRepository implements FileRepository {
+public class TunnelRepository implements ShpRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
@@ -16,15 +16,16 @@ public class FrozenRepository implements FileRepository {
     private final String tableName;
     private final String sigIndexName;
 
-    public FrozenRepository(String tableName) {
+    public TunnelRepository(String tableName) {
         this.tableName = tableName;
-        this.sigIndexName = "frozen_sig_cd_index";
+        this.sigIndexName = "tunnel_sig_cd_index";
     }
 
-    public void run(List<File> files) {
+    @Override
+    public void run(List<Shp> shps) {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);
-            saveFrozen(conn, files);
+            saveTunnel(conn, shps);
             createIndex(conn);
             createClusterIndex(conn);
         } catch (SQLException e) {
@@ -34,14 +35,16 @@ public class FrozenRepository implements FileRepository {
 
     private void createTable(Connection conn) {
         String ddl = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
-            + "  the_geom geometry(Point, 4326),\n"
-            + "  sig_cd integer)";
+            + " the_geom geometry(Point, 4326),\n"
+            + " ufid varchar(32) not null PRIMARY KEY,\n"
+            + " name varchar(100),\n"
+            + " sig_cd integer)";
         executeQuery.create(conn, ddl);
     }
 
-    private void saveFrozen(Connection conn, List<File> files) throws SQLException {
-        SaveFrozen saveFrozen = new SaveFrozen(tableName);
-        saveFrozen.save(conn, files);
+    private void saveTunnel(Connection conn, List<Shp> shps) throws SQLException {
+        SaveTunnel saveTunnel = new SaveTunnel(tableName);
+        saveTunnel.save(conn, shps);
     }
 
     private void createIndex(Connection conn) {

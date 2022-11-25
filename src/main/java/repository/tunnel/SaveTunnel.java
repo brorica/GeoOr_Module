@@ -1,4 +1,4 @@
-package repository.road;
+package repository.tunnel;
 
 import domain.Shp;
 import geoUtil.WKB;
@@ -9,25 +9,26 @@ import java.util.List;
 import org.geotools.feature.FeatureIterator;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
+import repository.RelateAdminSector;
 import repository.Save;
 
-public class SaveRoad implements Save<Shp> {
+public class SaveTunnel extends RelateAdminSector implements Save<Shp> {
 
     private final int batchLimitValue = 1024;
     private final WKB wkb = new WKB();
     private final String tableName;
 
-    public SaveRoad(String tableName) {
+    public SaveTunnel(String tableName) {
         this.tableName = tableName;
     }
 
     @Override
-    public void save(Connection conn, List<Shp> shps) {
+    public void save(Connection conn, List<Shp> shps) throws SQLException {
         String insertQuery = createQuery();
         int totalRecordCount = 0;
         try (PreparedStatement pStmt = conn.prepareStatement(insertQuery)) {
             for (Shp shp : shps) {
-                System.out.printf("road table %s save start ... ", shp.getName());
+                System.out.printf("tunnel table %s save start ... ", shp.getName());
                 totalRecordCount += SetPreparedStatement(pStmt, shp);
                 shp.close();
             }
@@ -36,7 +37,6 @@ public class SaveRoad implements Save<Shp> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -44,8 +44,11 @@ public class SaveRoad implements Save<Shp> {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");
         query.append(tableName);
-        query.append("(the_geom, opert_de, rw_sn, sig_cd) ");
-        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?)");
+        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ");
+        query.append("(SELECT adm_sect_cd FROM ");
+        query.append(getAdminSectorSegmentTableName());
+        query.append(
+            " WHERE ST_intersects(st_setSRID(ST_FlipCoordinates(?) ::geometry, 4326), the_geom) LIMIT 1))");
         return query.toString();
     }
 
@@ -54,11 +57,12 @@ public class SaveRoad implements Save<Shp> {
         int batchLimit = batchLimitValue, recordCount = 0;
         while (features.hasNext()) {
             SimpleFeature feature = features.next();
-            pStmt.setBytes(1,
-                wkb.convert5181To4326((Geometry) feature.getDefaultGeometryProperty().getValue()));
-            pStmt.setObject(2, feature.getAttribute("OPERT_DE"));
-            pStmt.setObject(3, feature.getAttribute("RW_SN"));
-            pStmt.setInt(4, Integer.parseInt((String) feature.getAttribute("SIG_CD")));
+
+            byte[] centerPoint = getCentroid((Geometry) feature.getAttribute(0));
+            pStmt.setBytes(1,centerPoint);
+            pStmt.setObject(2, feature.getAttribute("UFID"));
+            pStmt.setObject(3, feature.getAttribute("NAME"));
+            pStmt.setBytes(4, centerPoint);
 
             pStmt.addBatch();
             if (--batchLimit == 0) {
@@ -69,5 +73,9 @@ public class SaveRoad implements Save<Shp> {
         recordCount += pStmt.executeBatch().length;
         System.out.printf("%d save\n", recordCount);
         return recordCount;
+    }
+
+    private byte[] getCentroid(Geometry Geometry) {
+        return wkb.convert5179To4326(Geometry.getCentroid());
     }
 }

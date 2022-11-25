@@ -9,7 +9,6 @@ public class RoadInitializer {
 
     public static void main(String[] args) {
         RoadService roadService = new RoadService();
-        roadService.storeRoad();
+        roadService.save();
     }
-
 }

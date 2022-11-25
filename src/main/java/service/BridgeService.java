@@ -8,29 +8,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import repository.road.SegmentRoadRepository;
-import repository.road.RoadRepository;
+import repository.bridge.BridgeRepository;
 
-public class RoadService implements Service {
+public class BridgeService implements Service {
 
-    private final RoadRepository origin;
-    private final SegmentRoadRepository segment;
-    private final String originTableName = "road";
-    private final String segmentTableName = "road_segment";
+    private final BridgeRepository repository;
+    private final String originTableName = "bridge";
 
-    public RoadService() {
-        this.origin = new RoadRepository(originTableName);
-        this.segment = new SegmentRoadRepository(originTableName, segmentTableName);
+    public BridgeService() {
+        this.repository = new BridgeRepository(originTableName);
     }
 
     @Override
     public void save() {
-        origin.run(getShps());
-        segment.run();
+        repository.run(getShps());
     }
 
     private List<Shp> getShps() {
-        String path = getProperty("road");
+        String path = getProperty("bridge");
         String extension = "shp";
         List<File> shpFiles = getFiles(path, extension);
 

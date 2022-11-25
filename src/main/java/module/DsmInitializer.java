@@ -9,7 +9,6 @@ public class DsmInitializer {
 
     public static void main(String[] args) {
         DsmService dsmService = new DsmService();
-        dsmService.storeDsm();
+        dsmService.save();
     }
-
 }
