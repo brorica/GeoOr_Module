@@ -1,6 +1,7 @@
 package repository;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -9,7 +10,7 @@ import java.util.List;
  */
 public interface FileRepository {
 
-    void run(List<File> files);
+    void run(List<File> files) throws IOException;
 }
 
 
