@@ -21,6 +21,7 @@ public class DsmRepository implements FileRepository {
         this.indexName = "dsm_sig_cd_index";
     }
 
+    @Override
     public void run(List<File> dsms) {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);

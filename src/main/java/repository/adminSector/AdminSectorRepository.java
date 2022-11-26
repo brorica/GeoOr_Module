@@ -19,6 +19,7 @@ public class AdminSectorRepository implements ShpRepository {
         this.tableName = tableName;
     }
 
+    @Override
     public void run(List<Shp> shps) {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);
