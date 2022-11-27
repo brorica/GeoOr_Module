@@ -68,10 +68,11 @@ public class TestDsmRepository implements FileRepository {
 
     private void createTable(Connection conn) {
         String ddl = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
-            + "   x numeric not null,\n"
-            + "   y numeric not null,\n"
-            + "   z numeric not null,\n"
-            + "   sig_cd integer)";
+            + "   the_geom geometry(Polygon, 4326),\n"
+            + "   address bigint,\n"
+            + "   height integer,\n"
+            + "   sig_cd integer,"
+            + "   hillshade integer default 0)";
         executeQuery.create(conn, ddl);
     }
 
