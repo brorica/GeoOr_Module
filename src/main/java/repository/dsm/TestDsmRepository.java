@@ -29,6 +29,8 @@ public class TestDsmRepository implements FileRepository {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);
             saveH3(conn);
+            createIndex(conn);
+            createClusterIndex(conn);
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -36,13 +38,9 @@ public class TestDsmRepository implements FileRepository {
     }
 
     private void makeHexagonMap(List<File> dsms) throws IOException {
-        long startTime, endTime;
         for (File dsm : dsms) {
-            startTime = System.currentTimeMillis();
             System.out.print(dsm.getName() + " save... ");
             readDsm(dsm);
-            endTime = System.currentTimeMillis();
-            System.out.println("cost : " + (endTime - startTime) / 1000 + "s");
             test();
         }
     }
@@ -71,13 +69,28 @@ public class TestDsmRepository implements FileRepository {
             + "   the_geom geometry(Polygon, 4326),\n"
             + "   address bigint,\n"
             + "   height integer,\n"
-            + "   sig_cd integer,"
-            + "   hillshade integer default 0)";
+            + "   sig_cd integer)";
         executeQuery.create(conn, ddl);
     }
 
     private void saveH3(Connection conn) {
+        long startTime, endTime;
+        startTime = System.currentTimeMillis();
         TestSaveDsm saveDsm = new TestSaveDsm(tableName, h3);
         saveDsm.save(conn);
+        endTime = System.currentTimeMillis();
+        System.out.println(" cost : " + (endTime - startTime) / 1000 + "s");
+    }
+
+    private void createIndex(Connection conn) {
+        String indexName = "testdsm_sig_cd_index";
+        String sql = "CREATE INDEX " + indexName + " ON testdsm USING btree(sig_cd)";
+        executeQuery.createIndex(conn, sql);
+    }
+
+    private void createClusterIndex(Connection conn) {
+        String indexName = "testdsm_sig_cd_index";
+        String sql = "CLUSTER " + tableName + " USING "+ indexName;
+        executeQuery.createIndex(conn, sql);
     }
 }

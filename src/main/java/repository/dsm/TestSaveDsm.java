@@ -1,6 +1,7 @@
 package repository.dsm;
 
 import com.uber.h3core.util.LatLng;
+import domain.Hexagon;
 import geoUtil.UberH3;
 import geoUtil.WKB;
 import java.sql.Connection;
@@ -14,11 +15,10 @@ import java.util.Map.Entry;
 
 public class TestSaveDsm {
 
-    private final int batchLimitValue = 648000;
+    private final int batchLimitValue = 45000;
     private final WKB wkb = new WKB();
     private final String tableName;
     private final UberH3 h3;
-    private final List<Integer> sig_cds = new ArrayList<>();
 
     public TestSaveDsm(String tableName, UberH3 h3) {
         this.tableName = tableName;
@@ -28,39 +28,41 @@ public class TestSaveDsm {
     public void save(Connection conn) {
         long totalBatchCount = 0;
         Map<Long, Integer> h3Map = h3.getH3Map();
+        System.out.printf("save [");
         for (Entry<Long, Integer> entry : h3Map.entrySet()) {
             long h3Address = entry.getKey();
             int height = entry.getValue();
-            sig_cds.clear();
-            byte[] polygonWKB = findIntersectSigCd(conn, h3Address);
-            totalBatchCount += saveIntersectSigCd(conn, polygonWKB, h3Address, height);
+
+            List<LatLng> h3Boundary = h3.getH3Boundary(h3Address);
+            byte[] polygonWKB = wkb.makeH3BoundaryToPolygon(h3Boundary);
+            List<Integer> sig_cds = findIntersectSigCd(conn, polygonWKB);
+            totalBatchCount += saveIntersectSigCd(conn, sig_cds, polygonWKB, h3Address, height);
         }
-        System.out.println("totalBatchCount = " + totalBatchCount);
+        System.out.print("] totalBatchCount = " + totalBatchCount);
     }
 
-    private byte[] findIntersectSigCd(Connection conn, long h3Address) {
-        List<LatLng> h3Boundary = h3.getH3Boundary(h3Address);
-        byte[] bytes = wkb.makeH3BoundaryToPolygon(h3Boundary);
+    private List<Integer> findIntersectSigCd(Connection conn, byte[] polygonWKB) {
         String sql = createQuery1();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setBytes(1, bytes);
-            showResult(ps);
+            ps.setBytes(1, polygonWKB);
+            return showResult(ps);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return bytes;
+        return null;
     }
 
     private String createQuery1() {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT sig_cd from ");
-        query.append("road_segment ");
+        query.append("SELECT adm_sect_cd from ");
+        query.append("admin_sector_segment ");
         query.append("WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) ");
-        query.append("group by sig_cd");
+        query.append("group by adm_sect_cd");
         return query.toString();
     }
 
-    private void showResult(PreparedStatement ps) {
+    private List<Integer> showResult(PreparedStatement ps) {
+        List<Integer> sig_cds = new ArrayList<>();
         try (ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 sig_cds.add(rs.getInt(1));
@@ -68,9 +70,10 @@ public class TestSaveDsm {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return sig_cds;
     }
 
-    private int saveIntersectSigCd(Connection conn, byte[] polygonWKB, long h3Address, int height) {
+    private int saveIntersectSigCd(Connection conn, List<Integer> sig_cds, byte[] polygonWKB, long h3Address, int height) {
         String sql = createQuery2();
         int batchCount = batchLimitValue, batchResult = 0;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {

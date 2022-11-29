@@ -2,6 +2,7 @@ package geoUtil;
 
 import com.uber.h3core.H3Core;
 import com.uber.h3core.util.LatLng;
+import domain.Hexagon;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.Map;
 public class UberH3 {
 
     private H3Core h3;
-    private final int h3Res = 9;
+    private final int h3Res = 10;
     private final Map<Long, Integer> h3Map = new HashMap<>();
 
     public UberH3() {
