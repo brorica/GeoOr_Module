@@ -2,10 +2,12 @@ package domain;
 
 public class Hexagon {
 
-    private int totalHeight = 0;
-    private int dsmCount = 0;
+    private int totalHeight;
+    private int dsmCount;
 
-    public Hexagon() {
+    public Hexagon(int height) {
+        totalHeight = height;
+        dsmCount = 1;
     }
 
     public void addDsmInfo(int height) {
