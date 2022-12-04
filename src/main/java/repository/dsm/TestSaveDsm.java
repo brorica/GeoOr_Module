@@ -63,7 +63,7 @@ public class TestSaveDsm {
     private List<Integer> showResult(PreparedStatement ps) {
         List<Integer> sig_cds = new ArrayList<>();
         try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
+            while (rs.next()) {
                 sig_cds.add(rs.getInt(1));
             }
         } catch (SQLException e) {
