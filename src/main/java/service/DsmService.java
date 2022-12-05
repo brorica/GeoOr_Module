@@ -7,17 +7,17 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import repository.dsm.DsmRepository;
-import repository.dsm.TestDsmRepository;
+import repository.dsm.HexagonRepository;
 
 public class DsmService implements Service {
 
     private final DsmRepository origin;
-    private final TestDsmRepository test;
+    private final HexagonRepository test;
     private final String originTableName = "dsm";
 
     public DsmService() {
         this.origin = new DsmRepository(originTableName);
-        this.test = new TestDsmRepository("testDsm");
+        this.test = new HexagonRepository("hexagon");
     }
 
     @Override

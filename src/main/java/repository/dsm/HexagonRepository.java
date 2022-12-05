@@ -12,15 +12,17 @@ import java.util.List;
 import repository.ExecuteQuery;
 import repository.FileRepository;
 
-public class TestDsmRepository implements FileRepository {
+public class HexagonRepository implements FileRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
     private final String tableName;
+    private final String indexName;
     private final UberH3 h3;
 
-    public TestDsmRepository(String tableName){
+    public HexagonRepository(String tableName){
         this.tableName = tableName;
+        this.indexName = "hexagon_id_index";
         this.h3 = new UberH3();
     }
 
@@ -28,7 +30,7 @@ public class TestDsmRepository implements FileRepository {
         makeHexagonMap(dsms);
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);
-            saveH3(conn);
+            saveHexagon(conn);
             createIndex(conn);
             createClusterIndex(conn);
             conn.commit();
@@ -39,7 +41,7 @@ public class TestDsmRepository implements FileRepository {
 
     private void makeHexagonMap(List<File> dsms) throws IOException {
         for (File dsm : dsms) {
-            System.out.print(dsm.getName() + " save... ");
+            System.out.print(dsm.getName() + " read... ");
             readDsm(dsm);
             test();
         }
@@ -67,29 +69,26 @@ public class TestDsmRepository implements FileRepository {
     private void createTable(Connection conn) {
         String ddl = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
             + "   the_geom geometry(Polygon, 4326),\n"
-            + "   address bigint,\n"
-            + "   height integer,\n"
-            + "   sig_cd integer)";
+            + "   id bigint PRIMARY KEY,\n"
+            + "   height integer)";
         executeQuery.create(conn, ddl);
     }
 
-    private void saveH3(Connection conn) {
+    private void saveHexagon(Connection conn) throws SQLException {
         long startTime, endTime;
         startTime = System.currentTimeMillis();
-        TestSaveDsm saveDsm = new TestSaveDsm(tableName, h3);
+        SaveHexagon saveDsm = new SaveHexagon(tableName, h3);
         saveDsm.save(conn);
         endTime = System.currentTimeMillis();
         System.out.println(" cost : " + (endTime - startTime) / 1000 + "s");
     }
 
-    private void createIndex(Connection conn) {
-        String indexName = "testdsm_sig_cd_index";
-        String sql = "CREATE INDEX " + indexName + " ON testdsm USING btree(sig_cd)";
+    private void createIndex (Connection conn) {
+        String sql = "CREATE INDEX " + indexName + " ON " + tableName + " USING btree(id)";
         executeQuery.createIndex(conn, sql);
     }
 
-    private void createClusterIndex(Connection conn) {
-        String indexName = "testdsm_sig_cd_index";
+    private void createClusterIndex (Connection conn) {
         String sql = "CLUSTER " + tableName + " USING "+ indexName;
         executeQuery.createIndex(conn, sql);
     }
