@@ -34,14 +34,14 @@ public class SegmentRelateAdminSectorRepository extends RelateAdminSector {
     private void createTable(Connection conn) {
         String ddl = "CREATE TABLE IF NOT EXISTS " + getAdminSectorSegmentTableName() + " (\n"
             + "  the_geom geometry(Polygon, 4326),\n"
-            + "  adm_sect_cd integer)";
+            + "  sig_cd integer)";
         executeQuery.create(conn, ddl);
     }
 
     private void divideAdminSector(Connection conn) throws SQLException {
         String sql = "insert into " + getAdminSectorSegmentTableName()
             + " select ST_Subdivide(ST_MakeValid(the_geom), " + maximumPoints
-            + "), adm_sect_cd from " + originTableName;
+            + "), sig_cd from " + originTableName;
         executeQuery.save(conn, sql);
     }
 

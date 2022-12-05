@@ -7,17 +7,20 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import repository.dsm.DsmRepository;
+import repository.dsm.HexagonAdminRepository;
 import repository.dsm.HexagonRepository;
 
 public class DsmService implements Service {
 
     private final DsmRepository origin;
-    private final HexagonRepository test;
+    private final HexagonRepository hexagonRepository;
+    private final HexagonAdminRepository hexagonAdminRepository;
     private final String originTableName = "dsm";
 
     public DsmService() {
         this.origin = new DsmRepository(originTableName);
-        this.test = new HexagonRepository("hexagon");
+        this.hexagonRepository = new HexagonRepository("hexagon");
+        this.hexagonAdminRepository = new HexagonAdminRepository("hexagon_admin");
     }
 
     @Override
@@ -26,7 +29,8 @@ public class DsmService implements Service {
         String extension = "xyz";
         //origin.run(getFiles(path, extension));
         try {
-            test.run(getFiles(path, extension));
+            hexagonRepository.run(getFiles(path, extension));
+            hexagonAdminRepository.run();
         } catch (IOException e) {
             e.printStackTrace();
         }

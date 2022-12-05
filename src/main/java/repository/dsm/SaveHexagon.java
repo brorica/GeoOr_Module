@@ -37,9 +37,10 @@ public class SaveHexagon {
         for (Entry<Long, Hexagon> entry : h3Map.entrySet()) {
             long h3Address = entry.getKey();
             Hexagon hexagon = entry.getValue();
-
-            ps.setLong(1, h3Address);
-            ps.setInt(2, hexagon.getAverageHeight());
+            byte[] bytes = wkb.makeH3BoundaryToPolygon(h3.getH3Boundary(h3Address));
+            ps.setBytes(1, bytes);
+            ps.setLong(2, h3Address);
+            ps.setInt(3, hexagon.getAverageHeight());
             ps.addBatch();
             if (--batchCount == 0) {
                 ps.executeBatch();
@@ -53,7 +54,7 @@ public class SaveHexagon {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO ");
         query.append(tableName);
-        query.append(" VALUES(?, ?)");
+        query.append(" VALUES(?, ?, ?)");
         return query.toString();
     }
 }
