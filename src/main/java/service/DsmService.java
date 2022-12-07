@@ -32,10 +32,10 @@ public class DsmService implements Service {
         String extension = "xyz";
         //origin.run(getFiles(path, extension));
         try {
-            hexagonRepository.run(getFiles(path, extension));
-            hexagonAdminRepository.run();
+//            hexagonRepository.run(getFiles(path, extension));
+//            hexagonAdminRepository.run();
             hexagonRoadRepository.run();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

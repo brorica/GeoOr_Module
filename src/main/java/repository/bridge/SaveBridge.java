@@ -46,7 +46,7 @@ public class SaveBridge extends RelateAdminSector implements Save<Shp> {
         query.append("INSERT INTO public.");
         query.append(tableName);
         query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ");
-        query.append("(SELECT adm_sect_cd FROM ");
+        query.append("(SELECT sig_cd FROM ");
         query.append(getAdminSectorSegmentTableName());
         query.append(
             " WHERE ST_intersects(st_setSRID(ST_FlipCoordinates(?) ::geometry, 4326), the_geom) LIMIT 1))");

@@ -33,8 +33,6 @@ public class RoadRepository implements ShpRepository {
         String ddl = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
             + "  id integer primary key generated always as identity,\n"
             + "  the_geom geometry(MultiPolygon, 4326),\n"
-            + "  opert_de character varying(14),\n"
-            + "  rw_sn double precision,\n"
             + "  sig_cd integer,\n"
             + "  hillshade integer default 0)";
         executeQuery.create(conn, ddl);

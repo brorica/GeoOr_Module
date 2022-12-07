@@ -22,8 +22,8 @@ public class Main {
         adminSectorService.save();
         roadService.save();
         dsmService.save();
-//        frozenService.save();
-//        tunnelService.save();
-//        bridgeService.save();
+        frozenService.save();
+        tunnelService.save();
+        bridgeService.save();
     }
 }

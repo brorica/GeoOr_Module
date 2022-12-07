@@ -44,7 +44,7 @@ public class SaveFrozen extends RelateAdminSector implements Save<File> {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO ");
         query.append(tableName);
-        query.append(" VALUES(?, (SELECT adm_sect_cd FROM ");
+        query.append(" VALUES(?, (SELECT sig_cd FROM ");
         query.append(getAdminSectorSegmentTableName());
         query.append(" WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))");
         return query.toString();

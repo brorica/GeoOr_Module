@@ -30,20 +30,20 @@ public class HexagonRoadRepository {
 
     private void createTable(Connection conn) {
         String ddl = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
-            + "  road_id integer,\n"
+            + "  road_segment_id integer,\n"
             + "  hexagon_id bigint,\n"
+            + "  origin_road_id int,\n"
             + "  sig_cd integer,\n"
-            + "  CONSTRAINT fk_road FOREIGN KEY(road_id) REFERENCES road(id),\n"
+            + "  CONSTRAINT fk_road_segment FOREIGN KEY(road_segment_id) REFERENCES road_segment(id),\n"
             + "  CONSTRAINT fk_hexagon FOREIGN KEY(hexagon_id) REFERENCES hexagon(id))";
         executeQuery.create(conn, ddl);
     }
 
     private void insertTable(Connection conn) {
         String query = "INSERT INTO " + tableName
-            + " SELECT r.origin_id, h.id, r.sig_cd\n"
+            + " SELECT r.id, h.id, r.origin_id, r.sig_cd\n"
             + " FROM road_segment as r, hexagon as h\n"
-            + " WHERE ST_intersects(r.the_geom, h.the_geom)\n"
-            + " GROUP BY r.origin_id, h.id, r.sig_cd";
+            + " WHERE ST_intersects(r.the_geom, h.the_geom)\n";
         executeQuery.save(conn, query);
     }
 
