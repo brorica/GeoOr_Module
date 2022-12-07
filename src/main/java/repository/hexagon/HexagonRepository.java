@@ -1,4 +1,4 @@
-package repository.dsm;
+package repository.hexagon;
 
 import config.JdbcTemplate;
 import geoUtil.UberH3;

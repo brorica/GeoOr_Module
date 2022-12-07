@@ -1,22 +1,19 @@
-package repository.dsm;
+package repository.hexagon;
 
 import config.JdbcTemplate;
 import java.sql.Connection;
 import java.sql.SQLException;
 import repository.ExecuteQuery;
 
-/**
- * hexagon과 행정 구역간의 정보를모아둠
- */
-public class HexagonAdminRepository {
+public class HexagonRoadRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
     private final String tableName;
-    private final String sigIndexName = "hexagon_admin_sig_cd_index";
+    private final String sigIndexName = "hexagon_road_hexagon_id_index";
 
-    public HexagonAdminRepository(String tableName) {
+    public HexagonRoadRepository(String tableName) {
         this.tableName = tableName;
     }
 
@@ -33,24 +30,25 @@ public class HexagonAdminRepository {
 
     private void createTable(Connection conn) {
         String ddl = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
-            + "  sig_cd integer,\n"
+            + "  road_segment_id integer,\n"
             + "  hexagon_id bigint,\n"
-            + "  CONSTRAINT fk_admin_sector FOREIGN KEY(sig_cd) REFERENCES admin_sector(sig_cd),\n"
+            + "  origin_road_id int,\n"
+            + "  sig_cd integer,\n"
+            + "  CONSTRAINT fk_road_segment FOREIGN KEY(road_segment_id) REFERENCES road_segment(id),\n"
             + "  CONSTRAINT fk_hexagon FOREIGN KEY(hexagon_id) REFERENCES hexagon(id))";
         executeQuery.create(conn, ddl);
     }
 
     private void insertTable(Connection conn) {
         String query = "INSERT INTO " + tableName
-            + " SELECT a.sig_cd, h.id\n"
-            + " FROM admin_sector_segment as a, hexagon as h\n"
-            + " where ST_INTERSECTS(a.the_geom, h.the_geom)\n"
-            + " group by a.sig_cd, h.id";
+            + " SELECT r.id, h.id, r.origin_id, r.sig_cd\n"
+            + " FROM road_segment as r, hexagon as h\n"
+            + " WHERE ST_intersects(r.the_geom, h.the_geom)\n";
         executeQuery.save(conn, query);
     }
 
     private void createSigCodeIndex(Connection conn) {
-        String sql = "CREATE INDEX " + sigIndexName + " ON " + tableName + " USING btree(sig_cd)";
+        String sql = "CREATE INDEX " + sigIndexName + " ON " + tableName + " USING btree(hexagon_id)";
         executeQuery.createIndex(conn, sql);
     }
 

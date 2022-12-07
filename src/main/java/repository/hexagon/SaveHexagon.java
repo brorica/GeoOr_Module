@@ -1,4 +1,4 @@
-package repository.dsm;
+package repository.hexagon;
 
 import domain.Hexagon;
 import geoUtil.UberH3;
