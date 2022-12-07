@@ -9,10 +9,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
-import repository.RelateAdminSector;
 import repository.Save;
 
-public class SaveFrozen extends RelateAdminSector implements Save<File> {
+public class SaveFrozen implements Save<File> {
 
     private final int batchLimitValue = 648000;
     private final WKB wkb = new WKB();
@@ -45,7 +44,7 @@ public class SaveFrozen extends RelateAdminSector implements Save<File> {
         query.append("INSERT INTO ");
         query.append(tableName);
         query.append(" VALUES(?, (SELECT sig_cd FROM ");
-        query.append(getAdminSectorSegmentTableName());
+        query.append("admin_sector_segment");
         query.append(" WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))");
         return query.toString();
     }

@@ -4,9 +4,8 @@ import config.JdbcTemplate;
 import java.sql.Connection;
 import java.sql.SQLException;
 import repository.ExecuteQuery;
-import repository.RelateAdminSector;
 
-public class SegmentRelateAdminSectorRepository extends RelateAdminSector {
+public class SegmentRelateAdminSectorRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
@@ -32,21 +31,21 @@ public class SegmentRelateAdminSectorRepository extends RelateAdminSector {
     }
 
     private void createTable(Connection conn) {
-        String ddl = "CREATE TABLE IF NOT EXISTS " + getAdminSectorSegmentTableName() + " (\n"
+        String ddl = "CREATE TABLE IF NOT EXISTS " + "admin_sector_segment" + " (\n"
             + "  the_geom geometry(Polygon, 4326),\n"
             + "  sig_cd integer)";
         executeQuery.create(conn, ddl);
     }
 
     private void divideAdminSector(Connection conn) throws SQLException {
-        String sql = "insert into " + getAdminSectorSegmentTableName()
+        String sql = "insert into " + "admin_sector_segment"
             + " select ST_Subdivide(ST_MakeValid(the_geom), " + maximumPoints
             + "), sig_cd from " + originTableName;
         executeQuery.save(conn, sql);
     }
 
     private void createIndex(Connection conn) {
-        String sql = "CREATE INDEX " + geomIndexName + " ON " + getAdminSectorSegmentTableName() + " USING gist(the_geom)";
+        String sql = "CREATE INDEX " + geomIndexName + " ON " + "admin_sector_segment" + " USING gist(the_geom)";
         executeQuery.createIndex(conn, sql);
     }
 }
