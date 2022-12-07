@@ -76,7 +76,7 @@ public class HexagonRepository implements FileRepository {
         long startTime, endTime;
         startTime = System.currentTimeMillis();
         SaveHexagon saveDsm = new SaveHexagon(tableName, h3);
-        saveDsm.save(conn);
+        saveDsm.save(conn, hexagonMap);
         endTime = System.currentTimeMillis();
         System.out.println(" cost : " + (endTime - startTime) / 1000 + "s");
     }

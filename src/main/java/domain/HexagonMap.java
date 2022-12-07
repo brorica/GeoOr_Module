@@ -14,4 +14,8 @@ public class HexagonMap {
         }
         h3Map.put(cellIndex, new Hexagon(height));
     }
+
+    public Map<Long, Hexagon> getH3Map() {
+        return h3Map;
+    }
 }

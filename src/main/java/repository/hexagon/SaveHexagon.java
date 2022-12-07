@@ -1,6 +1,7 @@
 package repository.hexagon;
 
 import domain.Hexagon;
+import domain.HexagonMap;
 import geoUtil.UberH3;
 import geoUtil.WKB;
 import java.sql.Connection;
@@ -8,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.Map.Entry;
+import repository.Save;
 
 public class SaveHexagon {
 
@@ -21,19 +23,19 @@ public class SaveHexagon {
         this.h3 = h3;
     }
 
-    public void save(Connection conn) throws SQLException {
+    public void save(Connection conn, HexagonMap hexagonMap) throws SQLException {
         String sql = createQuery();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            saveH3Map(ps);
+            saveH3Map(ps,hexagonMap);
         } catch (SQLException e) {
             conn.rollback();
             e.printStackTrace();
         }
     }
 
-    private void saveH3Map(PreparedStatement ps) throws SQLException {
+    private void saveH3Map(PreparedStatement ps, HexagonMap hexagonMap) throws SQLException {
         int batchCount = batchLimitValue;
-        Map<Long, Hexagon> h3Map = h3.getH3Map();
+        Map<Long, Hexagon> h3Map = hexagonMap.getH3Map();
         for (Entry<Long, Hexagon> entry : h3Map.entrySet()) {
             long h3Address = entry.getKey();
             Hexagon hexagon = entry.getValue();
