@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import repository.ExecuteQuery;
 
-public class SegmentRelateAdminSectorRepository {
+public class SegmentAdminSectorRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
@@ -14,7 +14,7 @@ public class SegmentRelateAdminSectorRepository {
     private final String geomIndexName;
     private final int maximumPoints;
 
-    public SegmentRelateAdminSectorRepository(String originTableName) {
+    public SegmentAdminSectorRepository(String originTableName) {
         this.originTableName = originTableName;
         this.geomIndexName = "admin_sector_index";
         this.maximumPoints = 64;

@@ -1,6 +1,7 @@
 package repository.hexagon;
 
 import config.JdbcTemplate;
+import domain.HexagonMap;
 import geoUtil.UberH3;
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,11 +20,13 @@ public class HexagonRepository implements FileRepository {
     private final String tableName;
     private final String indexName;
     private final UberH3 h3;
+    private final HexagonMap hexagonMap;
 
     public HexagonRepository(String tableName){
         this.tableName = tableName;
         this.indexName = "hexagon_id_index";
         this.h3 = new UberH3();
+        this.hexagonMap = new HexagonMap();
     }
 
     public void run(List<File> dsms) throws IOException {
@@ -43,7 +46,6 @@ public class HexagonRepository implements FileRepository {
         for (File dsm : dsms) {
             System.out.print(dsm.getName() + " read... ");
             readDsm(dsm);
-            test();
         }
     }
 
@@ -57,13 +59,9 @@ public class HexagonRepository implements FileRepository {
             lat = Double.parseDouble(s[0]);
             lon = Double.parseDouble(s[1]);
             height = Integer.parseInt(s[2]);
-            h3.addH3Address(lat, lon, height);
+            hexagonMap.addCellIndex(h3.getLatLngToCell(lat, lon), height);
         }
         reader.close();
-    }
-
-    private void test() {
-        System.out.println(h3.getH3Map().size());
     }
 
     private void createTable(Connection conn) {
