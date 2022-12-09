@@ -15,12 +15,12 @@ public class SaveHexagon {
 
     private final int batchLimitValue = 45000;
     private final WKB wkb = new WKB();
-    private final String tableName;
-    private final UberH3 h3;
+    private final UberH3 h3 = new UberH3();
 
-    public SaveHexagon(String tableName, UberH3 h3) {
+    private final String tableName;
+
+    public SaveHexagon(String tableName) {
         this.tableName = tableName;
-        this.h3 = h3;
     }
 
     public void save(Connection conn, HexagonMap hexagonMap) throws SQLException {

@@ -13,6 +13,7 @@ import repository.bridge.BridgeRepository;
 public class BridgeService implements Service {
 
     private final BridgeRepository repository;
+
     private final String originTableName = "bridge";
 
     public BridgeService() {

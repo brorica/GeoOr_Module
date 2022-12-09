@@ -10,16 +10,15 @@ public class SegmentAdminSectorRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
+    private final String geomIndexName = "admin_sector_index";
+    private final int maximumPoints = 64;
+
     private final String originTableName;
     private final String segmentTableName;
-    private final String geomIndexName;
-    private final int maximumPoints;
 
     public SegmentAdminSectorRepository(String originTableName, String segmentTableName) {
         this.originTableName = originTableName;
         this.segmentTableName = segmentTableName;
-        this.geomIndexName = "admin_sector_index";
-        this.maximumPoints = 64;
     }
 
     public void run() {

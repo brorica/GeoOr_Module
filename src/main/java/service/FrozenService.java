@@ -9,6 +9,7 @@ import repository.frozen.FrozenRepository;
 public class FrozenService implements Service {
 
     private final FrozenRepository repository;
+
     private final String originTableName = "frozen";
 
     public FrozenService() {

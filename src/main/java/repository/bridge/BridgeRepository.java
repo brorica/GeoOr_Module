@@ -13,12 +13,12 @@ public class BridgeRepository implements ShpRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
+    private final String sigIndexName = "bridge_sig_cd_index";
+
     private final String tableName;
-    private final String sigIndexName;
 
     public BridgeRepository(String tableName) {
         this.tableName = tableName;
-        this.sigIndexName = "bridge_sig_cd_index";
     }
 
     @Override

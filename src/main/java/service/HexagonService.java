@@ -9,16 +9,20 @@ import repository.hexagon.HexagonAdminRepository;
 import repository.hexagon.HexagonRepository;
 import repository.hexagon.HexagonRoadRepository;
 
-public class DsmService implements Service {
+public class HexagonService implements Service {
 
     private final HexagonRepository hexagonRepository;
     private final HexagonAdminRepository hexagonAdminRepository;
     private final HexagonRoadRepository hexagonRoadRepository;
 
-    public DsmService() {
+    private final String originTableName = "hexagon";
+    private final String hexagonAdminTableName = "hexagon_admin";
+    private final String hexagonRoadTableName = "hexagon_road";
+
+    public HexagonService() {
         this.hexagonRepository = new HexagonRepository("hexagon");
-        this.hexagonAdminRepository = new HexagonAdminRepository("hexagon_admin");
-        this.hexagonRoadRepository = new HexagonRoadRepository("hexagon_road");
+        this.hexagonAdminRepository = new HexagonAdminRepository(originTableName, hexagonAdminTableName);
+        this.hexagonRoadRepository = new HexagonRoadRepository(originTableName, hexagonRoadTableName);
     }
 
     @Override

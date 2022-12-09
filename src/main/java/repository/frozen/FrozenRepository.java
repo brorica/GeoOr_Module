@@ -13,12 +13,12 @@ public class FrozenRepository implements FileRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
+    private final String sigIndexName = "frozen_sig_cd_index";
+
     private final String tableName;
-    private final String sigIndexName;
 
     public FrozenRepository(String tableName) {
         this.tableName = tableName;
-        this.sigIndexName = "frozen_sig_cd_index";
     }
 
     @Override

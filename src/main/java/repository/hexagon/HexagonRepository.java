@@ -17,16 +17,16 @@ public class HexagonRepository implements FileRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
+
+    private final String indexName = "hexagon_id_index";
+
+    private final UberH3 h3 = new UberH3();
+    private final HexagonMap hexagonMap = new HexagonMap();
+
     private final String tableName;
-    private final String indexName;
-    private final UberH3 h3;
-    private final HexagonMap hexagonMap;
 
     public HexagonRepository(String tableName){
         this.tableName = tableName;
-        this.indexName = "hexagon_id_index";
-        this.h3 = new UberH3();
-        this.hexagonMap = new HexagonMap();
     }
 
     public void run(List<File> dsms) throws IOException {
@@ -76,7 +76,7 @@ public class HexagonRepository implements FileRepository {
     private void saveHexagon(Connection conn) throws SQLException {
         long startTime, endTime;
         startTime = System.currentTimeMillis();
-        SaveHexagon saveDsm = new SaveHexagon(tableName, h3);
+        SaveHexagon saveDsm = new SaveHexagon(tableName);
         saveDsm.save(conn, hexagonMap);
         endTime = System.currentTimeMillis();
         System.out.println(" cost : " + (endTime - startTime) / 1000 + "s");

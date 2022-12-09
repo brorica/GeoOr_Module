@@ -15,6 +15,7 @@ public class SaveTunnel implements Save<Shp> {
 
     private final int batchLimitValue = 1024;
     private final WKB wkb = new WKB();
+
     private final String tableName;
 
     public SaveTunnel(String tableName) {

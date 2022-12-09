@@ -15,6 +15,7 @@ public class SaveFrozen implements Save<File> {
 
     private final int batchLimitValue = 648000;
     private final WKB wkb = new WKB();
+
     private final String tableName;
 
     public SaveFrozen(String tableName) {

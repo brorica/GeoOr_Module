@@ -15,6 +15,7 @@ public class RoadService implements Service {
 
     private final RoadRepository origin;
     private final SegmentRoadRepository segment;
+
     private final String originTableName = "road";
     private final String segmentTableName = "road_segment";
 

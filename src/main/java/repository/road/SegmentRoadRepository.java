@@ -10,18 +10,16 @@ public class SegmentRoadRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
+    private final String geomIndexName = "road_geom_index";
+    private final String sigIndexName = "road_sig_cd_index";
+    private final int maximumPoints = 64;
+
     private final String originTableName;
     private final String segmentTableName;
-    private final String geomIndexName;
-    private final String sigIndexName;
-    private final int maximumPoints;
 
     public SegmentRoadRepository(String originTableName, String segmentTableName) {
         this.originTableName = originTableName;
         this.segmentTableName = segmentTableName;
-        this.geomIndexName = "road_geom_index";
-        this.sigIndexName = "road_sig_cd_index";
-        this.maximumPoints = 64;
     }
 
     public void run() {

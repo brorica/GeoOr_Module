@@ -30,6 +30,9 @@ public class ExecuteQuery {
         }
     }
 
+    /**
+     * 클러스터 인덱스 생성
+     */
     public void createIndex(Connection conn, String table, String index) {
         String sql = "CLUSTER " + table + " USING " + index;
         System.out.println(sql);

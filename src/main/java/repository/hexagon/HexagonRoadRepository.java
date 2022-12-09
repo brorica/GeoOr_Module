@@ -10,10 +10,13 @@ public class HexagonRoadRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
-    private final String tableName;
     private final String sigIndexName = "hexagon_road_hexagon_id_index";
 
-    public HexagonRoadRepository(String tableName) {
+    private final String originTableName;
+    private final String tableName;
+
+    public HexagonRoadRepository(String originTableName, String tableName) {
+        this.originTableName = originTableName;
         this.tableName = tableName;
     }
 
@@ -36,14 +39,14 @@ public class HexagonRoadRepository {
             + "  origin_road_id int,\n"
             + "  sig_cd integer,\n"
             + "  CONSTRAINT fk_road_segment FOREIGN KEY(road_segment_id) REFERENCES road_segment(id),\n"
-            + "  CONSTRAINT fk_hexagon FOREIGN KEY(hexagon_id) REFERENCES hexagon(id))";
+            + "  CONSTRAINT fk_hexagon FOREIGN KEY(hexagon_id) REFERENCES " + originTableName + "(id))";
         executeQuery.create(conn, ddl);
     }
 
     private void insertTable(Connection conn) {
         String query = "INSERT INTO " + tableName
             + " SELECT r.id, h.id, r.origin_id, r.sig_cd\n"
-            + " FROM road_segment as r, hexagon as h\n"
+            + " FROM road_segment as r, " + originTableName + " as h\n"
             + " WHERE ST_intersects(r.the_geom, h.the_geom)\n";
         executeQuery.save(conn, query);
     }
