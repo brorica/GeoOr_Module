@@ -28,6 +28,7 @@ public class TunnelRepository implements ShpRepository {
             saveTunnel(conn, shps);
             createIndex(conn);
             createClusterIndex(conn);
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }

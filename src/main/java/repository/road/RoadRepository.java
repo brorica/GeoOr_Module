@@ -24,6 +24,7 @@ public class RoadRepository implements ShpRepository {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);
             saveRoad(conn, shps);
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }

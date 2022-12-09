@@ -28,7 +28,7 @@ public class SaveHexagon {
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             saveH3Map(ps,hexagonMap);
         } catch (SQLException e) {
-            conn.rollback();
+            conn.commit();
             e.printStackTrace();
         }
     }

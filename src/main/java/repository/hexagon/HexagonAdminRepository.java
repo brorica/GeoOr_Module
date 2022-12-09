@@ -26,6 +26,7 @@ public class HexagonAdminRepository {
             insertTable(conn);
             createSigCodeIndex(conn);
             createClusterIndex(conn);
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }

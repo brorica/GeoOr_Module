@@ -24,6 +24,7 @@ public class AdminSectorRepository implements ShpRepository {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);
             saveAdminSector(conn, shps);
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -36,7 +37,7 @@ public class AdminSectorRepository implements ShpRepository {
         executeQuery.create(conn, ddl);
     }
 
-    private void saveAdminSector(Connection conn, List<Shp> shps) {
+    private void saveAdminSector(Connection conn, List<Shp> shps) throws SQLException {
         SaveAdminSector saveAdminSector = new SaveAdminSector(tableName);
         saveAdminSector.save(conn, shps);
     }

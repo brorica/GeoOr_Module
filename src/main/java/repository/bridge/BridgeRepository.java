@@ -28,6 +28,7 @@ public class BridgeRepository implements ShpRepository {
             saveBridge(conn, shps);
             createIndex(conn);
             createClusterIndex(conn);
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }

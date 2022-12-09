@@ -23,7 +23,7 @@ public class SaveAdminSector implements Save<Shp> {
     }
 
     @Override
-    public void save(Connection conn, List<Shp> shps) {
+    public void save(Connection conn, List<Shp> shps) throws SQLException {
         String insertQuery = createQuery();
         int totalRecordCount = 0;
         try (PreparedStatement pStmt = conn.prepareStatement(insertQuery)) {
@@ -35,6 +35,7 @@ public class SaveAdminSector implements Save<Shp> {
             conn.commit();
             System.out.printf("total save : %s\n", totalRecordCount);
         } catch (SQLException e) {
+            conn.rollback();
             e.printStackTrace();
         }
     }

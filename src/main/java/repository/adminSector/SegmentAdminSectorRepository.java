@@ -11,11 +11,13 @@ public class SegmentAdminSectorRepository {
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
     private final String originTableName;
+    private final String segmentTableName;
     private final String geomIndexName;
     private final int maximumPoints;
 
-    public SegmentAdminSectorRepository(String originTableName) {
+    public SegmentAdminSectorRepository(String originTableName, String segmentTableName) {
         this.originTableName = originTableName;
+        this.segmentTableName = segmentTableName;
         this.geomIndexName = "admin_sector_index";
         this.maximumPoints = 64;
     }
@@ -25,6 +27,7 @@ public class SegmentAdminSectorRepository {
             createTable(conn);
             divideAdminSector(conn);
             createIndex(conn);
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -38,7 +41,7 @@ public class SegmentAdminSectorRepository {
     }
 
     private void divideAdminSector(Connection conn) throws SQLException {
-        String sql = "insert into " + "admin_sector_segment"
+        String sql = "insert into " + segmentTableName
             + " select ST_Subdivide(ST_MakeValid(the_geom), " + maximumPoints
             + "), sig_cd from " + originTableName;
         executeQuery.save(conn, sql);

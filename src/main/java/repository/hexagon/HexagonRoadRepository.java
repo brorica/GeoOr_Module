@@ -23,6 +23,7 @@ public class HexagonRoadRepository {
             insertTable(conn);
             createSigCodeIndex(conn);
             createClusterIndex(conn);
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }

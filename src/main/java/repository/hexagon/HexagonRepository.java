@@ -37,6 +37,7 @@ public class HexagonRepository implements FileRepository {
             createIndex(conn);
             createClusterIndex(conn);
             conn.commit();
+            hexagonMap.clear();
         } catch (SQLException e) {
             e.printStackTrace();
         }

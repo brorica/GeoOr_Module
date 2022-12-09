@@ -28,6 +28,7 @@ public class FrozenRepository implements FileRepository {
             saveFrozen(conn, files);
             createIndex(conn);
             createClusterIndex(conn);
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -16,10 +16,11 @@ public class AdminSectorService implements Service {
     private final AdminSectorRepository origin;
     private final SegmentAdminSectorRepository segment;
     private final String originTableName = "admin_sector";
+    private final String segmentTableName = "admin_sector_segment";
 
     public AdminSectorService() {
         this.origin = new AdminSectorRepository(originTableName);
-        this.segment = new SegmentAdminSectorRepository(originTableName);
+        this.segment = new SegmentAdminSectorRepository(originTableName, segmentTableName);
     }
 
     @Override

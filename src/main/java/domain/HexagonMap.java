@@ -18,4 +18,8 @@ public class HexagonMap {
     public Map<Long, Hexagon> getH3Map() {
         return h3Map;
     }
+
+    public void clear() {
+        h3Map.clear();
+    }
 }
