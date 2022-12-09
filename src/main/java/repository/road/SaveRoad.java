@@ -44,8 +44,8 @@ public class SaveRoad implements Save<Shp> {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");
         query.append(tableName);
-        query.append("(the_geom, opert_de, rw_sn, sig_cd) ");
-        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?)");
+        query.append("(the_geom, sig_cd) ");
+        query.append(" VALUES (ST_FlipCoordinates(?), ?)");
         return query.toString();
     }
 
@@ -56,9 +56,7 @@ public class SaveRoad implements Save<Shp> {
             SimpleFeature feature = features.next();
             pStmt.setBytes(1,
                 wkb.convert5181To4326((Geometry) feature.getDefaultGeometryProperty().getValue()));
-            pStmt.setObject(2, feature.getAttribute("OPERT_DE"));
-            pStmt.setObject(3, feature.getAttribute("RW_SN"));
-            pStmt.setInt(4, Integer.parseInt((String) feature.getAttribute("SIG_CD")));
+            pStmt.setInt(2, Integer.parseInt((String) feature.getAttribute("SIG_CD")));
 
             pStmt.addBatch();
             if (--batchLimit == 0) {

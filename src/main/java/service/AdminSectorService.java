@@ -9,17 +9,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import repository.adminSector.AdminSectorRepository;
-import repository.adminSector.SegmentRelateAdminSectorRepository;
+import repository.adminSector.SegmentAdminSectorRepository;
 
 public class AdminSectorService implements Service {
 
     private final AdminSectorRepository origin;
-    private final SegmentRelateAdminSectorRepository segment;
+    private final SegmentAdminSectorRepository segment;
     private final String originTableName = "admin_sector";
+    private final String segmentTableName = "admin_sector_segment";
 
     public AdminSectorService() {
         this.origin = new AdminSectorRepository(originTableName);
-        this.segment = new SegmentRelateAdminSectorRepository(originTableName);
+        this.segment = new SegmentAdminSectorRepository(originTableName, segmentTableName);
     }
 
     @Override

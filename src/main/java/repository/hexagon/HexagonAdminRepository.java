@@ -1,32 +1,30 @@
-package repository.bridge;
+package repository.hexagon;
 
 import config.JdbcTemplate;
-import domain.Shp;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
 import repository.ExecuteQuery;
-import repository.ShpRepository;
 
-public class BridgeRepository implements ShpRepository {
+/**
+ * hexagon과 행정 구역간의 정보를모아둠
+ */
+public class HexagonAdminRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
     private final String tableName;
-    private final String sigIndexName;
+    private final String sigIndexName = "hexagon_admin_sig_cd_index";
 
-    public BridgeRepository(String tableName) {
+    public HexagonAdminRepository(String tableName) {
         this.tableName = tableName;
-        this.sigIndexName = "bridge_sig_cd_index";
     }
 
-    @Override
-    public void run(List<Shp> shps) {
+    public void run() {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);
-            saveBridge(conn, shps);
-            createIndex(conn);
+            insertTable(conn);
+            createSigCodeIndex(conn);
             createClusterIndex(conn);
             conn.commit();
         } catch (SQLException e) {
@@ -36,19 +34,23 @@ public class BridgeRepository implements ShpRepository {
 
     private void createTable(Connection conn) {
         String ddl = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
-            + " the_geom geometry(Point, 4326),\n"
-            + " ufid varchar(34),\n"
-            + " name varchar(100),\n"
-            + " sig_cd integer)";
+            + "  sig_cd integer,\n"
+            + "  hexagon_id bigint,\n"
+            + "  CONSTRAINT fk_admin_sector FOREIGN KEY(sig_cd) REFERENCES admin_sector(sig_cd),\n"
+            + "  CONSTRAINT fk_hexagon FOREIGN KEY(hexagon_id) REFERENCES hexagon(id))";
         executeQuery.create(conn, ddl);
     }
 
-    private void saveBridge(Connection conn, List<Shp> shps) throws SQLException {
-        SaveBridge saveBridge = new SaveBridge(tableName);
-        saveBridge.save(conn, shps);
+    private void insertTable(Connection conn) {
+        String query = "INSERT INTO " + tableName
+            + " SELECT a.sig_cd, h.id\n"
+            + " FROM admin_sector_segment as a, hexagon as h\n"
+            + " where ST_INTERSECTS(a.the_geom, h.the_geom)\n"
+            + " group by a.sig_cd, h.id";
+        executeQuery.save(conn, query);
     }
 
-    private void createIndex(Connection conn) {
+    private void createSigCodeIndex(Connection conn) {
         String sql = "CREATE INDEX " + sigIndexName + " ON " + tableName + " USING btree(sig_cd)";
         executeQuery.createIndex(conn, sql);
     }

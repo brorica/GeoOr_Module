@@ -4,19 +4,20 @@ import config.JdbcTemplate;
 import java.sql.Connection;
 import java.sql.SQLException;
 import repository.ExecuteQuery;
-import repository.RelateAdminSector;
 
-public class SegmentRelateAdminSectorRepository extends RelateAdminSector {
+public class SegmentAdminSectorRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
     private final String originTableName;
+    private final String segmentTableName;
     private final String geomIndexName;
     private final int maximumPoints;
 
-    public SegmentRelateAdminSectorRepository(String originTableName) {
+    public SegmentAdminSectorRepository(String originTableName, String segmentTableName) {
         this.originTableName = originTableName;
+        this.segmentTableName = segmentTableName;
         this.geomIndexName = "admin_sector_index";
         this.maximumPoints = 64;
     }
@@ -26,27 +27,28 @@ public class SegmentRelateAdminSectorRepository extends RelateAdminSector {
             createTable(conn);
             divideAdminSector(conn);
             createIndex(conn);
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     private void createTable(Connection conn) {
-        String ddl = "CREATE TABLE IF NOT EXISTS " + getAdminSectorSegmentTableName() + " (\n"
+        String ddl = "CREATE TABLE IF NOT EXISTS " + "admin_sector_segment" + " (\n"
             + "  the_geom geometry(Polygon, 4326),\n"
-            + "  adm_sect_cd integer)";
+            + "  sig_cd integer)";
         executeQuery.create(conn, ddl);
     }
 
     private void divideAdminSector(Connection conn) throws SQLException {
-        String sql = "insert into " + getAdminSectorSegmentTableName()
+        String sql = "insert into " + segmentTableName
             + " select ST_Subdivide(ST_MakeValid(the_geom), " + maximumPoints
-            + "), adm_sect_cd from " + originTableName;
+            + "), sig_cd from " + originTableName;
         executeQuery.save(conn, sql);
     }
 
     private void createIndex(Connection conn) {
-        String sql = "CREATE INDEX " + geomIndexName + " ON " + getAdminSectorSegmentTableName() + " USING gist(the_geom)";
+        String sql = "CREATE INDEX " + geomIndexName + " ON " + "admin_sector_segment" + " USING gist(the_geom)";
         executeQuery.createIndex(conn, sql);
     }
 }

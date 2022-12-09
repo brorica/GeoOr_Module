@@ -21,12 +21,14 @@ public class FrozenRepository implements FileRepository {
         this.sigIndexName = "frozen_sig_cd_index";
     }
 
+    @Override
     public void run(List<File> files) {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);
             saveFrozen(conn, files);
             createIndex(conn);
             createClusterIndex(conn);
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }

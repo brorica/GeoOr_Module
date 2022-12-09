@@ -1,9 +1,12 @@
 package geoUtil;
 
+import com.uber.h3core.util.LatLng;
+import java.util.List;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LinearRing;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.WKBWriter;
 
@@ -34,5 +37,20 @@ public class WKB {
     public byte[] convert5179To4326(Geometry geom) {
         Geometry geometry = srid5179.convertGeometry(geom);
         return wkbWriter.write(geometry);
+    }
+
+    // 한국 좌표가 이상한게 위경도 값을 바꿔 넣어줘야 한다.
+    public byte[] makeH3BoundaryToPolygon(List<LatLng> latLngs) {
+        Coordinate[] coords = new Coordinate[7];
+        LatLng latLng = latLngs.get(0);
+        // Polygon의 마지막 좌표는 시작점이어야 함.
+        coords[6] = new Coordinate(latLng.lng, latLng.lat);
+        for (int i = 0; i < 6; i++) {
+            latLng = latLngs.get(i);
+            coords[i] = new Coordinate(latLng.lng, latLng.lat);
+        }
+        LinearRing ring = geometryFactory.createLinearRing( coords );
+        LinearRing holes[] = null;
+        return wkbWriter.write(geometryFactory.createPolygon(ring, holes));
     }
 }

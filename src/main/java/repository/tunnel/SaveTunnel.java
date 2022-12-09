@@ -9,10 +9,9 @@ import java.util.List;
 import org.geotools.feature.FeatureIterator;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
-import repository.RelateAdminSector;
 import repository.Save;
 
-public class SaveTunnel extends RelateAdminSector implements Save<Shp> {
+public class SaveTunnel implements Save<Shp> {
 
     private final int batchLimitValue = 1024;
     private final WKB wkb = new WKB();
@@ -45,8 +44,8 @@ public class SaveTunnel extends RelateAdminSector implements Save<Shp> {
         query.append("INSERT INTO public.");
         query.append(tableName);
         query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ");
-        query.append("(SELECT adm_sect_cd FROM ");
-        query.append(getAdminSectorSegmentTableName());
+        query.append("(SELECT sig_cd FROM ");
+        query.append("admin_sector_segment");
         query.append(
             " WHERE ST_intersects(st_setSRID(ST_FlipCoordinates(?) ::geometry, 4326), the_geom) LIMIT 1))");
         return query.toString();

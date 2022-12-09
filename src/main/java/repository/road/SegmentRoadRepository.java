@@ -28,9 +28,11 @@ public class SegmentRoadRepository {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);
             divideRoad(conn);
+            alterTable(conn);
             createGeomIndex(conn);
             createSigCodeIndex(conn);
             createClusterIndex(conn);
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -51,6 +53,11 @@ public class SegmentRoadRepository {
         String sql = "insert into " + segmentTableName +
             " select id, sig_cd, ST_Subdivide(ST_MakeValid(the_geom), " + maximumPoints + ") from " + originTableName;
         executeQuery.save(conn, sql);
+    }
+
+    private void alterTable(Connection conn) {
+        String sql = "ALTER TABLE " + segmentTableName + " ADD COLUMN id SERIAL PRIMARY KEY";
+        executeQuery.alter(conn, sql);
     }
 
     private void createGeomIndex(Connection conn) {

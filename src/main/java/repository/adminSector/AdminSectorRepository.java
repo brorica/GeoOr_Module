@@ -19,10 +19,12 @@ public class AdminSectorRepository implements ShpRepository {
         this.tableName = tableName;
     }
 
+    @Override
     public void run(List<Shp> shps) {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);
             saveAdminSector(conn, shps);
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -31,15 +33,11 @@ public class AdminSectorRepository implements ShpRepository {
     private void createTable(Connection conn) {
         String ddl = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
             + "  the_geom geometry(MultiPolygon, 4326),\n"
-            + "  adm_sect_cd integer,\n"
-            + "  sgg_nm character varying(60),\n"
-            + "  sgg_oid integer,\n"
-            + "  col_adm_se character varying(5),\n"
-            + "  gid integer primary key)";
+            + "  sig_cd integer PRIMARY KEY)";
         executeQuery.create(conn, ddl);
     }
 
-    private void saveAdminSector(Connection conn, List<Shp> shps) {
+    private void saveAdminSector(Connection conn, List<Shp> shps) throws SQLException {
         SaveAdminSector saveAdminSector = new SaveAdminSector(tableName);
         saveAdminSector.save(conn, shps);
     }
