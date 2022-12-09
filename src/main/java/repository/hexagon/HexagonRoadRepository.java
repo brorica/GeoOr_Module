@@ -49,12 +49,10 @@ public class HexagonRoadRepository {
     }
 
     private void createSigCodeIndex(Connection conn) {
-        String sql = "CREATE INDEX " + sigIndexName + " ON " + tableName + " USING btree(hexagon_id)";
-        executeQuery.createIndex(conn, sql);
+        executeQuery.createIndex(conn, sigIndexName, tableName, "btree", "hexagon_id");
     }
 
     private void createClusterIndex(Connection conn) {
-        String sql = "CLUSTER " + tableName + " USING " + sigIndexName;
-        executeQuery.createIndex(conn, sql);
+        executeQuery.createIndex(conn, tableName, sigIndexName);
     }
 }

@@ -83,12 +83,10 @@ public class HexagonRepository implements FileRepository {
     }
 
     private void createIndex (Connection conn) {
-        String sql = "CREATE INDEX " + indexName + " ON " + tableName + " USING btree(id)";
-        executeQuery.createIndex(conn, sql);
+        executeQuery.createIndex(conn, indexName, tableName, "btree", "id");
     }
 
     private void createClusterIndex (Connection conn) {
-        String sql = "CLUSTER " + tableName + " USING "+ indexName;
-        executeQuery.createIndex(conn, sql);
+        executeQuery.createIndex(conn, tableName, indexName);
     }
 }

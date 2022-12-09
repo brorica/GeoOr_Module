@@ -51,12 +51,10 @@ public class HexagonAdminRepository {
     }
 
     private void createSigCodeIndex(Connection conn) {
-        String sql = "CREATE INDEX " + sigIndexName + " ON " + tableName + " USING btree(sig_cd)";
-        executeQuery.createIndex(conn, sql);
+        executeQuery.createIndex(conn, sigIndexName, tableName, "btree", "sig_cd");
     }
 
     private void createClusterIndex(Connection conn) {
-        String sql = "CLUSTER " + tableName + " USING " + sigIndexName;
-        executeQuery.createIndex(conn, sql);
+        executeQuery.createIndex(conn, tableName, sigIndexName);
     }
 }

@@ -61,17 +61,14 @@ public class SegmentRoadRepository {
     }
 
     private void createGeomIndex(Connection conn) {
-        String sql = "CREATE INDEX " + geomIndexName +" ON " + segmentTableName + " USING gist(the_geom)";
-        executeQuery.createIndex(conn, sql);
+        executeQuery.createIndex(conn, geomIndexName, segmentTableName, "gist", "the_geom");
     }
 
     private void createSigCodeIndex(Connection conn) {
-        String sql = "CREATE INDEX " + sigIndexName + " ON " + segmentTableName + " USING btree(sig_cd)";
-        executeQuery.createIndex(conn, sql);
+        executeQuery.createIndex(conn, sigIndexName, segmentTableName, "btree", "sig_cd");
     }
 
     private void createClusterIndex(Connection conn) {
-        String sql = "CLUSTER " + segmentTableName + " USING " + sigIndexName;
-        executeQuery.createIndex(conn, sql);
+        executeQuery.createIndex(conn, segmentTableName, sigIndexName);
     }
 }

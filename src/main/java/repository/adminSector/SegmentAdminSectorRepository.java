@@ -48,7 +48,6 @@ public class SegmentAdminSectorRepository {
     }
 
     private void createIndex(Connection conn) {
-        String sql = "CREATE INDEX " + geomIndexName + " ON " + "admin_sector_segment" + " USING gist(the_geom)";
-        executeQuery.createIndex(conn, sql);
+        executeQuery.createIndex(conn, geomIndexName, segmentTableName, "gist", "the_geom");
     }
 }

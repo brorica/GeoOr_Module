@@ -19,7 +19,19 @@ public class ExecuteQuery {
         }
     }
 
-    public void createIndex(Connection conn, String sql) {
+    public void createIndex(Connection conn, String index, String table, String indexType, String column) {
+        String sql = "CREATE INDEX " + index + " ON " + table + " USING " + indexType +"(" + column + ")";
+        System.out.println(sql);
+        try (Statement st = conn.createStatement()) {
+            st.execute(sql);
+        } catch (SQLException e) {
+            System.err.printf("인덱스 생성에 오류가 발생했습니다.\n");
+            e.printStackTrace();
+        }
+    }
+
+    public void createIndex(Connection conn, String table, String index) {
+        String sql = "CLUSTER " + table + " USING " + index;
         System.out.println(sql);
         try (Statement st = conn.createStatement()) {
             st.execute(sql);
