@@ -1,4 +1,5 @@
 import config.ApplicationProperties;
+import repository.RefineRepository;
 import service.AdminSectorService;
 import service.BridgeService;
 import service.HexagonService;
@@ -18,6 +19,7 @@ public class Main {
         FrozenService frozenService = new FrozenService();
         TunnelService tunnelService = new TunnelService();
         BridgeService bridgeService = new BridgeService();
+        RefineRepository refineRepository = new RefineRepository();
 
         adminSectorService.save();
         roadService.save();
@@ -25,5 +27,6 @@ public class Main {
 //        frozenService.save();
 //        tunnelService.save();
 //        bridgeService.save();
+        refineRepository.run();
     }
 }

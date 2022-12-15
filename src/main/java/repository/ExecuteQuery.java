@@ -54,7 +54,8 @@ public class ExecuteQuery {
         }
     }
 
-    public void drop(Connection conn, String sql) {
+    public void drop(Connection conn, String table) {
+        String sql = "DROP TABLE " + table;
         System.out.println(sql);
         try (Statement st = conn.createStatement()) {
             st.execute(sql);

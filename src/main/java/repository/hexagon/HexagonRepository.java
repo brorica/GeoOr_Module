@@ -67,9 +67,9 @@ public class HexagonRepository implements FileRepository {
 
     private void createTable(Connection conn) {
         String ddl = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
-            + "   the_geom geometry(Polygon, 4326),\n"
+            + "   the_geom geometry(Polygon, 4326) NOT NULL,\n"
             + "   id bigint PRIMARY KEY,\n"
-            + "   height integer)";
+            + "   height INTEGER NOT NULL)";
         executeQuery.create(conn, ddl);
     }
 

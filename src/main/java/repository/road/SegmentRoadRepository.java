@@ -11,7 +11,6 @@ public class SegmentRoadRepository {
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
     private final String geomIndexName = "road_geom_index";
-    private final String sigIndexName = "road_sig_cd_index";
     private final int maximumPoints = 64;
 
     private final String originTableName;
@@ -26,10 +25,7 @@ public class SegmentRoadRepository {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);
             divideRoad(conn);
-            alterTable(conn);
             createGeomIndex(conn);
-            createSigCodeIndex(conn);
-            createClusterIndex(conn);
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -39,8 +35,8 @@ public class SegmentRoadRepository {
     private void createTable(Connection conn) {
         String ddl = "CREATE TABLE IF NOT EXISTS " + segmentTableName + " (\n"
             + "  origin_id integer,\n"
-            + "  sig_cd integer,\n"
-            + "  the_geom geometry(Polygon, 4326))";
+            + "  sig_cd integer NOT NULL,\n"
+            + "  the_geom geometry(Polygon, 4326) NOT NULL)";
         executeQuery.create(conn, ddl);
     }
 
@@ -53,20 +49,7 @@ public class SegmentRoadRepository {
         executeQuery.save(conn, sql);
     }
 
-    private void alterTable(Connection conn) {
-        String sql = "ALTER TABLE " + segmentTableName + " ADD COLUMN id SERIAL PRIMARY KEY";
-        executeQuery.alter(conn, sql);
-    }
-
     private void createGeomIndex(Connection conn) {
         executeQuery.createIndex(conn, geomIndexName, segmentTableName, "gist", "the_geom");
-    }
-
-    private void createSigCodeIndex(Connection conn) {
-        executeQuery.createIndex(conn, sigIndexName, segmentTableName, "btree", "sig_cd");
-    }
-
-    private void createClusterIndex(Connection conn) {
-        executeQuery.createIndex(conn, segmentTableName, sigIndexName);
     }
 }

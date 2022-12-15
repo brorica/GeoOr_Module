@@ -32,8 +32,8 @@ public class AdminSectorRepository implements ShpRepository {
 
     private void createTable(Connection conn) {
         String ddl = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
-            + "  the_geom geometry(MultiPolygon, 4326),\n"
-            + "  sig_cd integer PRIMARY KEY)";
+            + "  the_geom geometry(MultiPolygon, 4326) NOT NULL,\n"
+            + "  sig_cd integer PRIMARY KEY NOT NULL)";
         executeQuery.create(conn, ddl);
     }
 
