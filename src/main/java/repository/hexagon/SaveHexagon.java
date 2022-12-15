@@ -13,7 +13,7 @@ import repository.Save;
 
 public class SaveHexagon {
 
-    private final int batchLimitValue = 45000;
+    private final int batchLimitValue = 640000;
     private final WKB wkb = new WKB();
     private final UberH3 h3 = new UberH3();
 

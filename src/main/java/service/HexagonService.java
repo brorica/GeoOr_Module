@@ -30,8 +30,8 @@ public class HexagonService implements Service {
         String path = getProperty("dsm");
         String extension = "xyz";
         try {
-            hexagonRepository.run(getFiles(path, extension));
-            hexagonAdminRepository.run();
+//            hexagonRepository.run(getFiles(path, extension));
+//            hexagonAdminRepository.run();
             hexagonRoadRepository.run();
         } catch (Exception e) {
             e.printStackTrace();
