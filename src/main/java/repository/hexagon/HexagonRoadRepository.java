@@ -10,6 +10,7 @@ public class HexagonRoadRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
+    private final String tempTableName = "temp_hexagon_road";
     private final String sigIndexName = "hexagon_road_hexagon_id_index";
 
     private final String originTableName;
@@ -22,14 +23,24 @@ public class HexagonRoadRepository {
 
     public void run() {
         try (Connection conn = jdbcTemplate.getConnection()) {
+            createTempTable(conn);
             createTable(conn);
+            insertTempTable(conn);
             insertTable(conn);
+            dropTempHexagonRoad(conn);
             createSigCodeIndex(conn);
             createClusterIndex(conn);
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void createTempTable(Connection conn) {
+        String ddl = "CREATE TABLE IF NOT EXISTS " + tempTableName + " (\n"
+            + "  hexagon_id bigint,\n"
+            + "  road_id int)";
+        executeQuery.create(conn, ddl);
     }
 
     private void createTable(Connection conn) {
@@ -41,15 +52,24 @@ public class HexagonRoadRepository {
         executeQuery.create(conn, ddl);
     }
 
-    /**
-     * 주의: 이 작업은 오래 걸림
-     */
-    private void insertTable(Connection conn) {
-        String query = "INSERT INTO " + tableName
+    private void insertTempTable(Connection conn) {
+        String query = "INSERT INTO " + tempTableName
             + " SELECT h.id, r.origin_id\n"
             + " FROM road_segment as r, " + originTableName + " as h\n"
             + " WHERE ST_intersects(r.the_geom, h.the_geom)\n";
         executeQuery.save(conn, query);
+    }
+
+    private void insertTable(Connection conn) {
+        String query = "INSERT INTO " + tableName
+            + " SELECT hexagon_id, road_id\n"
+            + " FROM " + tempTableName + "\n"
+            + " GROUP BY hexagon_id, road_id";
+        executeQuery.save(conn, query);
+    }
+
+    private void dropTempHexagonRoad(Connection conn) {
+        executeQuery.drop(conn, tempTableName);
     }
 
     private void createSigCodeIndex(Connection conn) {
