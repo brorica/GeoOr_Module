@@ -1,4 +1,4 @@
-package repository.tunnel;
+package repository.hazard.bridge;
 
 import domain.Shp;
 import geoUtil.WKB;
@@ -11,20 +11,21 @@ import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import repository.Save;
 
-public class SaveTunnel implements Save<Shp> {
+public class SaveBridge implements Save<Shp> {
 
     private final int batchLimitValue = 1024;
     private final WKB wkb = new WKB();
 
     private final String tableName;
 
-    public SaveTunnel(String tableName) {
+    public SaveBridge(String tableName) {
         this.tableName = tableName;
     }
 
     @Override
     public void save(Connection conn, List<Shp> shps) throws SQLException {
         String insertQuery = createQuery();
+        System.out.println(insertQuery);
         int totalRecordCount = 0;
         try (PreparedStatement pStmt = conn.prepareStatement(insertQuery)) {
             for (Shp shp : shps) {
@@ -59,7 +60,7 @@ public class SaveTunnel implements Save<Shp> {
             SimpleFeature feature = features.next();
 
             byte[] centerPoint = getCentroid((Geometry) feature.getAttribute(0));
-            pStmt.setBytes(1,centerPoint);
+            pStmt.setBytes(1, centerPoint);
             pStmt.setObject(2, feature.getAttribute("UFID"));
             pStmt.setObject(3, feature.getAttribute("NAME"));
             pStmt.setBytes(4, centerPoint);

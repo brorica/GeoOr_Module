@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import repository.tunnel.TunnelRepository;
+import repository.hazard.tunnel.TunnelRepository;
 
 public class TunnelService implements Service {
 

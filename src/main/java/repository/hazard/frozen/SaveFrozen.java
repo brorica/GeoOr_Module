@@ -1,4 +1,4 @@
-package repository.frozen;
+package repository.hazard.frozen;
 
 import geoUtil.WKB;
 import java.io.BufferedReader;

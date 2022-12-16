@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import repository.bridge.BridgeRepository;
+import repository.hazard.bridge.BridgeRepository;
 
 public class BridgeService implements Service {
 

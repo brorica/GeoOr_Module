@@ -4,7 +4,7 @@ import static config.ApplicationProperties.getProperty;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-import repository.frozen.FrozenRepository;
+import repository.hazard.frozen.FrozenRepository;
 
 public class FrozenService implements Service {
 

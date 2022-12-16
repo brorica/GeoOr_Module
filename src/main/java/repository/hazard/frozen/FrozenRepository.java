@@ -1,31 +1,31 @@
-package repository.tunnel;
+package repository.hazard.frozen;
 
 import config.JdbcTemplate;
-import domain.Shp;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import repository.ExecuteQuery;
-import repository.ShpRepository;
+import repository.FileRepository;
 
-public class TunnelRepository implements ShpRepository {
+public class FrozenRepository implements FileRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
-    private final String sigIndexName = "tunnel_sig_cd_index";
+    private final String sigIndexName = "frozen_sig_cd_index";
 
     private final String tableName;
 
-    public TunnelRepository(String tableName) {
+    public FrozenRepository(String tableName) {
         this.tableName = tableName;
     }
 
     @Override
-    public void run(List<Shp> shps) {
+    public void run(List<File> files) {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);
-            saveTunnel(conn, shps);
+            saveFrozen(conn, files);
             createIndex(conn);
             createClusterIndex(conn);
             conn.commit();
@@ -36,16 +36,14 @@ public class TunnelRepository implements ShpRepository {
 
     private void createTable(Connection conn) {
         String ddl = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
-            + " the_geom geometry(Point, 4326),\n"
-            + " ufid varchar(32) not null PRIMARY KEY,\n"
-            + " name varchar(100),\n"
-            + " sig_cd integer)";
+            + "  the_geom geometry(Point, 4326),\n"
+            + "  sig_cd integer)";
         executeQuery.create(conn, ddl);
     }
 
-    private void saveTunnel(Connection conn, List<Shp> shps) throws SQLException {
-        SaveTunnel saveTunnel = new SaveTunnel(tableName);
-        saveTunnel.save(conn, shps);
+    private void saveFrozen(Connection conn, List<File> files) throws SQLException {
+        SaveFrozen saveFrozen = new SaveFrozen(tableName);
+        saveFrozen.save(conn, files);
     }
 
     private void createIndex(Connection conn) {
