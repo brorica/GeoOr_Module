@@ -1,11 +1,11 @@
 import config.ApplicationProperties;
 import repository.RefineRepository;
 import service.AdminSectorService;
-import service.BridgeService;
+import service.hazard.BridgeService;
 import service.HexagonService;
-import service.FrozenService;
+import service.hazard.FrozenService;
 import service.RoadService;
-import service.TunnelService;
+import service.hazard.TunnelService;
 
 
 public class Main {

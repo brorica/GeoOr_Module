@@ -1,4 +1,4 @@
-package service;
+package service.hazard;
 
 import static config.ApplicationProperties.getProperty;
 
@@ -8,16 +8,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import repository.hazard.bridge.BridgeRepository;
+import repository.hazard.tunnel.TunnelRepository;
+import service.Service;
 
-public class BridgeService implements Service {
+public class TunnelService implements Service {
 
-    private final BridgeRepository repository;
+    private final TunnelRepository repository;
 
-    private final String originTableName = "bridge";
+    private final String originTableName = "tunnel";
 
-    public BridgeService() {
-        this.repository = new BridgeRepository(originTableName);
+    public TunnelService() {
+        this.repository = new TunnelRepository(originTableName);
     }
 
     @Override
@@ -26,7 +27,7 @@ public class BridgeService implements Service {
     }
 
     private List<Shp> getShps() {
-        String path = getProperty("bridge");
+        String path = getProperty("tunnel");
         String extension = "shp";
         List<File> shpFiles = getFiles(path, extension);
 

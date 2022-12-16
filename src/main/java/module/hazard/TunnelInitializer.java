@@ -1,14 +1,14 @@
-package module;
+package module.hazard;
 
 import config.ApplicationProperties;
-import service.FrozenService;
+import service.hazard.TunnelService;
 
-public class FrozenInitializer {
+public class TunnelInitializer {
 
     private static final ApplicationProperties applicationProperties = new ApplicationProperties();
 
     public static void main(String[] args) {
-        FrozenService frozenService = new FrozenService();
-        frozenService.save();
+        TunnelService tunnelService = new TunnelService();
+        tunnelService.save();
     }
 }

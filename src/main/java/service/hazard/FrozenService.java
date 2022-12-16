@@ -1,10 +1,11 @@
-package service;
+package service.hazard;
 
 import static config.ApplicationProperties.getProperty;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import repository.hazard.frozen.FrozenRepository;
+import service.Service;
 
 public class FrozenService implements Service {
 
