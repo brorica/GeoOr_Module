@@ -8,6 +8,9 @@ import java.util.List;
 import repository.ExecuteQuery;
 import repository.ShpRepository;
 
+/**
+ * 행정 구역 테이블을 만들고 저장하는 repository
+ */
 public class AdminSectorRepository implements ShpRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();

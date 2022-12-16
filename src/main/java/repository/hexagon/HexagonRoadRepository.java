@@ -5,6 +5,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import repository.ExecuteQuery;
 
+/**
+ * h3과 도로 테이블은 다대다 관계이기 때문에
+ * 중간에 테이블을 놔야 한다.
+ */
 public class HexagonRoadRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();

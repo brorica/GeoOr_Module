@@ -6,7 +6,8 @@ import java.sql.SQLException;
 import repository.ExecuteQuery;
 
 /**
- * hexagon과 행정 구역간의 정보를모아둠
+ * h3과 행정구역 테이블은 다대다 관계이기 때문에
+ * 중간에 테이블을 놔야 한다.
  */
 public class HexagonAdminRepository {
 

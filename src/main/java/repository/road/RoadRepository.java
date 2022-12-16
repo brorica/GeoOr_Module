@@ -8,6 +8,9 @@ import java.util.List;
 import repository.ExecuteQuery;
 import repository.ShpRepository;
 
+/**
+ * 도로 테이블을 만들고 저장하는 repository
+ */
 public class RoadRepository implements ShpRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();

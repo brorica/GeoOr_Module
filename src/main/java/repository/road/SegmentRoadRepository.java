@@ -5,6 +5,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import repository.ExecuteQuery;
 
+/**
+ * 기존 도로 테이블은 r-tree 탐색에 적합한 형태가 아니기 때문에
+ * 내부적으로 분할해야 한다.
+ */
 public class SegmentRoadRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();

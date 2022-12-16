@@ -24,9 +24,9 @@ public class Main {
         adminSectorService.save();
         roadService.save();
         hexagonService.save();
-//        frozenService.save();
-//        tunnelService.save();
-//        bridgeService.save();
+        frozenService.save();
+        tunnelService.save();
+        bridgeService.save();
         refineRepository.run();
     }
 }
