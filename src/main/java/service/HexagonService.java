@@ -1,6 +1,6 @@
 package service;
 
-import static config.ApplicationProperties.getProperty;
+import static config.ApplicationProperties.getPath;
 
 import java.io.File;
 import java.util.Arrays;
@@ -9,21 +9,20 @@ import repository.hexagon.HexagonAdminRepository;
 import repository.hexagon.HexagonRepository;
 import repository.hexagon.HexagonRoadRepository;
 
-public class DsmService implements Service {
+public class HexagonService {
 
     private final HexagonRepository hexagonRepository;
     private final HexagonAdminRepository hexagonAdminRepository;
     private final HexagonRoadRepository hexagonRoadRepository;
 
-    public DsmService() {
-        this.hexagonRepository = new HexagonRepository("hexagon");
-        this.hexagonAdminRepository = new HexagonAdminRepository("hexagon_admin");
-        this.hexagonRoadRepository = new HexagonRoadRepository("hexagon_road");
+    public HexagonService() {
+        this.hexagonRepository = new HexagonRepository();
+        this.hexagonAdminRepository = new HexagonAdminRepository();
+        this.hexagonRoadRepository = new HexagonRoadRepository();
     }
 
-    @Override
     public void save() {
-        String path = getProperty("dsm");
+        String path = getPath("dsmPath");
         String extension = "xyz";
         try {
             hexagonRepository.run(getFiles(path, extension));
@@ -34,7 +33,6 @@ public class DsmService implements Service {
         }
     }
 
-    @Override
     public List<File> getFiles(String path, String extension) {
         File directory = new File(path);
         File[] files = directory.listFiles((dir, name) -> name.endsWith(extension));

@@ -1,6 +1,6 @@
-package service;
+package service.hazard;
 
-import static config.ApplicationProperties.getProperty;
+import static config.ApplicationProperties.getPath;
 
 import domain.Shp;
 import java.io.File;
@@ -8,24 +8,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import repository.tunnel.TunnelRepository;
+import repository.hazard.bridge.BridgeRepository;
 
-public class TunnelService implements Service {
+public class BridgeService {
 
-    private final TunnelRepository repository;
-    private final String originTableName = "tunnel";
+    private final BridgeRepository repository = new BridgeRepository();
 
-    public TunnelService() {
-        this.repository = new TunnelRepository(originTableName);
-    }
-
-    @Override
     public void save() {
         repository.run(getShps());
     }
 
     private List<Shp> getShps() {
-        String path = getProperty("tunnel");
+        String path = getPath("bridgePath");
         String extension = "shp";
         List<File> shpFiles = getFiles(path, extension);
 
@@ -41,7 +35,6 @@ public class TunnelService implements Service {
         return shps;
     }
 
-    @Override
     public List<File> getFiles(String path, String extension) {
         File directory = new File(path);
         File[] files = directory.listFiles((dir, name) -> name.endsWith(extension));

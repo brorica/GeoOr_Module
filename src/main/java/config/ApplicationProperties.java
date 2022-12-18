@@ -20,6 +20,10 @@ public class ApplicationProperties {
     }
 
     public static String getProperty(String name) {
+        return properties.getProperty(name);
+    }
+
+    public static String getPath(String name) {
         return System.getProperty("user.dir") + properties.getProperty(name);
     }
 

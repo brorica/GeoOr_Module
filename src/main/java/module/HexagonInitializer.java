@@ -1,14 +1,14 @@
 package module;
 
 import config.ApplicationProperties;
-import service.DsmService;
+import service.HexagonService;
 
-public class DsmInitializer {
+public class HexagonInitializer {
 
     private static final ApplicationProperties applicationProperties = new ApplicationProperties();
 
     public static void main(String[] args) {
-        DsmService dsmService = new DsmService();
-        dsmService.save();
+        HexagonService hexagonService = new HexagonService();
+        hexagonService.save();
     }
 }

@@ -1,10 +1,11 @@
 import config.ApplicationProperties;
+import repository.RefineRepository;
 import service.AdminSectorService;
-import service.BridgeService;
-import service.DsmService;
-import service.FrozenService;
+import service.hazard.BridgeService;
+import service.HexagonService;
+import service.hazard.FrozenService;
 import service.RoadService;
-import service.TunnelService;
+import service.hazard.TunnelService;
 
 
 public class Main {
@@ -14,16 +15,18 @@ public class Main {
     public static void main(String[] args) {
         AdminSectorService adminSectorService = new AdminSectorService();
         RoadService roadService = new RoadService();
-        DsmService dsmService = new DsmService();
+        HexagonService hexagonService = new HexagonService();
         FrozenService frozenService = new FrozenService();
         TunnelService tunnelService = new TunnelService();
         BridgeService bridgeService = new BridgeService();
+        RefineRepository refineRepository = new RefineRepository();
 
         adminSectorService.save();
         roadService.save();
-        dsmService.save();
-//        frozenService.save();
-//        tunnelService.save();
-//        bridgeService.save();
+        hexagonService.save();
+        frozenService.save();
+        tunnelService.save();
+        bridgeService.save();
+        refineRepository.run();
     }
 }

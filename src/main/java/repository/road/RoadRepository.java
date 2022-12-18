@@ -1,25 +1,24 @@
 package repository.road;
 
+import static config.ApplicationProperties.getProperty;
+
 import config.JdbcTemplate;
 import domain.Shp;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import repository.ExecuteQuery;
-import repository.ShpRepository;
 
-public class RoadRepository implements ShpRepository {
+/**
+ * 도로 테이블을 만들고 저장하는 repository
+ */
+public class RoadRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
-    private final String tableName;
+    private final String tableName = getProperty("road");
 
-    public RoadRepository(String tableName) {
-        this.tableName = tableName;
-    }
-
-    @Override
     public void run(List<Shp> shps) {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);
@@ -33,8 +32,8 @@ public class RoadRepository implements ShpRepository {
     private void createTable(Connection conn) {
         String ddl = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
             + "  id integer primary key generated always as identity,\n"
-            + "  the_geom geometry(MultiPolygon, 4326),\n"
-            + "  sig_cd integer,\n"
+            + "  the_geom geometry(MultiPolygon, 4326) NOT NULL,\n"
+            + "  sig_cd integer NOT NULL,\n"
             + "  hillshade integer default 0)";
         executeQuery.create(conn, ddl);
     }

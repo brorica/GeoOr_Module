@@ -6,9 +6,6 @@ import java.sql.Statement;
 
 public class ExecuteQuery {
 
-    /**
-     * 테이블을 생성하는 메소드 application.properties에 명시된 경로에 있는 sql 파일을 읽어 실행한다.
-     */
     public void create(Connection conn, String ddl) {
         try (Statement st = conn.createStatement()) {
             System.out.println(ddl);
@@ -19,7 +16,23 @@ public class ExecuteQuery {
         }
     }
 
-    public void createIndex(Connection conn, String sql) {
+    public void createIndex(Connection conn, String index, String table, String indexType, String column) {
+        String sql = "CREATE INDEX " + index + " ON " + table + " USING " + indexType +"(" + column + ")";
+        System.out.println(sql);
+        try (Statement st = conn.createStatement()) {
+            st.execute(sql);
+        } catch (SQLException e) {
+            System.err.printf("인덱스 생성에 오류가 발생했습니다.\n");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 클러스터 인덱스 생성
+     * 물리적으로 재정렬 하기 때문에 공간이 충분해야 한다.
+     */
+    public void createIndex(Connection conn, String table, String index) {
+        String sql = "CLUSTER " + table + " USING " + index;
         System.out.println(sql);
         try (Statement st = conn.createStatement()) {
             st.execute(sql);
@@ -39,7 +52,8 @@ public class ExecuteQuery {
         }
     }
 
-    public void drop(Connection conn, String sql) {
+    public void drop(Connection conn, String table) {
+        String sql = "DROP TABLE " + table;
         System.out.println(sql);
         try (Statement st = conn.createStatement()) {
             st.execute(sql);

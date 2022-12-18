@@ -1,6 +1,6 @@
 package service;
 
-import static config.ApplicationProperties.getProperty;
+import static config.ApplicationProperties.getPath;
 
 import domain.Shp;
 import java.io.File;
@@ -11,26 +11,18 @@ import java.util.List;
 import repository.adminSector.AdminSectorRepository;
 import repository.adminSector.SegmentAdminSectorRepository;
 
-public class AdminSectorService implements Service {
+public class AdminSectorService {
 
-    private final AdminSectorRepository origin;
-    private final SegmentAdminSectorRepository segment;
-    private final String originTableName = "admin_sector";
-    private final String segmentTableName = "admin_sector_segment";
+    private final AdminSectorRepository origin = new AdminSectorRepository();
+    private final SegmentAdminSectorRepository segment = new SegmentAdminSectorRepository();
 
-    public AdminSectorService() {
-        this.origin = new AdminSectorRepository(originTableName);
-        this.segment = new SegmentAdminSectorRepository(originTableName, segmentTableName);
-    }
-
-    @Override
     public void save() {
         origin.run(getShps());
         segment.run();
     }
 
     private List<Shp> getShps() {
-        String path = getProperty("adminSector");
+        String path = getPath("adminSectorPath");
         String extension = "shp";
         List<File> shpFiles = getFiles(path, extension);
 
@@ -46,7 +38,6 @@ public class AdminSectorService implements Service {
         return shps;
     }
 
-    @Override
     public List<File> getFiles(String path, String extension) {
         File directory = new File(path);
         File[] files = directory.listFiles((dir, name) -> name.endsWith(extension));

@@ -9,20 +9,18 @@ import java.util.List;
 import org.geotools.feature.FeatureIterator;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.type.AttributeDescriptor;
-import repository.Save;
 
-public class SaveAdminSector implements Save<Shp> {
+public class SaveAdminSector {
 
     private final int batchLimitValue = 1024;
     private final WKB wkb = new WKB();
-    private final String tableName;
 
-    public SaveAdminSector(String tableName) {
-        this.tableName = tableName;
+    private final String adminTable;
+
+    public SaveAdminSector(String adminTable) {
+        this.adminTable = adminTable;
     }
 
-    @Override
     public void save(Connection conn, List<Shp> shps) throws SQLException {
         String insertQuery = createQuery();
         int totalRecordCount = 0;
@@ -40,11 +38,10 @@ public class SaveAdminSector implements Save<Shp> {
         }
     }
 
-    @Override
     public String createQuery() {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");
-        query.append(tableName);
+        query.append(adminTable);
         query.append(" VALUES (ST_FlipCoordinates(?), ?)");
         return query.toString();
     }

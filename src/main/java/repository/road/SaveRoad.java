@@ -9,19 +9,18 @@ import java.util.List;
 import org.geotools.feature.FeatureIterator;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
-import repository.Save;
 
-public class SaveRoad implements Save<Shp> {
+public class SaveRoad {
 
     private final int batchLimitValue = 1024;
     private final WKB wkb = new WKB();
-    private final String tableName;
 
-    public SaveRoad(String tableName) {
-        this.tableName = tableName;
+    private final String roadTable;
+
+    public SaveRoad(String roadTable) {
+        this.roadTable = roadTable;
     }
 
-    @Override
     public void save(Connection conn, List<Shp> shps) {
         String insertQuery = createQuery();
         int totalRecordCount = 0;
@@ -39,11 +38,10 @@ public class SaveRoad implements Save<Shp> {
 
     }
 
-    @Override
     public String createQuery() {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");
-        query.append(tableName);
+        query.append(roadTable);
         query.append("(the_geom, sig_cd) ");
         query.append(" VALUES (ST_FlipCoordinates(?), ?)");
         return query.toString();

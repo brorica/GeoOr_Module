@@ -9,18 +9,17 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.Map.Entry;
-import repository.Save;
 
 public class SaveHexagon {
 
-    private final int batchLimitValue = 45000;
+    private final int batchLimitValue = 640000;
     private final WKB wkb = new WKB();
-    private final String tableName;
-    private final UberH3 h3;
+    private final UberH3 h3 = new UberH3();
 
-    public SaveHexagon(String tableName, UberH3 h3) {
-        this.tableName = tableName;
-        this.h3 = h3;
+    private final String hexagonTable;
+
+    public SaveHexagon(String hexagonTable) {
+        this.hexagonTable = hexagonTable;
     }
 
     public void save(Connection conn, HexagonMap hexagonMap) throws SQLException {
@@ -55,7 +54,7 @@ public class SaveHexagon {
     private String createQuery() {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO ");
-        query.append(tableName);
+        query.append(hexagonTable);
         query.append(" VALUES(?, ?, ?)");
         return query.toString();
     }
