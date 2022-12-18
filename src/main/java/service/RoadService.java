@@ -11,7 +11,7 @@ import java.util.List;
 import repository.road.SegmentRoadRepository;
 import repository.road.RoadRepository;
 
-public class RoadService implements Service {
+public class RoadService {
 
     private final RoadRepository origin;
     private final SegmentRoadRepository segment;
@@ -24,7 +24,6 @@ public class RoadService implements Service {
         this.segment = new SegmentRoadRepository(originTableName, segmentTableName);
     }
 
-    @Override
     public void save() {
         origin.run(getShps());
         segment.run();
@@ -47,7 +46,6 @@ public class RoadService implements Service {
         return shps;
     }
 
-    @Override
     public List<File> getFiles(String path, String extension) {
         File directory = new File(path);
         File[] files = directory.listFiles((dir, name) -> name.endsWith(extension));

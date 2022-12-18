@@ -9,9 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import repository.hazard.bridge.BridgeRepository;
-import service.Service;
 
-public class BridgeService implements Service {
+public class BridgeService {
 
     private final BridgeRepository repository;
 
@@ -21,7 +20,6 @@ public class BridgeService implements Service {
         this.repository = new BridgeRepository(originTableName);
     }
 
-    @Override
     public void save() {
         repository.run(getShps());
     }
@@ -43,7 +41,6 @@ public class BridgeService implements Service {
         return shps;
     }
 
-    @Override
     public List<File> getFiles(String path, String extension) {
         File directory = new File(path);
         File[] files = directory.listFiles((dir, name) -> name.endsWith(extension));

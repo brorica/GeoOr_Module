@@ -6,12 +6,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import repository.ExecuteQuery;
-import repository.ShpRepository;
 
 /**
  * 도로 테이블을 만들고 저장하는 repository
  */
-public class RoadRepository implements ShpRepository {
+public class RoadRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
@@ -22,7 +21,6 @@ public class RoadRepository implements ShpRepository {
         this.tableName = tableName;
     }
 
-    @Override
     public void run(List<Shp> shps) {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);

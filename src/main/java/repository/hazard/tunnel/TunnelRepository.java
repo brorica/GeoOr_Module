@@ -6,9 +6,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import repository.ExecuteQuery;
-import repository.ShpRepository;
 
-public class TunnelRepository implements ShpRepository {
+public class TunnelRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
@@ -21,7 +20,6 @@ public class TunnelRepository implements ShpRepository {
         this.tableName = tableName;
     }
 
-    @Override
     public void run(List<Shp> shps) {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);

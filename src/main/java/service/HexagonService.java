@@ -9,7 +9,7 @@ import repository.hexagon.HexagonAdminRepository;
 import repository.hexagon.HexagonRepository;
 import repository.hexagon.HexagonRoadRepository;
 
-public class HexagonService implements Service {
+public class HexagonService {
 
     private final HexagonRepository hexagonRepository;
     private final HexagonAdminRepository hexagonAdminRepository;
@@ -25,7 +25,6 @@ public class HexagonService implements Service {
         this.hexagonRoadRepository = new HexagonRoadRepository(originTableName, hexagonRoadTableName);
     }
 
-    @Override
     public void save() {
         String path = getProperty("dsm");
         String extension = "xyz";
@@ -38,7 +37,6 @@ public class HexagonService implements Service {
         }
     }
 
-    @Override
     public List<File> getFiles(String path, String extension) {
         File directory = new File(path);
         File[] files = directory.listFiles((dir, name) -> name.endsWith(extension));

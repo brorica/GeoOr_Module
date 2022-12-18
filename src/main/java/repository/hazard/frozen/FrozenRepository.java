@@ -6,9 +6,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import repository.ExecuteQuery;
-import repository.FileRepository;
 
-public class FrozenRepository implements FileRepository {
+public class FrozenRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
@@ -21,7 +20,6 @@ public class FrozenRepository implements FileRepository {
         this.tableName = tableName;
     }
 
-    @Override
     public void run(List<File> files) {
         try (Connection conn = jdbcTemplate.getConnection()) {
             createTable(conn);

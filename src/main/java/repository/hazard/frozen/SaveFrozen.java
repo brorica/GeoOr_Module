@@ -9,9 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
-import repository.Save;
 
-public class SaveFrozen implements Save<File> {
+public class SaveFrozen {
 
     private final int batchLimitValue = 648000;
     private final WKB wkb = new WKB();
@@ -22,7 +21,6 @@ public class SaveFrozen implements Save<File> {
         this.tableName = tableName;
     }
 
-    @Override
     public void save(Connection conn, List<File> files) throws SQLException {
         String sql = createQuery();
         long totalBatchCount = 0;
@@ -39,7 +37,6 @@ public class SaveFrozen implements Save<File> {
         }
     }
 
-    @Override
     public String createQuery() {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO ");

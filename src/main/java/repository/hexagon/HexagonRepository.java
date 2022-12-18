@@ -11,9 +11,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import repository.ExecuteQuery;
-import repository.FileRepository;
 
-public class HexagonRepository implements FileRepository {
+public class HexagonRepository {
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();

@@ -9,9 +9,8 @@ import java.util.List;
 import org.geotools.feature.FeatureIterator;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
-import repository.Save;
 
-public class SaveTunnel implements Save<Shp> {
+public class SaveTunnel {
 
     private final int batchLimitValue = 1024;
     private final WKB wkb = new WKB();
@@ -22,7 +21,6 @@ public class SaveTunnel implements Save<Shp> {
         this.tableName = tableName;
     }
 
-    @Override
     public void save(Connection conn, List<Shp> shps) throws SQLException {
         String insertQuery = createQuery();
         int totalRecordCount = 0;
@@ -39,7 +37,6 @@ public class SaveTunnel implements Save<Shp> {
         }
     }
 
-    @Override
     public String createQuery() {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");

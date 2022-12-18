@@ -9,9 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import repository.hazard.tunnel.TunnelRepository;
-import service.Service;
 
-public class TunnelService implements Service {
+public class TunnelService {
 
     private final TunnelRepository repository;
 
@@ -21,7 +20,6 @@ public class TunnelService implements Service {
         this.repository = new TunnelRepository(originTableName);
     }
 
-    @Override
     public void save() {
         repository.run(getShps());
     }
@@ -43,7 +41,6 @@ public class TunnelService implements Service {
         return shps;
     }
 
-    @Override
     public List<File> getFiles(String path, String extension) {
         File directory = new File(path);
         File[] files = directory.listFiles((dir, name) -> name.endsWith(extension));
