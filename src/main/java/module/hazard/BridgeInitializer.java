@@ -1,14 +1,14 @@
-package module;
+package module.hazard;
 
 import config.ApplicationProperties;
-import service.TunnelService;
+import service.hazard.BridgeService;
 
-public class TunnelInitializer {
+public class BridgeInitializer {
 
     private static final ApplicationProperties applicationProperties = new ApplicationProperties();
 
     public static void main(String[] args) {
-        TunnelService tunnelService = new TunnelService();
-        tunnelService.save();
+        BridgeService BridgeService = new BridgeService();
+        BridgeService.save();
     }
 }

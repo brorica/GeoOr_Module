@@ -9,21 +9,19 @@ import java.util.List;
 import org.geotools.feature.FeatureIterator;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.type.AttributeDescriptor;
-import repository.Save;
 
-public class SaveAdminSector implements Save<Shp> {
+public class SaveAdminSector {
 
     private final int batchLimitValue = 1024;
     private final WKB wkb = new WKB();
-    private final String tableName;
 
-    public SaveAdminSector(String tableName) {
-        this.tableName = tableName;
+    private final String adminTable;
+
+    public SaveAdminSector(String adminTable) {
+        this.adminTable = adminTable;
     }
 
-    @Override
-    public void save(Connection conn, List<Shp> shps) {
+    public void save(Connection conn, List<Shp> shps) throws SQLException {
         String insertQuery = createQuery();
         int totalRecordCount = 0;
         try (PreparedStatement pStmt = conn.prepareStatement(insertQuery)) {
@@ -35,32 +33,27 @@ public class SaveAdminSector implements Save<Shp> {
             conn.commit();
             System.out.printf("total save : %s\n", totalRecordCount);
         } catch (SQLException e) {
+            conn.rollback();
             e.printStackTrace();
         }
     }
 
-    @Override
     public String createQuery() {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");
-        query.append(tableName);
-        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?, ?, ?)");
+        query.append(adminTable);
+        query.append(" VALUES (ST_FlipCoordinates(?), ?)");
         return query.toString();
     }
 
     private int SetPreparedStatement(PreparedStatement pStmt, Shp shp) throws SQLException {
         FeatureIterator<SimpleFeature> features = shp.getFeature();
-        List<AttributeDescriptor> attributeNames = shp.getAttributeNames();
         int batchLimit = batchLimitValue, recordCount = 0;
         while (features.hasNext()) {
             SimpleFeature feature = features.next();
             pStmt.setBytes(1,
                 wkb.convert5179To4326((Geometry) feature.getDefaultGeometryProperty().getValue()));
             pStmt.setInt(2, Integer.parseInt((String) feature.getAttribute("ADM_SECT_C")));
-            pStmt.setObject(3, feature.getAttribute("SGG_NM"));
-            pStmt.setObject(4, feature.getAttribute("SGG_OID"));
-            pStmt.setObject(5, feature.getAttribute("COL_ADM_SE"));
-            pStmt.setObject(6, feature.getAttribute("GID"));
             pStmt.addBatch();
             if (--batchLimit == 0) {
                 recordCount += pStmt.executeBatch().length;

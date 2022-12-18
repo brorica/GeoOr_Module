@@ -1,14 +1,14 @@
-package module;
+package module.hazard;
 
 import config.ApplicationProperties;
-import service.BridgeService;
+import service.hazard.FrozenService;
 
-public class BridgeInitializer {
+public class FrozenInitializer {
 
     private static final ApplicationProperties applicationProperties = new ApplicationProperties();
 
     public static void main(String[] args) {
-        BridgeService BridgeService = new BridgeService();
-        BridgeService.save();
+        FrozenService frozenService = new FrozenService();
+        frozenService.save();
     }
 }

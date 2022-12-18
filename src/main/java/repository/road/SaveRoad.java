@@ -9,19 +9,18 @@ import java.util.List;
 import org.geotools.feature.FeatureIterator;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
-import repository.Save;
 
-public class SaveRoad implements Save<Shp> {
+public class SaveRoad {
 
     private final int batchLimitValue = 1024;
     private final WKB wkb = new WKB();
-    private final String tableName;
 
-    public SaveRoad(String tableName) {
-        this.tableName = tableName;
+    private final String roadTable;
+
+    public SaveRoad(String roadTable) {
+        this.roadTable = roadTable;
     }
 
-    @Override
     public void save(Connection conn, List<Shp> shps) {
         String insertQuery = createQuery();
         int totalRecordCount = 0;
@@ -39,13 +38,12 @@ public class SaveRoad implements Save<Shp> {
 
     }
 
-    @Override
     public String createQuery() {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");
-        query.append(tableName);
-        query.append("(the_geom, opert_de, rw_sn, sig_cd) ");
-        query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ?)");
+        query.append(roadTable);
+        query.append("(the_geom, sig_cd) ");
+        query.append(" VALUES (ST_FlipCoordinates(?), ?)");
         return query.toString();
     }
 
@@ -56,9 +54,7 @@ public class SaveRoad implements Save<Shp> {
             SimpleFeature feature = features.next();
             pStmt.setBytes(1,
                 wkb.convert5181To4326((Geometry) feature.getDefaultGeometryProperty().getValue()));
-            pStmt.setObject(2, feature.getAttribute("OPERT_DE"));
-            pStmt.setObject(3, feature.getAttribute("RW_SN"));
-            pStmt.setInt(4, Integer.parseInt((String) feature.getAttribute("SIG_CD")));
+            pStmt.setInt(2, Integer.parseInt((String) feature.getAttribute("SIG_CD")));
 
             pStmt.addBatch();
             if (--batchLimit == 0) {
