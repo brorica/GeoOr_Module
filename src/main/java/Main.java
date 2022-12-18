@@ -27,6 +27,6 @@ public class Main {
         frozenService.save();
         tunnelService.save();
         bridgeService.save();
-//        refineRepository.run();
+        refineRepository.run();
     }
 }
