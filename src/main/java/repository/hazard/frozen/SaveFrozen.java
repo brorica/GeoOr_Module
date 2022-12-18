@@ -1,5 +1,7 @@
 package repository.hazard.frozen;
 
+import static config.ApplicationProperties.getProperty;
+
 import geoUtil.WKB;
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,10 +17,10 @@ public class SaveFrozen {
     private final int batchLimitValue = 648000;
     private final WKB wkb = new WKB();
 
-    private final String tableName;
+    private final String frozenTable;
 
-    public SaveFrozen(String tableName) {
-        this.tableName = tableName;
+    public SaveFrozen(String frozenTable) {
+        this.frozenTable = frozenTable;
     }
 
     public void save(Connection conn, List<File> files) throws SQLException {
@@ -40,9 +42,9 @@ public class SaveFrozen {
     public String createQuery() {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO ");
-        query.append(tableName);
+        query.append(frozenTable);
         query.append(" VALUES(?, (SELECT sig_cd FROM ");
-        query.append("admin_sector_segment");
+        query.append(getProperty("admin.segment"));
         query.append(" WHERE ST_intersects(st_setSRID(? ::geometry, 4326), the_geom) LIMIT 1))");
         return query.toString();
     }

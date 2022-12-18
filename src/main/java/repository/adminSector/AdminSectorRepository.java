@@ -1,5 +1,7 @@
 package repository.adminSector;
 
+import static config.ApplicationProperties.getProperty;
+
 import config.JdbcTemplate;
 import domain.Shp;
 import java.sql.Connection;
@@ -15,11 +17,7 @@ public class AdminSectorRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
-    private final String tableName;
-
-    public AdminSectorRepository(String tableName) {
-        this.tableName = tableName;
-    }
+    private final String adminTable = getProperty("admin");
 
     public void run(List<Shp> shps) {
         try (Connection conn = jdbcTemplate.getConnection()) {
@@ -32,14 +30,14 @@ public class AdminSectorRepository {
     }
 
     private void createTable(Connection conn) {
-        String ddl = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
+        String ddl = "CREATE TABLE IF NOT EXISTS " + adminTable + " (\n"
             + "  the_geom geometry(MultiPolygon, 4326) NOT NULL,\n"
             + "  sig_cd integer PRIMARY KEY NOT NULL)";
         executeQuery.create(conn, ddl);
     }
 
     private void saveAdminSector(Connection conn, List<Shp> shps) throws SQLException {
-        SaveAdminSector saveAdminSector = new SaveAdminSector(tableName);
+        SaveAdminSector saveAdminSector = new SaveAdminSector(adminTable);
         saveAdminSector.save(conn, shps);
     }
 }

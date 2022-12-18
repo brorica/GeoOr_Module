@@ -1,5 +1,7 @@
 package repository.hazard.tunnel;
 
+import static config.ApplicationProperties.getProperty;
+
 import config.JdbcTemplate;
 import domain.Shp;
 import java.sql.Connection;
@@ -13,12 +15,7 @@ public class TunnelRepository {
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
     private final String sigIndexName = "tunnel_sig_cd_index";
-
-    private final String tableName;
-
-    public TunnelRepository(String tableName) {
-        this.tableName = tableName;
-    }
+    private final String tunnelTable = getProperty("tunnel");
 
     public void run(List<Shp> shps) {
         try (Connection conn = jdbcTemplate.getConnection()) {
@@ -33,7 +30,7 @@ public class TunnelRepository {
     }
 
     private void createTable(Connection conn) {
-        String ddl = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
+        String ddl = "CREATE TABLE IF NOT EXISTS " + tunnelTable + " (\n"
             + " the_geom geometry(Point, 4326),\n"
             + " ufid varchar(32) not null PRIMARY KEY,\n"
             + " name varchar(100),\n"
@@ -42,15 +39,15 @@ public class TunnelRepository {
     }
 
     private void saveTunnel(Connection conn, List<Shp> shps) throws SQLException {
-        SaveTunnel saveTunnel = new SaveTunnel(tableName);
+        SaveTunnel saveTunnel = new SaveTunnel(tunnelTable);
         saveTunnel.save(conn, shps);
     }
 
     private void createIndex(Connection conn) {
-        executeQuery.createIndex(conn, sigIndexName, tableName, "btree", "sig_cd");
+        executeQuery.createIndex(conn, sigIndexName, tunnelTable, "btree", "sig_cd");
     }
 
     private void createClusterIndex(Connection conn) {
-        executeQuery.createIndex(conn, tableName, sigIndexName);
+        executeQuery.createIndex(conn, tunnelTable, sigIndexName);
     }
 }

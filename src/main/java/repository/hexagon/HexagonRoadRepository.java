@@ -1,5 +1,7 @@
 package repository.hexagon;
 
+import static config.ApplicationProperties.getProperty;
+
 import config.JdbcTemplate;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,21 +16,20 @@ public class HexagonRoadRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
-    private final String tempTableName = "temp_hexagon_road";
+    private final String tempTable = "temp_hexagon_road";
     private final String sigIndexName = "hexagon_road_hexagon_id_index";
+    private final String hexagonTable = getProperty("h3.hexagon");
+    private final String hexagonRoadTable = getProperty("h3.road");
 
     private final HexagonRoadTemp hexagonRoadTemp;
-    private final String originTableName;
-    private final String tableName;
 
-    public HexagonRoadRepository(String originTableName, String tableName) {
-        this.hexagonRoadTemp = new HexagonRoadTemp(originTableName);
-        this.originTableName = originTableName;
-        this.tableName = tableName;
+    public HexagonRoadRepository() {
+        this.hexagonRoadTemp = new HexagonRoadTemp(hexagonTable, tempTable);
     }
 
     public void run() {
         try (Connection conn = jdbcTemplate.getConnection()) {
+            hexagonRoadTemp.run(conn);
             createTable(conn);
             insertTable(conn);
             createSigCodeIndex(conn);
@@ -41,31 +42,31 @@ public class HexagonRoadRepository {
     }
 
     private void createTable(Connection conn) {
-        String ddl = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
+        String ddl = "CREATE TABLE IF NOT EXISTS " + hexagonRoadTable + " (\n"
             + "  hexagon_id bigint,\n"
             + "  road_id int,\n"
-            + "  CONSTRAINT fk_road FOREIGN KEY(road_id) REFERENCES road(id),\n"
-            + "  CONSTRAINT fk_hexagon FOREIGN KEY(hexagon_id) REFERENCES " + originTableName + "(id))";
+            + "  CONSTRAINT fk_road FOREIGN KEY(road_id) REFERENCES " + getProperty("road") + "(id),\n"
+            + "  CONSTRAINT fk_hexagon FOREIGN KEY(hexagon_id) REFERENCES " + hexagonTable + "(id))";
         executeQuery.create(conn, ddl);
     }
 
     private void insertTable(Connection conn) {
-        String query = "INSERT INTO " + tableName
+        String query = "INSERT INTO " + hexagonRoadTable
             + " SELECT hexagon_id, road_id\n"
-            + " FROM " + tempTableName + "\n"
+            + " FROM " + tempTable + "\n"
             + " GROUP BY hexagon_id, road_id";
         executeQuery.save(conn, query);
     }
 
     private void createSigCodeIndex(Connection conn) {
-        executeQuery.createIndex(conn, sigIndexName, tableName, "btree", "hexagon_id");
+        executeQuery.createIndex(conn, sigIndexName, hexagonRoadTable, "btree", "hexagon_id");
     }
 
     private void createClusterIndex(Connection conn) {
-        executeQuery.createIndex(conn, tableName, sigIndexName);
+        executeQuery.createIndex(conn, hexagonRoadTable, sigIndexName);
     }
 
     private void dropTempHexagonRoad(Connection conn) {
-        executeQuery.drop(conn, tempTableName);
+        executeQuery.drop(conn, tempTable);
     }
 }

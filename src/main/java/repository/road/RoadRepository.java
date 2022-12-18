@@ -1,5 +1,7 @@
 package repository.road;
 
+import static config.ApplicationProperties.getProperty;
+
 import config.JdbcTemplate;
 import domain.Shp;
 import java.sql.Connection;
@@ -15,11 +17,7 @@ public class RoadRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
-    private final String tableName;
-
-    public RoadRepository(String tableName) {
-        this.tableName = tableName;
-    }
+    private final String tableName = getProperty("road");
 
     public void run(List<Shp> shps) {
         try (Connection conn = jdbcTemplate.getConnection()) {

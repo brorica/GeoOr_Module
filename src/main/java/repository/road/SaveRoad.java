@@ -15,10 +15,10 @@ public class SaveRoad {
     private final int batchLimitValue = 1024;
     private final WKB wkb = new WKB();
 
-    private final String tableName;
+    private final String roadTable;
 
-    public SaveRoad(String tableName) {
-        this.tableName = tableName;
+    public SaveRoad(String roadTable) {
+        this.roadTable = roadTable;
     }
 
     public void save(Connection conn, List<Shp> shps) {
@@ -41,7 +41,7 @@ public class SaveRoad {
     public String createQuery() {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");
-        query.append(tableName);
+        query.append(roadTable);
         query.append("(the_geom, sig_cd) ");
         query.append(" VALUES (ST_FlipCoordinates(?), ?)");
         return query.toString();

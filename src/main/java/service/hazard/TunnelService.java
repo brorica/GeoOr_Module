@@ -1,6 +1,6 @@
 package service.hazard;
 
-import static config.ApplicationProperties.getProperty;
+import static config.ApplicationProperties.getPath;
 
 import domain.Shp;
 import java.io.File;
@@ -12,20 +12,14 @@ import repository.hazard.tunnel.TunnelRepository;
 
 public class TunnelService {
 
-    private final TunnelRepository repository;
-
-    private final String originTableName = "tunnel";
-
-    public TunnelService() {
-        this.repository = new TunnelRepository(originTableName);
-    }
+    private final TunnelRepository repository = new TunnelRepository();
 
     public void save() {
         repository.run(getShps());
     }
 
     private List<Shp> getShps() {
-        String path = getProperty("tunnel");
+        String path = getPath("tunnelPath");
         String extension = "shp";
         List<File> shpFiles = getFiles(path, extension);
 

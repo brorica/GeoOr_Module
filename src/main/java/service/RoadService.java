@@ -1,6 +1,6 @@
 package service;
 
-import static config.ApplicationProperties.getProperty;
+import static config.ApplicationProperties.getPath;
 
 import domain.Shp;
 import java.io.File;
@@ -16,12 +16,9 @@ public class RoadService {
     private final RoadRepository origin;
     private final SegmentRoadRepository segment;
 
-    private final String originTableName = "road";
-    private final String segmentTableName = "road_segment";
-
     public RoadService() {
-        this.origin = new RoadRepository(originTableName);
-        this.segment = new SegmentRoadRepository(originTableName, segmentTableName);
+        this.origin = new RoadRepository();
+        this.segment = new SegmentRoadRepository();
     }
 
     public void save() {
@@ -30,7 +27,7 @@ public class RoadService {
     }
 
     private List<Shp> getShps() {
-        String path = getProperty("road");
+        String path = getPath("roadPath");
         String extension = "shp";
         List<File> shpFiles = getFiles(path, extension);
 

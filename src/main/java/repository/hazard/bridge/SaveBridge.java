@@ -1,5 +1,7 @@
 package repository.hazard.bridge;
 
+import static config.ApplicationProperties.getProperty;
+
 import domain.Shp;
 import geoUtil.WKB;
 import java.sql.Connection;
@@ -15,10 +17,10 @@ public class SaveBridge {
     private final int batchLimitValue = 1024;
     private final WKB wkb = new WKB();
 
-    private final String tableName;
+    private final String bridgeTable;
 
-    public SaveBridge(String tableName) {
-        this.tableName = tableName;
+    public SaveBridge(String bridgeTable) {
+        this.bridgeTable = bridgeTable;
     }
 
     public void save(Connection conn, List<Shp> shps) throws SQLException {
@@ -41,10 +43,10 @@ public class SaveBridge {
     public String createQuery() {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");
-        query.append(tableName);
+        query.append(bridgeTable);
         query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ");
         query.append("(SELECT sig_cd FROM ");
-        query.append("admin_sector_segment");
+        query.append(getProperty("admin.segment"));
         query.append(
             " WHERE ST_intersects(st_setSRID(ST_FlipCoordinates(?) ::geometry, 4326), the_geom) LIMIT 1))");
         return query.toString();

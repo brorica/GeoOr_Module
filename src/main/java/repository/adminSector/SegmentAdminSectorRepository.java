@@ -1,5 +1,7 @@
 package repository.adminSector;
 
+import static config.ApplicationProperties.getProperty;
+
 import config.JdbcTemplate;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,16 +16,10 @@ public class SegmentAdminSectorRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
-    private final String geomIndexName = "admin_sector_index";
+    private final String adminTable = getProperty("admin");
+    private final String adminSegmentTable = getProperty("admin.segment");
     private final int maximumPoints = 64;
-
-    private final String originTableName;
-    private final String segmentTableName;
-
-    public SegmentAdminSectorRepository(String originTableName, String segmentTableName) {
-        this.originTableName = originTableName;
-        this.segmentTableName = segmentTableName;
-    }
+    private final String geomIndexName = "admin_sector_index";
 
     public void run() {
         try (Connection conn = jdbcTemplate.getConnection()) {
@@ -44,13 +40,13 @@ public class SegmentAdminSectorRepository {
     }
 
     private void divideAdminSector(Connection conn) throws SQLException {
-        String sql = "insert into " + segmentTableName
+        String sql = "insert into " + adminSegmentTable
             + " select ST_Subdivide(ST_MakeValid(the_geom), " + maximumPoints
-            + "), sig_cd from " + originTableName;
+            + "), sig_cd from " + adminTable;
         executeQuery.save(conn, sql);
     }
 
     private void createIndex(Connection conn) {
-        executeQuery.createIndex(conn, geomIndexName, segmentTableName, "gist", "the_geom");
+        executeQuery.createIndex(conn, geomIndexName, adminSegmentTable, "gist", "the_geom");
     }
 }

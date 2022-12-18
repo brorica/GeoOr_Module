@@ -1,6 +1,6 @@
 package service;
 
-import static config.ApplicationProperties.getProperty;
+import static config.ApplicationProperties.getPath;
 
 import domain.Shp;
 import java.io.File;
@@ -13,16 +13,8 @@ import repository.adminSector.SegmentAdminSectorRepository;
 
 public class AdminSectorService {
 
-    private final AdminSectorRepository origin;
-    private final SegmentAdminSectorRepository segment;
-
-    private final String originTableName = "admin_sector";
-    private final String segmentTableName = "admin_sector_segment";
-
-    public AdminSectorService() {
-        this.origin = new AdminSectorRepository(originTableName);
-        this.segment = new SegmentAdminSectorRepository(originTableName, segmentTableName);
-    }
+    private final AdminSectorRepository origin = new AdminSectorRepository();
+    private final SegmentAdminSectorRepository segment = new SegmentAdminSectorRepository();
 
     public void save() {
         origin.run(getShps());
@@ -30,7 +22,7 @@ public class AdminSectorService {
     }
 
     private List<Shp> getShps() {
-        String path = getProperty("adminSector");
+        String path = getPath("adminSectorPath");
         String extension = "shp";
         List<File> shpFiles = getFiles(path, extension);
 

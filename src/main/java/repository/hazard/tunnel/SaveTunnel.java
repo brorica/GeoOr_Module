@@ -1,5 +1,7 @@
 package repository.hazard.tunnel;
 
+import static config.ApplicationProperties.getProperty;
+
 import domain.Shp;
 import geoUtil.WKB;
 import java.sql.Connection;
@@ -15,10 +17,10 @@ public class SaveTunnel {
     private final int batchLimitValue = 1024;
     private final WKB wkb = new WKB();
 
-    private final String tableName;
+    private final String tunnelTable;
 
-    public SaveTunnel(String tableName) {
-        this.tableName = tableName;
+    public SaveTunnel(String tunnelTable) {
+        this.tunnelTable = tunnelTable;
     }
 
     public void save(Connection conn, List<Shp> shps) throws SQLException {
@@ -40,10 +42,10 @@ public class SaveTunnel {
     public String createQuery() {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO public.");
-        query.append(tableName);
+        query.append(tunnelTable);
         query.append(" VALUES (ST_FlipCoordinates(?), ?, ?, ");
         query.append("(SELECT sig_cd FROM ");
-        query.append("admin_sector_segment");
+        query.append(getProperty("admin.segment"));
         query.append(
             " WHERE ST_intersects(st_setSRID(ST_FlipCoordinates(?) ::geometry, 4326), the_geom) LIMIT 1))");
         return query.toString();

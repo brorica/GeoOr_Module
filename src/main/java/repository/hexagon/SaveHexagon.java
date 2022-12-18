@@ -16,10 +16,10 @@ public class SaveHexagon {
     private final WKB wkb = new WKB();
     private final UberH3 h3 = new UberH3();
 
-    private final String tableName;
+    private final String hexagonTable;
 
-    public SaveHexagon(String tableName) {
-        this.tableName = tableName;
+    public SaveHexagon(String hexagonTable) {
+        this.hexagonTable = hexagonTable;
     }
 
     public void save(Connection conn, HexagonMap hexagonMap) throws SQLException {
@@ -54,7 +54,7 @@ public class SaveHexagon {
     private String createQuery() {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO ");
-        query.append(tableName);
+        query.append(hexagonTable);
         query.append(" VALUES(?, ?, ?)");
         return query.toString();
     }

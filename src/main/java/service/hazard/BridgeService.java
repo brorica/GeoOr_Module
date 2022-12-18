@@ -1,6 +1,6 @@
 package service.hazard;
 
-import static config.ApplicationProperties.getProperty;
+import static config.ApplicationProperties.getPath;
 
 import domain.Shp;
 import java.io.File;
@@ -12,20 +12,14 @@ import repository.hazard.bridge.BridgeRepository;
 
 public class BridgeService {
 
-    private final BridgeRepository repository;
-
-    private final String originTableName = "bridge";
-
-    public BridgeService() {
-        this.repository = new BridgeRepository(originTableName);
-    }
+    private final BridgeRepository repository = new BridgeRepository();
 
     public void save() {
         repository.run(getShps());
     }
 
     private List<Shp> getShps() {
-        String path = getProperty("bridge");
+        String path = getPath("bridgePath");
         String extension = "shp";
         List<File> shpFiles = getFiles(path, extension);
 

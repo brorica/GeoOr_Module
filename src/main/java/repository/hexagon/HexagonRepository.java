@@ -1,5 +1,7 @@
 package repository.hexagon;
 
+import static config.ApplicationProperties.getProperty;
+
 import config.JdbcTemplate;
 import domain.HexagonMap;
 import geoUtil.UberH3;
@@ -17,16 +19,11 @@ public class HexagonRepository {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
-    private final String indexName = "hexagon_id_index";
-
     private final UberH3 h3 = new UberH3();
     private final HexagonMap hexagonMap = new HexagonMap();
 
-    private final String tableName;
-
-    public HexagonRepository(String tableName){
-        this.tableName = tableName;
-    }
+    private final String tableName = getProperty("h3.hexagon");
+    private final String indexName = "hexagon_id_index";
 
     public void run(List<File> dsms) throws IOException {
         makeHexagonMap(dsms);

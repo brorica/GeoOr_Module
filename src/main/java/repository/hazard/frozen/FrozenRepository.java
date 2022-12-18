@@ -1,5 +1,7 @@
 package repository.hazard.frozen;
 
+import static config.ApplicationProperties.getProperty;
+
 import config.JdbcTemplate;
 import java.io.File;
 import java.sql.Connection;
@@ -13,12 +15,7 @@ public class FrozenRepository {
     private ExecuteQuery executeQuery = new ExecuteQuery();
 
     private final String sigIndexName = "frozen_sig_cd_index";
-
-    private final String tableName;
-
-    public FrozenRepository(String tableName) {
-        this.tableName = tableName;
-    }
+    private final String frozenTable = getProperty("frozen");
 
     public void run(List<File> files) {
         try (Connection conn = jdbcTemplate.getConnection()) {
@@ -33,22 +30,22 @@ public class FrozenRepository {
     }
 
     private void createTable(Connection conn) {
-        String ddl = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
+        String ddl = "CREATE TABLE IF NOT EXISTS " + frozenTable + " (\n"
             + "  the_geom geometry(Point, 4326),\n"
             + "  sig_cd integer)";
         executeQuery.create(conn, ddl);
     }
 
     private void saveFrozen(Connection conn, List<File> files) throws SQLException {
-        SaveFrozen saveFrozen = new SaveFrozen(tableName);
+        SaveFrozen saveFrozen = new SaveFrozen(frozenTable);
         saveFrozen.save(conn, files);
     }
 
     private void createIndex(Connection conn) {
-        executeQuery.createIndex(conn, sigIndexName, tableName, "btree", "sig_cd");
+        executeQuery.createIndex(conn, sigIndexName, frozenTable, "btree", "sig_cd");
     }
 
     private void createClusterIndex(Connection conn) {
-        executeQuery.createIndex(conn, tableName, sigIndexName);
+        executeQuery.createIndex(conn, frozenTable, sigIndexName);
     }
 }

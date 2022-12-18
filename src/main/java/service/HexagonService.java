@@ -1,6 +1,6 @@
 package service;
 
-import static config.ApplicationProperties.getProperty;
+import static config.ApplicationProperties.getPath;
 
 import java.io.File;
 import java.util.Arrays;
@@ -15,18 +15,14 @@ public class HexagonService {
     private final HexagonAdminRepository hexagonAdminRepository;
     private final HexagonRoadRepository hexagonRoadRepository;
 
-    private final String originTableName = "hexagon";
-    private final String hexagonAdminTableName = "hexagon_admin";
-    private final String hexagonRoadTableName = "hexagon_road";
-
     public HexagonService() {
-        this.hexagonRepository = new HexagonRepository("hexagon");
-        this.hexagonAdminRepository = new HexagonAdminRepository(originTableName, hexagonAdminTableName);
-        this.hexagonRoadRepository = new HexagonRoadRepository(originTableName, hexagonRoadTableName);
+        this.hexagonRepository = new HexagonRepository();
+        this.hexagonAdminRepository = new HexagonAdminRepository();
+        this.hexagonRoadRepository = new HexagonRoadRepository();
     }
 
     public void save() {
-        String path = getProperty("dsm");
+        String path = getPath("dsmPath");
         String extension = "xyz";
         try {
             hexagonRepository.run(getFiles(path, extension));
